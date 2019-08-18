@@ -15,6 +15,8 @@ public:
 	virtual ~CCube();
 	virtual bool Render(DWORD dwTimes);
 	virtual bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
+private:
+
 
 };
 
