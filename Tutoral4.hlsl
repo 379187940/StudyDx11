@@ -1,9 +1,26 @@
-float4 vs_main(float4 in_postion:POSITION) :SV_POSITION
+
+struct vs_out
 {
-	return in_postion;
+	float4 postion:SV_POSITION;
+	float4 color:COLOR0;
+};
+cbuffer ConstantBuffer:register(b0)
+{
+	matrix world;
+	matrix view;
+	matrix Projection;
+};
+vs_out vs_main(float4 in_postion:POSITION , float4 in_color:COLOR )
+{
+	vs_out temp;
+	temp.postion = mul(in_postion,world);
+	temp.postion = mul(temp.postion, view);
+	temp.postion = mul(temp.postion, Projection);
+	temp.color = in_color;
+	return temp;
 }
 
-float4 ps_main(float4 Pos:SV_POSITION) : SV_Target
+float4 ps_main(vs_out vsout) : SV_Target
 {
-	return float4(1.0f,1.0f,0.0f,1.0f);
+	return vsout.color;
 }
