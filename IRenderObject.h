@@ -16,6 +16,7 @@ protected:
 		m_pVertexBuffer =  NULL;
 		m_pVertexShader = NULL ;
 		m_pPixelShader = NULL ;
+		m_pIndexBuffer = NULL;
 	}
 	virtual ~CCommonRenderData()
 	{
@@ -27,12 +28,15 @@ protected:
 			m_pVertexShader->Release();
 		if (m_pPixelShader)
 			m_pPixelShader->Release();
+		if (m_pIndexBuffer)
+			m_pIndexBuffer->Release();
 	}
 protected:
 	ID3D11DeviceContext* m_pContext;
 	ID3D11Device*        m_pd3dDevice;
 	ID3D11InputLayout*	 m_pLayoutInput;
 	ID3D11Buffer*        m_pVertexBuffer;
+	ID3D11Buffer*        m_pIndexBuffer;
 	ID3D11VertexShader*  m_pVertexShader;
 	ID3D11PixelShader*   m_pPixelShader;
 };

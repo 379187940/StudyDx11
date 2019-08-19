@@ -382,6 +382,9 @@
     <ClCompile Include="Tutorial01.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Tutoral4.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h" />

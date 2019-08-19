@@ -45,5 +45,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Tutoral4.hlsl" />
   </ItemGroup>
 </Project>
