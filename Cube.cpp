@@ -92,7 +92,9 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 	assert(SUCCEEDED(hr));
 	hr = m_pd3dDevice->CreateInputLayout(inputDesc, ARRAYSIZE(inputDesc), pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), &m_pLayoutInput);
 	assert(SUCCEEDED(hr));
-
+	//pixel shader
+	hr = m_pd3dDevice->CreateVertexShader(pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), NULL, &m_pPixelShader);
+	assert(SUCCEEDED(hr));
 
 	return false;
 }
