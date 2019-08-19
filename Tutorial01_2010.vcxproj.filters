@@ -34,9 +34,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="test.hlsl" />
-  </ItemGroup>
-  <ItemGroup>
     <CLInclude Include="resource.h">
       <Filter>Resource Files</Filter>
     </CLInclude>
@@ -46,5 +43,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Tutoral4.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Tutoral2.hlsl" />
   </ItemGroup>
 </Project>

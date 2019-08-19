@@ -372,7 +372,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <FxCompile Include="test.hlsl">
+    <FxCompile Include="Tutoral2.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>

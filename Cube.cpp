@@ -88,7 +88,7 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 		{ "COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,0,24,D3D11_INPUT_PER_VERTEX_DATA ,0 },
 	};
 	ID3D10Blob* pVertexShader = NULL;
-	D3DX11CompileFromFile(_T("test.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader, NULL, &hr);
+	D3DX11CompileFromFile(_T("Tutoral4.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader, NULL, &hr);
 	assert(SUCCEEDED(hr));
 	hr = m_pd3dDevice->CreateInputLayout(inputDesc, ARRAYSIZE(inputDesc), pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), &m_pLayoutInput);
 	assert(SUCCEEDED(hr));
