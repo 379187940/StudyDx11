@@ -4,11 +4,14 @@
 
 CCube::CCube()
 {
+	m_pConstBuffer = NULL;
 }
 
 
 CCube::~CCube()
 {
+	if (m_pConstBuffer)
+		m_pConstBuffer->Release();
 }
 
 bool CCube::Render(DWORD dwTimes)
@@ -95,6 +98,16 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 	//pixel shader
 	hr = m_pd3dDevice->CreateVertexShader(pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), NULL, &m_pPixelShader);
 	assert(SUCCEEDED(hr));
+
+	D3D11_BUFFER_DESC constBufferDesc;
+	ZeroMemory(&constBufferDesc, sizeof(constBufferDesc));
+	constBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	constBufferDesc.CPUAccessFlags = 0;
+	constBufferDesc.ByteWidth = sizeof(ConstantBuffer);
+	constBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	hr = m_pd3dDevice->CreateBuffer(&constBufferDesc, NULL, &m_pConstBuffer);
+	assert(SUCCEEDED(hr));
+
 
 	return false;
 }
