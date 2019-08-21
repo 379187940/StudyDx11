@@ -95,8 +95,15 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 	assert(SUCCEEDED(hr));
 	hr = m_pd3dDevice->CreateInputLayout(inputDesc, ARRAYSIZE(inputDesc), pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), &m_pLayoutInput);
 	assert(SUCCEEDED(hr));
+	//vertex shader
+	hr = m_pd3dDevice->CreateVertexShader(pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), NULL, &m_pVertexShader);
+	assert(SUCCEEDED(hr));
+	
+	ID3D10Blob* pPixelShader = NULL;
+	D3DX11CompileFromFile(_T("Tutoral4.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader, NULL, &hr);
+	assert(SUCCEEDED(hr));
 	//pixel shader
-	hr = m_pd3dDevice->CreateVertexShader(pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), NULL, &m_pPixelShader);
+	hr = m_pd3dDevice->CreateVertexShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_pPixelShader);
 	assert(SUCCEEDED(hr));
 
 	D3D11_BUFFER_DESC constBufferDesc;
@@ -113,5 +120,10 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 }
 bool CCube::UpdateRenderParams(const RenderParams& renderParams)
 {
+	ConstantBuffer cb;
+	cb.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
+	cb.mView = XMMatrixTranspose(renderParams.m_viewMatrix);
+	cb.mProjection = XMMatrixTranspose(renderParams.m_projMatrix);
+	m_pContext->UpdateSubresource(m_pConstBuffer, 0, NULL, &cb, 0, 0);
 
 }
