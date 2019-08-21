@@ -21,6 +21,7 @@ public:
 	virtual ~CCube();
 	virtual bool Render(DWORD dwTimes);
 	virtual bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
+	virtual bool UpdateRenderParams(const RenderParams& renderParams);
 private:
 	ID3D11Buffer* m_pConstBuffer;
 

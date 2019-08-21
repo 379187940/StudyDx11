@@ -1,16 +1,30 @@
 #pragma once
 #include "IObject.h"
+struct RenderParams
+{
+	XMMATRIX m_worldMatrix;
+	XMMATRIX m_viewMatrix;
+	XMMATRIX m_projMatrix;
+
+	RenderParams()
+	{
+		m_worldMatrix = XMMatrixIdentity();
+		m_viewMatrix = XMMatrixIdentity();
+		m_projMatrix = XMMatrixIdentity();
+	}
+};
 class IRenderObject :
 	public IObject
 {
 public:
 	virtual bool Render(DWORD dwTimes) = 0;
 	virtual bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext) = 0 ;
-	virtual bool UpdateTransForm(const XMMATRIX& world, const XMMATRIX& view, const XMMATRIX& proj) = 0;
+	virtual bool UpdateRenderParams(const RenderParams& renderParams) = 0;
 };
 class CCommonRenderData
 {
 protected:
+	
 	CCommonRenderData()
 	{
 		m_pLayoutInput = NULL ;
@@ -40,5 +54,6 @@ protected:
 	ID3D11Buffer*        m_pIndexBuffer;
 	ID3D11VertexShader*  m_pVertexShader;
 	ID3D11PixelShader*   m_pPixelShader;
+	RenderParams         m_renderParams;
 };
 

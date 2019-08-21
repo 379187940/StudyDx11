@@ -111,3 +111,7 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 
 	return false;
 }
+bool CCube::UpdateRenderParams(const RenderParams& renderParams)
+{
+
+}
