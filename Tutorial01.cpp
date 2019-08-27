@@ -10,7 +10,7 @@
 #include <d3dx11.h>
 #include "resource.h"
 #include "Triangle.h"
-
+#include "Cube.h"
 //--------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------
@@ -23,7 +23,9 @@ ID3D11DeviceContext*    g_pImmediateContext = NULL;
 IDXGISwapChain*         g_pSwapChain = NULL;
 ID3D11RenderTargetView* g_pRenderTargetView = NULL;
 CTriangle				g_Triangle;
-
+CCube                   g_Cube;
+XMMATRIX g_World, g_View, g_Projection;
+LONG g_width = 640, g_height= 480;
 //--------------------------------------------------------------------------------------
 // Forward declarations
 //--------------------------------------------------------------------------------------
@@ -97,7 +99,7 @@ HRESULT InitWindow( HINSTANCE hInstance, int nCmdShow )
 
     // Create window
     g_hInst = hInstance;
-    RECT rc = { 0, 0, 640, 480 };
+    RECT rc = { 0, 0, g_width, g_height };
     AdjustWindowRect( &rc, WS_OVERLAPPEDWINDOW, FALSE );
     g_hWnd = CreateWindow( L"TutorialWindowClass", L"Direct3D 11 Tutorial 1: Direct3D 11 Basics", WS_OVERLAPPEDWINDOW,
                            CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top, NULL, NULL, hInstance,
@@ -219,19 +221,36 @@ HRESULT InitDevice()
     vp.TopLeftY = 0;
     g_pImmediateContext->RSSetViewports( 1, &vp );
 	g_Triangle.Init(g_pd3dDevice, g_pImmediateContext);
+	g_Cube.Init(g_pd3dDevice, g_pImmediateContext);
     return S_OK;
 }
-
 
 //--------------------------------------------------------------------------------------
 // Render the frame
 //--------------------------------------------------------------------------------------
 void Render()
 {
+	//update matrix
+	g_World = XMMatrixIdentity();
+
+	// Initialize the view matrix
+	XMVECTOR Eye = XMVectorSet(0.0f, 1.0f, -5.0f, 0.0f);
+	XMVECTOR At = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	g_View = XMMatrixLookAtLH(Eye, At, Up);
+
+	// Initialize the projection matrix
+	g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, g_width / (FLOAT)g_height, 0.01f, 100.0f);
+	RenderParams renderParams;
+	renderParams.m_worldMatrix = g_World;
+	renderParams.m_viewMatrix = g_View;
+	renderParams.m_projMatrix = g_Projection;
+	g_Cube.UpdateRenderParams(renderParams);
     // Just clear the backbuffer
     float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; //red,green,blue,alpha
     g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, ClearColor );
 	g_Triangle.Render(0);
+	g_Cube.Render(0);
     g_pSwapChain->Present( 0, 0 );
 }
 

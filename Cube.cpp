@@ -16,7 +16,15 @@ CCube::~CCube()
 
 bool CCube::Render(DWORD dwTimes)
 {
-
+	m_pContext->IASetInputLayout(m_pLayoutInput);
+	m_pContext->VSSetShader(m_pVertexShader,NULL , 0);
+	m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
+	UINT stride = sizeof(SimpleVertex);
+	UINT offset = 0;
+	m_pContext->IASetVertexBuffers(0,1,&m_pVertexBuffer , &stride , &offset);
+	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstBuffer);
+	m_pContext->DrawIndexed(36, 0, 0);
 	return false;
 }
 
@@ -88,7 +96,7 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 	D3D11_INPUT_ELEMENT_DESC inputDesc[] =
 	{
 		{ "POSTION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA ,0 },
-		{ "COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,0,24,D3D11_INPUT_PER_VERTEX_DATA ,0 },
+		{ "COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA ,0 },
 	};
 	ID3D10Blob* pVertexShader = NULL;
 	D3DX11CompileFromFile(_T("Tutoral4.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader, NULL, &hr);
@@ -103,7 +111,7 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 	D3DX11CompileFromFile(_T("Tutoral4.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader, NULL, &hr);
 	assert(SUCCEEDED(hr));
 	//pixel shader
-	hr = m_pd3dDevice->CreateVertexShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_pPixelShader);
+	hr = m_pd3dDevice->CreatePixelShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_pPixelShader);
 	assert(SUCCEEDED(hr));
 
 	D3D11_BUFFER_DESC constBufferDesc;
@@ -125,5 +133,9 @@ bool CCube::UpdateRenderParams(const RenderParams& renderParams)
 	cb.mView = XMMatrixTranspose(renderParams.m_viewMatrix);
 	cb.mProjection = XMMatrixTranspose(renderParams.m_projMatrix);
 	m_pContext->UpdateSubresource(m_pConstBuffer, 0, NULL, &cb, 0, 0);
+	return true;
+}
+void CCube::Tick(DWORD dwTimes)
+{
 
 }
