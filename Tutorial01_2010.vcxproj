@@ -378,6 +378,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="CubeLight.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Tutorial01.cpp" />
   </ItemGroup>
@@ -388,6 +389,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="CubeLight.h" />
     <ClInclude Include="IObject.h" />
     <ClInclude Include="IRenderObject.h" />
     <CLInclude Include="resource.h" />
