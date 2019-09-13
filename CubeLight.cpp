@@ -1,20 +1,20 @@
-#include "Cube.h"
+#include "CubeLight.h"
 #include "assert.h"
 #include <tchar.h>
 
-CCube::CCube()
+CCubeLight ::CCubeLight ()
 {
 	m_pConstBuffer = NULL;
 }
 
 
-CCube::~CCube()
+CCubeLight ::~CCubeLight ()
 {
 	if (m_pConstBuffer)
 		m_pConstBuffer->Release();
 }
 
-bool CCube::Render(DWORD dwTimes)
+bool CCubeLight ::Render(DWORD dwTimes)
 {
 	m_pContext->IASetInputLayout(m_pLayoutInput);
 	m_pContext->VSSetShader(m_pVertexShader,NULL , 0);
@@ -28,7 +28,7 @@ bool CCube::Render(DWORD dwTimes)
 	return false;
 }
 
-bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
+bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 {
 	assert(pd3dDevice);
 	assert(pContext);
@@ -37,14 +37,14 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 	HRESULT hr;
 	SimpleVertex vertices[] =
 	{
-		{ XMFLOAT3(-1.0f,  1.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(1.0f,  1.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f,  1.0f,  1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f,  1.0f,  1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f,  1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f,  1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f,  1.0f, -1.0f), XMFLOAT3(-1.0f,  1.0f, -1.0f) },
+		{ XMFLOAT3(1.0f,  1.0f, -1.0f), XMFLOAT3(1.0f,  1.0f, -1.0f) },
+		{ XMFLOAT3(1.0f,  1.0f,  1.0f), XMFLOAT3(1.0f,  1.0f,  1.0f) },
+		{ XMFLOAT3(-1.0f,  1.0f,  1.0f), XMFLOAT3(-1.0f,  1.0f,  1.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(-1.0f, -1.0f, -1.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, -1.0f, -1.0f) },
+		{ XMFLOAT3(1.0f, -1.0f,  1.0f), XMFLOAT3(1.0f, -1.0f,  1.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f,  1.0f), XMFLOAT3(-1.0f, -1.0f,  1.0f) },
 	};
 	
 	D3D11_BUFFER_DESC vertexBufferDesc;
@@ -96,7 +96,7 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 	D3D11_INPUT_ELEMENT_DESC inputDesc[] =
 	{
 		{ "POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA ,0 },
-		{ "COLOR",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA ,0 },
+		{ "COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA ,0 },
 	};
 	ID3D10Blob* pVertexShader = NULL;
 	D3DX11CompileFromFile(_T("Tutoral4.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader, NULL, &hr);
@@ -126,7 +126,7 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 
 	return false;
 }
-bool CCube::UpdateRenderParams(const RenderParams& renderParams)
+bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 {
 	ConstantBuffer cb;
 	cb.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
@@ -135,7 +135,7 @@ bool CCube::UpdateRenderParams(const RenderParams& renderParams)
 	m_pContext->UpdateSubresource(m_pConstBuffer, 0, NULL, &cb, 0, 0);
 	return true;
 }
-void CCube::Tick(DWORD dwTimes)
+void CCubeLight ::Tick(DWORD dwTimes)
 {
 
 }
