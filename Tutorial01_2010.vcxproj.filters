@@ -52,5 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Tutoral2.hlsl" />
+    <FxCompile Include="Tutoral6.hlsl" />
   </ItemGroup>
 </Project>
