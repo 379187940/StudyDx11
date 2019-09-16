@@ -10,19 +10,18 @@ class CCubeLight :
 		XMFLOAT3 postion;
 		XMFLOAT3 Normal;
 	};
-	struct ConstantBufferMatrix
+	struct ConstantBuffer
 	{
 		XMMATRIX mWorld;
 		XMMATRIX mView;
 		XMMATRIX mProjection;
+		struct LightDataInfo
+		{
+			XMFLOAT3 ligthtDir;
+			XMFLOAT3 ligthColor;
+		}lightinfo[2];
 	};
-	struct ConstantBufferLightDir
-	{
-		XMFLOAT3 light1Dir;
-		XMFLOAT3 light1Color;
-		XMFLOAT3 light2Dir;
-		XMFLOAT3 light2Color;
-	};
+	
 public:
 	CCubeLight();
 	virtual ~CCubeLight();
