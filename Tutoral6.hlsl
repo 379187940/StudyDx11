@@ -6,21 +6,26 @@ struct vs_out
 };
 cbuffer ConstantBuffer:register(b0)
 {
-	matrix world;
-	matrix view;
-	matrix Projection;
-	float4 light1Dir;
-	float4 light1Color;
-	float4 light2Dir;
-	float4 light2Color;
+	matrix world				 :packoffset(c0);
+	matrix view					 :packoffset(c4);;
+	matrix Projection            :packoffset(c8);
+	struct LightDataStruct
+	{
+		float4 lightDir;
+		float4 lightColor;
+	}lightinfo[2]                :packoffset(c9);
 };
-vs_out vs_main(float4 in_postion:POSITION , float4 in_color:COLOR )
+vs_out vs_main(float4 in_postion:POSITION , float4 in_normal:NORAML0 )
 {
 	vs_out temp;
 	temp.postion = mul(in_postion,world);
 	temp.postion = mul(temp.postion, view);
 	temp.postion = mul(temp.postion, Projection);
-	temp.color = in_color;
+	temp.color = 0;
+	for (int i = 0; i < 2; i++)
+	{
+		temp.color += saturate(dot(in_normal, lightinfo[i].lightDir) * lightinfo[i].color);
+	}
 	return temp;
 }
 
