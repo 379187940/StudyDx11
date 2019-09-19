@@ -17,8 +17,8 @@ class CCubeLight :
 		XMMATRIX mProjection;
 		struct LightDataInfo
 		{
-			XMFLOAT3 ligthtDir;
-			XMFLOAT3 ligthColor;
+			XMFLOAT4 ligthtDir;
+			XMFLOAT4 ligthColor;
 		}lightinfo[2];
 	};
 	

@@ -128,12 +128,36 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 }
 bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 {
+	static float t = 0.0f;
+	static DWORD dwTimeStart = 0;
+	DWORD dwTimeCur = GetTickCount();
+	if (dwTimeStart == 0)
+		dwTimeStart = dwTimeCur;
+	t = (dwTimeCur - dwTimeStart) / 1000.0f;
+	
 	ConstantBuffer cb;
 	cb.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
 	cb.mView = XMMatrixTranspose(renderParams.m_viewMatrix);
 	cb.mProjection = XMMatrixTranspose(renderParams.m_projMatrix);
+	XMFLOAT4 vLightDirs[2] =
+	{
+		XMFLOAT4(-0.577f, 0.577f, -0.577f, 1.0f),
+		XMFLOAT4(0.0f, 0.0f, -1.0f, 1.0f),
+	};
+	XMFLOAT4 vLightColors[2] =
+	{
+		XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),
+		XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f)
+	};
+	XMMATRIX mRotate = XMMatrixRotationY(-2.0f * t);
+	XMVECTOR vLightDir = XMLoadFloat4(&vLightDirs[1]);
+	vLightDir = XMVector3Transform(vLightDir, mRotate);
+	XMStoreFloat4(&vLightDirs[1], vLightDir);
+	cb.lightinfo[0].ligthtDir = vLightDirs[0];
+	cb.lightinfo[1].ligthtDir = vLightDirs[1];
 
-	cb.lightinfo[0].ligthtDir = XMVector3Normalize( FXMVECTOR())
+	cb.lightinfo[0].ligthColor = vLightColors[0];
+	cb.lightinfo[0].ligthColor = vLightColors[1];
 	m_pContext->UpdateSubresource(m_pConstBuffer, 0, NULL, &cb, 0, 0);
 	return true;
 }
