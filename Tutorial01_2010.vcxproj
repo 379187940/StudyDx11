@@ -386,6 +386,7 @@
     <ClCompile Include="CubeLight.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Tutorial01.cpp" />
   </ItemGroup>
@@ -400,6 +401,7 @@
     <ClInclude Include="IObject.h" />
     <ClInclude Include="IRenderObject.h" />
     <CLInclude Include="resource.h" />
+    <ClInclude Include="Scene.h" />
     <ClInclude Include="Triangle.h" />
     <ResourceCompile Include="Tutorial01.rc" />
   </ItemGroup>

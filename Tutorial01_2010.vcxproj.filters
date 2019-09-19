@@ -26,6 +26,7 @@
     <ClInclude Include="CubeLight.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Tutorial01.cpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="CubeLight.cpp">
       <Filter>RenderObject</Filter>
     </ClCompile>
+    <ClCompile Include="Scene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
