@@ -2,6 +2,9 @@
 #include "assert.h"
 #include <Windows.h>
 #include "IRenderObject.h"
+#include "Cube.h"
+#include "Triangle.h"
+#include "CubeLight.h"
 CScene::CScene()
 {
 }
@@ -9,6 +12,24 @@ CScene::CScene()
 
 CScene::~CScene()
 {
+	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
+	{
+		it->first->Render(dwTimes);
+	}
+}
+bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext)
+{
+	CTriangle* pNewTrianle = new CTriangle();
+	pNewTrianle->Init(pd3d11Device, pContext);
+	CCube* pNewCube = new CCube();
+	pNewCube->Init(pd3d11Device, pContext);
+	CCubeLight* pNewCubeLight = new CCubeLight();
+	pNewCubeLight->Init(pd3d11Device, pContext);
+
+	RegisterObject(pNewTrianle);
+	RegisterObject(pNewCube);
+	RegisterObject(pNewCubeLight);
+	return true;
 }
 bool CScene::RegisterObject(IRenderObject* pRenderObject)
 {
@@ -20,20 +41,20 @@ void CScene::Tick(DWORD dwTimes)
 {
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
-
+		it->first->Tick(dwTimes);
 	}
 }
 bool CScene::Render(DWORD dwTimes)
 {
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
-
+		it->first->Render(dwTimes);
 	}
 }
 bool CScene::UpdateRenderParams(const RenderParams& renderParams)
 {
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
-
+		it->first->UpdateRenderParams(renderParams);
 	}
 }

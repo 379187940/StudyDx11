@@ -13,6 +13,8 @@ public:
 	void Tick(DWORD dwTimes);
 	bool Render(DWORD dwTimes);
 	bool UpdateRenderParams(const RenderParams& renderParams);
+	//Tutoral Scene in general not use
+	bool LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext);
 protected:
 	map<IRenderObject*,int> m_allObject;
 

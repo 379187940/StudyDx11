@@ -22,8 +22,7 @@ ID3D11Device*           g_pd3dDevice = NULL;
 ID3D11DeviceContext*    g_pImmediateContext = NULL;
 IDXGISwapChain*         g_pSwapChain = NULL;
 ID3D11RenderTargetView* g_pRenderTargetView = NULL;
-CTriangle				g_Triangle;
-CCube                   g_Cube;
+
 XMMATRIX g_World, g_View, g_Projection;
 LONG g_width = 640, g_height= 480;
 //--------------------------------------------------------------------------------------
