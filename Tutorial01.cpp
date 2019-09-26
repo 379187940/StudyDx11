@@ -7,10 +7,11 @@
 //--------------------------------------------------------------------------------------
 #include <windows.h>
 #include <d3d11.h>
-#include <d3dx11.h>
+#include <D3DX11.h>
 #include "resource.h"
 #include "Triangle.h"
 #include "Cube.h"
+#include "Scene.h"
 //--------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------
@@ -219,8 +220,7 @@ HRESULT InitDevice()
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
     g_pImmediateContext->RSSetViewports( 1, &vp );
-	g_Triangle.Init(g_pd3dDevice, g_pImmediateContext);
-	g_Cube.Init(g_pd3dDevice, g_pImmediateContext);
+	g_Scene.LoadDafultScene(g_pd3dDevice, g_pImmediateContext);
     return S_OK;
 }
 
@@ -244,12 +244,11 @@ void Render()
 	renderParams.m_worldMatrix = g_World;
 	renderParams.m_viewMatrix = g_View;
 	renderParams.m_projMatrix = g_Projection;
-	g_Cube.UpdateRenderParams(renderParams);
     // Just clear the backbuffer
     float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; //red,green,blue,alpha
+	g_Scene.UpdateRenderParams(renderParams);
     g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, ClearColor );
-	g_Triangle.Render(0);
-	g_Cube.Render(0);
+	g_Scene.Render(GetTickCount());
     g_pSwapChain->Present( 0, 0 );
 }
 

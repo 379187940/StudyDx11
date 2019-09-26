@@ -18,6 +18,7 @@ class IRenderObject :
 	public IObject
 {
 public:
+	//virtual IRenderObject() = 0;
 	virtual bool Render(DWORD dwTimes) = 0;
 	virtual bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext) = 0 ;
 	virtual bool UpdateRenderParams(const RenderParams& renderParams) = 0;

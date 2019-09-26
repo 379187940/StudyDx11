@@ -1,7 +1,8 @@
 #pragma once
 #include <map>
-class IRenderObject;
-class RenderParam;
+#include "IRenderObject.h"
+#include <Windows.h>
+struct RenderParam;
 using namespace std;
 class CScene
 {
@@ -19,4 +20,5 @@ protected:
 	map<IRenderObject*,int> m_allObject;
 
 };
+extern CScene g_Scene;
 

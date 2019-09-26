@@ -6,7 +6,11 @@
 class IObject
 {
 public:
-	//IObject() = 0;
+	virtual ~IObject() = 0 ;
 	virtual void Tick(DWORD dwTimes) = 0;
 };
+inline IObject::~IObject()
+{
+
+}
 
