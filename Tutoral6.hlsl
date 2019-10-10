@@ -24,7 +24,7 @@ vs_out vs_main(float4 in_postion:POSITION , float4 in_normal:NORAML0 )
 	temp.color = 0;
 	for (int i = 0; i < 2; i++)
 	{
-		temp.color += saturate(dot(in_normal, lightinfo[i].lightDir) * lightinfo[i].color);
+		temp.color += saturate(dot(in_normal, lightinfo[i].lightDir) * lightinfo[i].lightColor);
 	}
 	return temp;
 }

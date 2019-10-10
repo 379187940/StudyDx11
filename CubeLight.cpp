@@ -99,8 +99,17 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 		{ "COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA ,0 },
 	};
 	ID3D10Blob* pVertexShader = NULL;
-	D3DX11CompileFromFile(_T("Tutoral6.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader, NULL, &hr);
+	ID3D10Blob* pErrorMsg = NULL;
+	//pErrorMsg->GetBufferPointer();
+	D3DX11CompileFromFile(_T("Tutoral6.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader, &pErrorMsg, &hr);
+	if (pErrorMsg)
+	{
+		OutputDebugStringA((char*)pErrorMsg->GetBufferPointer());
+		pErrorMsg->Release();
+	}
+		
 	assert(SUCCEEDED(hr));
+
 	hr = m_pd3dDevice->CreateInputLayout(inputDesc, ARRAYSIZE(inputDesc), pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), &m_pLayoutInput);
 	assert(SUCCEEDED(hr));
 	//vertex shader
@@ -108,8 +117,10 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 	assert(SUCCEEDED(hr));
 	
 	ID3D10Blob* pPixelShader = NULL;
-	D3DX11CompileFromFile(_T("Tutoral6.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader, NULL, &hr);
+	D3DX11CompileFromFile(_T("Tutoral6.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader, &pErrorMsg, &hr);
 	assert(SUCCEEDED(hr));
+	if (pErrorMsg)
+		pErrorMsg->Release();
 	//pixel shader
 	hr = m_pd3dDevice->CreatePixelShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_pPixelShader);
 	assert(SUCCEEDED(hr));
