@@ -13,7 +13,7 @@ cbuffer ConstantBuffer:register(b0)
 	{
 		float4 lightDir;
 		float4 lightColor;
-	}lightinfo[2]                :packoffset(c9);
+	}lightinfo[2]                :packoffset(c12);
 };
 vs_out vs_main(float4 in_postion:POSITION , float4 in_normal:NORAML0 )
 {
