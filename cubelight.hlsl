@@ -15,7 +15,7 @@ cbuffer ConstantBuffer:register(b0)
 		float4 lightColor;
 	}lightinfo[2]                :packoffset(c12);
 };
-vs_out vs_main(float4 in_postion:POSITION , float4 in_normal:NORAML0 )
+vs_out vs_main(float4 in_postion:POSITION , float3 in_normal:NORMAL )
 {
 	vs_out temp;
 	temp.postion = mul(in_postion,world);
