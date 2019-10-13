@@ -24,7 +24,7 @@ bool CTriangle::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	ID3D10Blob* pVertexShader = NULL;
 	ID3D10Blob* pErrorMsg = NULL;
 	HRESULT hr;
-	D3DX11CompileFromFile(_T("Tutoral2.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader, &pErrorMsg, &hr);
+	D3DX11CompileFromFile(_T("triangle.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader, &pErrorMsg, &hr);
 	if (FAILED(hr))
 		assert(false);
 	D3D11_INPUT_ELEMENT_DESC desc[] = {
@@ -61,7 +61,7 @@ bool CTriangle::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	ID3D10Blob* pPixelShader = NULL;
 	ID3D10Blob*	pBlob_Errors = NULL;
 
-	D3DX11CompileFromFile(_T("Tutoral2.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader, &pBlob_Errors, &hr);
+	D3DX11CompileFromFile(_T("triangle.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader, &pBlob_Errors, &hr);
 	LPVOID l_pError = NULL;
 	if (FAILED(hr))
 	{

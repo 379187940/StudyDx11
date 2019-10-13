@@ -50,10 +50,10 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Tutoral4.hlsl" />
+    <FxCompile Include="triangle.hlsl" />
+    <FxCompile Include="cubelight.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Tutoral2.hlsl" />
-    <FxCompile Include="Tutoral6.hlsl" />
+    <None Include="cube.hlsl" />
   </ItemGroup>
 </Project>

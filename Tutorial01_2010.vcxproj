@@ -374,10 +374,10 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <FxCompile Include="Tutoral2.hlsl">
+    <FxCompile Include="triangle.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
-    <FxCompile Include="Tutoral6.hlsl">
+    <FxCompile Include="cubelight.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
@@ -391,7 +391,7 @@
     <ClCompile Include="Tutorial01.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Tutoral4.hlsl">
+    <None Include="cube.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </None>
   </ItemGroup>
