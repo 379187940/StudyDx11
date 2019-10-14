@@ -11,9 +11,11 @@
     <Filter Include="RenderObject">
       <UniqueIdentifier>{4a3e342f-b99a-49a2-b9c5-82cf79eea9d8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainFile">
+      <UniqueIdentifier>{c008ac3f-b770-486d-9853-8bd0d987f87c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="IObject.h" />
     <ClInclude Include="IRenderObject.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
@@ -26,10 +28,14 @@
     <ClInclude Include="CubeLight.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
-    <ClInclude Include="Scene.h" />
+    <ClInclude Include="IObject.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>MainFile</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Tutorial01.cpp" />
     <ClCompile Include="Triangle.cpp">
       <Filter>RenderObject</Filter>
     </ClCompile>
@@ -39,7 +45,12 @@
     <ClCompile Include="CubeLight.cpp">
       <Filter>RenderObject</Filter>
     </ClCompile>
-    <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Scene.cpp">
+      <Filter>MainFile</Filter>
+    </ClCompile>
+    <ClCompile Include="Tutorial01.cpp">
+      <Filter>MainFile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
