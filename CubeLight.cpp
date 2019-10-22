@@ -139,13 +139,8 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 }
 bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 {
-	static float t = 0.0f;
-	static DWORD dwTimeStart = 0;
-	DWORD dwTimeCur = GetTickCount();
-	if (dwTimeStart == 0)
-		dwTimeStart = dwTimeCur;
-	t = (dwTimeCur - dwTimeStart) / 1000.0f;
-	
+	static DWORD step = 0;
+	step = (step + 1) % 36000;
 	ConstantBuffer cb;
 	cb.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
 	cb.mView = XMMatrixTranspose(renderParams.m_viewMatrix);
@@ -160,7 +155,7 @@ bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 		XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),
 		XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f)
 	};
-	XMMATRIX mRotate = XMMatrixRotationY(-2.0f * t);
+	XMMATRIX mRotate = XMMatrixRotationY(step/36000.f*2*XM_PI);
 	XMVECTOR vLightDir = XMLoadFloat4(&vLightDirs[1]);
 	vLightDir = XMVector3Transform(vLightDir, mRotate);
 	XMStoreFloat4(&vLightDirs[1], vLightDir);
