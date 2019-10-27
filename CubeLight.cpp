@@ -143,8 +143,8 @@ bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 	step = (step + 1) % 36000;
 	ConstantBuffer cb;
 	cb.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
-	cb.mWorld = XMMatrixMultiply(cb.mWorld,XMMatrixTranslation(-1.0f, 0.0f, 0.0f) );
-	
+	cb.mWorld = XMMatrixTranslation(-1.0f, 0.0f, 0.0f) *cb.mWorld;
+	//XMMATRIX temp = XMMatrixTranslation(-1.0f, 0.0f, 0.0f) ;
 	cb.mView = XMMatrixTranspose(renderParams.m_viewMatrix);
 	cb.mProjection = XMMatrixTranspose(renderParams.m_projMatrix);
 	XMFLOAT4 vLightDirs[2] =
