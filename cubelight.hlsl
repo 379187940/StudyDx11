@@ -1,35 +1,67 @@
+//--------------------------------------------------------------------------------------
+// File: Tutorial06.fx
+//
+// Copyright (c) Microsoft Corporation. All rights reserved.
+//--------------------------------------------------------------------------------------
 
-struct vs_out
+
+//--------------------------------------------------------------------------------------
+// Constant Buffer Variables
+//--------------------------------------------------------------------------------------
+cbuffer ConstantBuffer : register(b0)
 {
-	float4 postion:SV_POSITION;
-	float4 color:COLOR0;
-};
-cbuffer ConstantBuffer:register(b0)
-{
-	matrix world				 :packoffset(c0);
-	matrix view					 :packoffset(c4);;
-	matrix Projection            :packoffset(c8);
+	matrix World :packoffset(c0);
+	matrix View  :packoffset(c4);
+	matrix Projection : packoffset(c8);
 	struct LightDataStruct
 	{
 		float4 lightDir;
 		float4 lightColor;
-	}lightinfo[2]                :packoffset(c12);
-};
-vs_out vs_main(float4 in_postion:POSITION , float3 in_normal:NORMAL )
-{
-	vs_out temp;
-	temp.postion = mul(in_postion,world);
-	temp.postion = mul(temp.postion, view);
-	temp.postion = mul(temp.postion, Projection);
-	temp.color = 0;
-	for (int i = 0; i < 2; i++)
-	{
-		temp.color += saturate(dot(in_normal, lightinfo[i].lightDir) * lightinfo[i].lightColor);
-	}
-	return temp;
+	}lightinfo[2] :packoffset(c12);
 }
 
-float4 ps_main(vs_out vsout) : SV_Target
+
+//--------------------------------------------------------------------------------------
+struct VS_INPUT
 {
-	return vsout.color;
+	float4 Pos : POSITION;
+	float3 Norm : NORMAL;
+};
+
+struct PS_INPUT
+{
+	float4 Pos : SV_POSITION;
+	float3 Norm : TEXCOORD0;
+};
+
+
+//--------------------------------------------------------------------------------------
+// Vertex Shader
+//--------------------------------------------------------------------------------------
+PS_INPUT vs_main(VS_INPUT input)
+{
+	PS_INPUT output = (PS_INPUT)0;
+	output.Pos = mul(input.Pos, World);
+	output.Pos = mul(output.Pos, View);
+	output.Pos = mul(output.Pos, Projection);
+	output.Norm = mul(input.Norm, World);
+
+	return output;
+}
+
+
+//--------------------------------------------------------------------------------------
+// Pixel Shader
+//--------------------------------------------------------------------------------------
+float4 ps_main(PS_INPUT input) : SV_Target
+{
+	float4 finalColor = 0;
+
+	//do NdotL lighting for 2 lights
+	for (int i = 0; i<2; i++)
+	{
+		finalColor += saturate(dot((float3)lightinfo[i].lightDir,input.Norm) * lightinfo[i].lightColor);
+	}
+	finalColor.a = 1;
+	return finalColor;
 }

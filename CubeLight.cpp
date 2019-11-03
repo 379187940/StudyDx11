@@ -24,6 +24,7 @@ bool CCubeLight ::Render(DWORD dwTimes)
 	m_pContext->IASetVertexBuffers(0,1,&m_pVertexBuffer , &stride , &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstBuffer);
+	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pContext->DrawIndexed(36, 0, 0);
 	return false;
 }
@@ -37,19 +38,39 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 	HRESULT hr;
 	SimpleVertex vertices[] =
 	{
-		{ XMFLOAT3(-1.0f,  1.0f, -1.0f), XMFLOAT3(-1.0f,  1.0f, -1.0f) },
-		{ XMFLOAT3(1.0f,  1.0f, -1.0f), XMFLOAT3(1.0f,  1.0f, -1.0f) },
-		{ XMFLOAT3(1.0f,  1.0f,  1.0f), XMFLOAT3(1.0f,  1.0f,  1.0f) },
-		{ XMFLOAT3(-1.0f,  1.0f,  1.0f), XMFLOAT3(-1.0f,  1.0f,  1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(-1.0f, -1.0f, -1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, -1.0f, -1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f,  1.0f), XMFLOAT3(1.0f, -1.0f,  1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f,  1.0f), XMFLOAT3(-1.0f, -1.0f,  1.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
+
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f) },
+
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f) },
+
+		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
+
+		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f) },
+
+		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
 	};
-	
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	memset(&vertexBufferDesc, 0 , sizeof(D3D11_BUFFER_DESC));
-	vertexBufferDesc.ByteWidth = sizeof(SimpleVertex) * 8;
+	vertexBufferDesc.ByteWidth = sizeof(SimpleVertex) * 24;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
 	vertexBufferDesc.MiscFlags = 0;
@@ -64,20 +85,20 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 		3,1,0,
 		2,1,3,
 
-		0,5,4,
-		1,5,0,
-
-		3,4,7,
-		0,4,3,
-
-		1,6,5,
-		2,6,1,
-
-		2,7,6,
-		3,7,2,
-
 		6,4,5,
 		7,4,6,
+
+		11,9,8,
+		10,9,11,
+
+		14,12,13,
+		15,12,14,
+
+		19,17,16,
+		18,17,19,
+
+		22,20,21,
+		23,20,22
 	};
 	D3D11_BUFFER_DESC indexBufferDesc;
 	memset(&indexBufferDesc, 0 , sizeof(D3D11_BUFFER_DESC));
@@ -140,11 +161,11 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 {
 	static DWORD step = 0;
-	step = (step + 1) % 36000;
+	step = (step + 1) % 3600;
 	ConstantBuffer cb;
 	cb.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
-	cb.mWorld = XMMatrixTranslation(-1.0f, 0.0f, 0.0f) *cb.mWorld;
-	//XMMATRIX temp = XMMatrixTranslation(-1.0f, 0.0f, 0.0f) ;
+	cb.mWorld = XMMatrixTranslation(-0.0f, 0.50f, 0.0f) *cb.mWorld;
+	XMMATRIX temp = XMMatrixTranslation(-1.0f, 0.0f, 0.0f) ;
 	cb.mView = XMMatrixTranspose(renderParams.m_viewMatrix);
 	cb.mProjection = XMMatrixTranspose(renderParams.m_projMatrix);
 	XMFLOAT4 vLightDirs[2] =
@@ -154,10 +175,10 @@ bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 	};
 	XMFLOAT4 vLightColors[2] =
 	{
-		XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),
+		XMFLOAT4(0.0f, 0.5f, 0.0f, 1.0f),
 		XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f)
 	};
-	XMMATRIX mRotate = XMMatrixRotationY(step/36000.f*2*XM_PI);
+	XMMATRIX mRotate = XMMatrixRotationY(step/3600.f*2*XM_PI);
 	XMVECTOR vLightDir = XMLoadFloat4(&vLightDirs[1]);
 	vLightDir = XMVector3Transform(vLightDir, mRotate);
 	XMStoreFloat4(&vLightDirs[1], vLightDir);
@@ -165,7 +186,7 @@ bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 	cb.lightinfo[1].ligthtDir = vLightDirs[1];
 
 	cb.lightinfo[0].ligthColor = vLightColors[0];
-	cb.lightinfo[0].ligthColor = vLightColors[1];
+	cb.lightinfo[1].ligthColor = vLightColors[1];
 	m_pContext->UpdateSubresource(m_pConstBuffer, 0, NULL, &cb, 0, 0);
 	return true;
 }
