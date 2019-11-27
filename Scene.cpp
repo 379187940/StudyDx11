@@ -28,7 +28,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	pNewCubeLight->Init(pd3d11Device, pContext);
 
 	//RegisterObject(pNewTrianle);
-	RegisterObject(pNewCube);
+	//RegisterObject(pNewCube);
 	RegisterObject(pNewCubeLight);
 	return true;
 }

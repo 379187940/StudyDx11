@@ -23,7 +23,8 @@ ID3D11Device*           g_pd3dDevice = NULL;
 ID3D11DeviceContext*    g_pImmediateContext = NULL;
 IDXGISwapChain*         g_pSwapChain = NULL;
 ID3D11RenderTargetView* g_pRenderTargetView = NULL;
-
+ID3D11Texture2D*        g_pDepthStencil = NULL;
+ID3D11DepthStencilView* g_pDepthStencilView = NULL;
 XMMATRIX g_World, g_View, g_Projection;
 LONG g_width = 640, g_height= 480;
 //--------------------------------------------------------------------------------------
@@ -209,7 +210,34 @@ HRESULT InitDevice()
     if( FAILED( hr ) )
         return hr;
 
-    g_pImmediateContext->OMSetRenderTargets( 1, &g_pRenderTargetView, NULL );
+	D3D11_TEXTURE2D_DESC descDepth;
+	ZeroMemory(&descDepth, sizeof(descDepth));
+	descDepth.Width = width;
+	descDepth.Height = height;
+	descDepth.MipLevels = 1;
+	descDepth.ArraySize = 1;
+	descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	descDepth.SampleDesc.Count = 1;
+	descDepth.SampleDesc.Quality = 0;
+	descDepth.Usage = D3D11_USAGE_DEFAULT;
+	descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	descDepth.CPUAccessFlags = 0;
+	descDepth.MiscFlags = 0;
+	hr = g_pd3dDevice->CreateTexture2D(&descDepth, NULL, &g_pDepthStencil);
+	if (FAILED(hr))
+		return hr;
+
+	// Create the depth stencil view
+	D3D11_DEPTH_STENCIL_VIEW_DESC descDSV;
+	ZeroMemory(&descDSV, sizeof(descDSV));
+	descDSV.Format = descDepth.Format;
+	descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
+	descDSV.Texture2D.MipSlice = 0;
+	hr = g_pd3dDevice->CreateDepthStencilView(g_pDepthStencil, &descDSV, &g_pDepthStencilView);
+	if (FAILED(hr))
+		return hr;
+
+    g_pImmediateContext->OMSetRenderTargets( 1, &g_pRenderTargetView, g_pDepthStencilView);
 
     // Setup the viewport
     D3D11_VIEWPORT vp;
@@ -234,12 +262,12 @@ void Render()
 
 	// Initialize the view matrix
 	XMVECTOR Eye = XMVectorSet(0.0f, 5.0f, -10.0f, 0.0f);
-	XMVECTOR At = XMVectorSet(0.0f, 5.0f, 0.0f, 0.0f);
+	XMVECTOR At = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 	g_View = XMMatrixLookAtLH(Eye, At, Up);
 
 	// Initialize the projection matrix
-	g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, g_width / (FLOAT)g_height, 0.01f, 100.0f);
+	g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, g_width / (FLOAT)g_height, 0.01f, 200.0f);
 	RenderParams renderParams;
 	renderParams.m_worldMatrix = g_World;
 	renderParams.m_viewMatrix = g_View;
@@ -248,6 +276,7 @@ void Render()
     float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; //red,green,blue,alpha
 	g_Scene.UpdateRenderParams(renderParams);
     g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, ClearColor );
+	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	g_Scene.Render(GetTickCount());
     g_pSwapChain->Present( 0, 0 );
 }

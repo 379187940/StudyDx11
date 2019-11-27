@@ -15,11 +15,8 @@ class CCubeLight :
 		XMMATRIX mWorld;
 		XMMATRIX mView;
 		XMMATRIX mProjection;
-		struct LightDataInfo
-		{
-			XMFLOAT4 ligthtDir;
-			XMFLOAT4 ligthColor;
-		}lightinfo[2];
+		XMFLOAT4 vLightDir[2];
+		XMFLOAT4 vLightColor[2];
 	};
 	
 public:

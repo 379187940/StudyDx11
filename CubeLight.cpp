@@ -24,6 +24,7 @@ bool CCubeLight ::Render(DWORD dwTimes)
 	m_pContext->IASetVertexBuffers(0,1,&m_pVertexBuffer , &stride , &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstBuffer);
+	m_pContext->PSSetConstantBuffers(0, 1, &m_pConstBuffer);
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pContext->DrawIndexed(36, 0, 0);
 	return false;
@@ -73,7 +74,7 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 	vertexBufferDesc.ByteWidth = sizeof(SimpleVertex) * 24;
 	vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	vertexBufferDesc.CPUAccessFlags = 0;
-	vertexBufferDesc.MiscFlags = 0;
+	//vertexBufferDesc.MiscFlags = 0;
 	vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	D3D11_SUBRESOURCE_DATA subVertexData;
 	memset(&subVertexData, 0 , sizeof(D3D11_SUBRESOURCE_DATA));
@@ -103,9 +104,9 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 	D3D11_BUFFER_DESC indexBufferDesc;
 	memset(&indexBufferDesc, 0 , sizeof(D3D11_BUFFER_DESC));
 	indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-	indexBufferDesc.ByteWidth = ARRAYSIZE(indices) * 2;
+	indexBufferDesc.ByteWidth = 36 * sizeof(WORD);
 	indexBufferDesc.CPUAccessFlags = 0;
-	indexBufferDesc.MiscFlags = 0;
+	//indexBufferDesc.MiscFlags = 0;
 	indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	D3D11_SUBRESOURCE_DATA subIndexData;
 	memset(&subIndexData, 0, sizeof(D3D11_SUBRESOURCE_DATA));
@@ -164,10 +165,10 @@ bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 	step = (step + 1) % 3600;
 	ConstantBuffer cb;
 	cb.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
-	cb.mWorld = XMMatrixTranslation(-0.0f, 0.50f, 0.0f) *cb.mWorld;
+	cb.mWorld = XMMatrixTranslation(-0.1f, 0.0f, 0.0f) ;
 	XMMATRIX temp = XMMatrixTranslation(-1.0f, 0.0f, 0.0f) ;
-	cb.mView = XMMatrixTranspose(renderParams.m_viewMatrix);
-	cb.mProjection = XMMatrixTranspose(renderParams.m_projMatrix);
+	cb.mView = renderParams.m_viewMatrix;
+	cb.mProjection = renderParams.m_projMatrix;
 	XMFLOAT4 vLightDirs[2] =
 	{
 		XMFLOAT4(-0.577f, 0.577f, -0.577f, 1.0f),
@@ -175,18 +176,18 @@ bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 	};
 	XMFLOAT4 vLightColors[2] =
 	{
-		XMFLOAT4(0.0f, 0.5f, 0.0f, 1.0f),
+		XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),
 		XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f)
 	};
 	XMMATRIX mRotate = XMMatrixRotationY(step/3600.f*2*XM_PI);
 	XMVECTOR vLightDir = XMLoadFloat4(&vLightDirs[1]);
-	vLightDir = XMVector3Transform(vLightDir, mRotate);
-	XMStoreFloat4(&vLightDirs[1], vLightDir);
-	cb.lightinfo[0].ligthtDir = vLightDirs[0];
-	cb.lightinfo[1].ligthtDir = vLightDirs[1];
+	//vLightDir = XMVector3Transform(vLightDir, mRotate);
+	//XMStoreFloat4(&vLightDirs[1], vLightDir);
+	cb.vLightDir[0] = vLightDirs[0];
+	cb.vLightDir[1] = vLightDirs[1];
 
-	cb.lightinfo[0].ligthColor = vLightColors[0];
-	cb.lightinfo[1].ligthColor = vLightColors[1];
+	cb.vLightColor[0]  = vLightColors[0];
+	cb.vLightColor[1] = vLightColors[1];
 	m_pContext->UpdateSubresource(m_pConstBuffer, 0, NULL, &cb, 0, 0);
 	return true;
 }

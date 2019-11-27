@@ -10,14 +10,11 @@
 //--------------------------------------------------------------------------------------
 cbuffer ConstantBuffer : register(b0)
 {
-	matrix World :packoffset(c0);
-	matrix View  :packoffset(c4);
-	matrix Projection : packoffset(c8);
-	struct LightDataStruct
-	{
-		float4 lightDir;
-		float4 lightColor;
-	}lightinfo[2] :packoffset(c12);
+	matrix World ;
+	matrix View  ;
+	matrix Projection ;
+	float4 vLightDir[2];
+	float4 vLightColor[2];
 }
 
 
@@ -60,8 +57,9 @@ float4 ps_main(PS_INPUT input) : SV_Target
 	//do NdotL lighting for 2 lights
 	for (int i = 0; i<2; i++)
 	{
-		finalColor += saturate(dot((float3)lightinfo[i].lightDir,input.Norm) * lightinfo[i].lightColor);
+		finalColor += saturate(dot((float3)vLightDir[i], input.Norm) * vLightColor[i]);
 	}
 	finalColor.a = 1;
+	finalColor = float4(1,0,0,1);
 	return finalColor;
 }
