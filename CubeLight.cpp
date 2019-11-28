@@ -18,13 +18,15 @@ bool CCubeLight ::Render(DWORD dwTimes)
 {
 	m_pContext->IASetInputLayout(m_pLayoutInput);
 	m_pContext->VSSetShader(m_pVertexShader,NULL , 0);
+	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstBuffer);
 	m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
+	m_pContext->PSSetConstantBuffers(0, 1, &m_pConstBuffer);
 	UINT stride = sizeof(SimpleVertex);
 	UINT offset = 0;
 	m_pContext->IASetVertexBuffers(0,1,&m_pVertexBuffer , &stride , &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
-	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstBuffer);
-	m_pContext->PSSetConstantBuffers(0, 1, &m_pConstBuffer);
+	
+	
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pContext->DrawIndexed(36, 0, 0);
 	return false;
@@ -165,10 +167,10 @@ bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 	step = (step + 1) % 3600;
 	ConstantBuffer cb;
 	cb.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
-	cb.mWorld = XMMatrixTranslation(-0.1f, 0.0f, 0.0f) ;
+	//cb.mWorld =XMMatrixScaling(10.0f, 10.0f, 10.0f) ;
 	XMMATRIX temp = XMMatrixTranslation(-1.0f, 0.0f, 0.0f) ;
-	cb.mView = renderParams.m_viewMatrix;
-	cb.mProjection = renderParams.m_projMatrix;
+	cb.mView = XMMatrixTranspose( renderParams.m_viewMatrix);
+	cb.mProjection = XMMatrixTranspose(renderParams.m_projMatrix);
 	XMFLOAT4 vLightDirs[2] =
 	{
 		XMFLOAT4(-0.577f, 0.577f, -0.577f, 1.0f),
@@ -181,8 +183,8 @@ bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 	};
 	XMMATRIX mRotate = XMMatrixRotationY(step/3600.f*2*XM_PI);
 	XMVECTOR vLightDir = XMLoadFloat4(&vLightDirs[1]);
-	//vLightDir = XMVector3Transform(vLightDir, mRotate);
-	//XMStoreFloat4(&vLightDirs[1], vLightDir);
+	vLightDir = XMVector3Transform(vLightDir, mRotate);
+	XMStoreFloat4(&vLightDirs[1], vLightDir);
 	cb.vLightDir[0] = vLightDirs[0];
 	cb.vLightDir[1] = vLightDirs[1];
 

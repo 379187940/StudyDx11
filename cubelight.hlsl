@@ -60,6 +60,6 @@ float4 ps_main(PS_INPUT input) : SV_Target
 		finalColor += saturate(dot((float3)vLightDir[i], input.Norm) * vLightColor[i]);
 	}
 	finalColor.a = 1;
-	finalColor = float4(1,0,0,1);
+	//finalColor = float4(1,0,0,1);
 	return finalColor;
 }
