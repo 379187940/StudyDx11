@@ -24,6 +24,7 @@ bool CCube::Render(DWORD dwTimes)
 	m_pContext->IASetVertexBuffers(0,1,&m_pVertexBuffer , &stride , &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	m_pContext->VSSetConstantBuffers(1, 1, &m_pConstBuffer);
+	
 	//m_pContext->vsset
 	m_pContext->DrawIndexed(36, 0, 0);
 	return false;

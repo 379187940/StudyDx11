@@ -267,7 +267,7 @@ void Render()
 	g_View = XMMatrixLookAtLH(Eye, At, Up);
 
 	// Initialize the projection matrix
-	g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV2, g_width / (FLOAT)g_height, 0.01f, 200.0f);
+	g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, g_width / (FLOAT)g_height, 0.01f, 100000.0f);
 	RenderParams renderParams;
 	renderParams.m_worldMatrix = g_World;
 	renderParams.m_viewMatrix = g_View;
