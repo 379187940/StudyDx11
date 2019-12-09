@@ -34,9 +34,9 @@ bool CTriangle::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	m_pd3dDevice->CreateInputLayout(desc, ARRAYSIZE(desc), pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), &m_pLayoutInput);
 	assert(m_pLayoutInput);
 	SimpleVertex vertices[] = {
-		XMFLOAT3( 0.0f , 0.5f , 0.999f ) ,
-		XMFLOAT3( 0.5f , -0.5f , 0.999f) ,
-		XMFLOAT3(-0.5f,-0.5f,0.999f)
+		XMFLOAT3( 0.0f , 0.5f , 1.0f ) ,
+		XMFLOAT3( 0.5f , -0.5f , 1.0f) ,
+		XMFLOAT3(-0.5f,-0.5f,1.0f)
 	};
 	D3D11_BUFFER_DESC bd;
 	memset(&bd, 0, sizeof(bd));
