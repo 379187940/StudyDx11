@@ -6,9 +6,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tutorial01", "Tutorial01_20
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3rdsdk", "3rdsdk", "{DD780C3B-963A-4137-8279-53676A32E8D5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AntTweakBar", "..\AntTweakBar\code\src\AntTweakBar.vcxproj", "{B99E1FA1-C30A-45F2-9D57-9E9C21B2DF42}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AntTweakBar", "3rdsdk\AntTweakBar\src\AntTweakBar.vcxproj", "{B99E1FA1-C30A-45F2-9D57-9E9C21B2DF42}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TwSimpleDX11", "..\AntTweakBar\code\examples\TwSimpleDX11.vcxproj", "{6D417E54-50AC-40D3-913A-35CD73F93D51}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TwSimpleDX11", "3rdsdk\AntTweakBar\examples\TwSimpleDX11.vcxproj", "{6D417E54-50AC-40D3-913A-35CD73F93D51}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
