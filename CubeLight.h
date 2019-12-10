@@ -1,8 +1,9 @@
 #pragma once
 #include "IRenderObject.h"
 #include <xnamath.h>
+#include "BaseRenderObject.h"
 class CCubeLight :
-	public IRenderObject,public CCommonRenderData
+	public CBaseRenderObject,public CCommonRenderData
 {
 
 	struct SimpleVertex
@@ -20,7 +21,7 @@ class CCubeLight :
 	};
 	
 public:
-	CCubeLight();
+	CCubeLight(wstring strName);
 	virtual ~CCubeLight();
 	virtual bool Render(DWORD dwTimes);
 	virtual bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);

@@ -1,8 +1,9 @@
 #pragma once
 #include "IRenderObject.h"
 #include <xnamath.h>
+#include "BaseRenderObject.h"
 class CTriangle :
-	public IRenderObject,public CCommonRenderData
+	public CBaseRenderObject,public CCommonRenderData
 {
 	struct SimpleVertex
 	{
@@ -10,7 +11,7 @@ class CTriangle :
 		//float r, g, b;
 	};
 public:
-	CTriangle();
+	CTriangle(wstring strName);
 	virtual ~CTriangle();
 	virtual void Tick(DWORD dwTimes) override;
 	virtual bool Render(DWORD dwTimes) override;

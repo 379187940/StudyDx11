@@ -34,6 +34,8 @@
     <ClInclude Include="Scene.h">
       <Filter>MainFile</Filter>
     </ClInclude>
+    <ClInclude Include="BaseRenderObject.h" />
+    <ClInclude Include="unit.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -51,6 +53,7 @@
     <ClCompile Include="Tutorial01.cpp">
       <Filter>MainFile</Filter>
     </ClCompile>
+    <ClCompile Include="BaseRenderObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">

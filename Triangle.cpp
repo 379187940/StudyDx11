@@ -1,7 +1,8 @@
 #include "Triangle.h"
 #include <assert.h>
 #include<tchar.h>
-CTriangle::CTriangle()
+CTriangle::CTriangle(wstring strName):
+	CBaseRenderObject(strName)
 {
 
 }

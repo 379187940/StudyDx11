@@ -1,8 +1,9 @@
 #pragma once
 #include "IRenderObject.h"
 #include <xnamath.h>
+#include "BaseRenderObject.h"
 class CCube :
-	public IRenderObject,public CCommonRenderData
+	public CBaseRenderObject,public CCommonRenderData
 {
 
 	struct SimpleVertex
@@ -17,7 +18,7 @@ class CCube :
 		XMMATRIX mProjection;
 	};
 public:
-	CCube();
+	CCube(wstring strName);
 	virtual ~CCube();
 	virtual bool Render(DWORD dwTimes);
 	virtual bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);

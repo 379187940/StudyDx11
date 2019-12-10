@@ -2,14 +2,16 @@
 #include "assert.h"
 #include <tchar.h>
 
-CCube::CCube()
+CCube::CCube(wstring strName):
+	CBaseRenderObject(strName)
 {
 	m_pConstBuffer = NULL;
 }
 
 
-CCube::~CCube()
+CCube::~CCube()  
 {
+	
 	if (m_pConstBuffer)
 		m_pConstBuffer->Release();
 }

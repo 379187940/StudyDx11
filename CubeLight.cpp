@@ -2,7 +2,8 @@
 #include "assert.h"
 #include <tchar.h>
 
-CCubeLight ::CCubeLight ()
+CCubeLight ::CCubeLight (wstring strName):
+	CBaseRenderObject(strName)
 {
 	m_pConstBuffer = NULL;
 }
