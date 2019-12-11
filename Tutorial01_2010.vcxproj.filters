@@ -31,8 +31,10 @@
     <ClInclude Include="Scene.h">
       <Filter>MainFile</Filter>
     </ClInclude>
-    <ClInclude Include="BaseRenderObject.h" />
     <ClInclude Include="unit.h" />
+    <ClInclude Include="BaseRenderObject.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -50,7 +52,9 @@
     <ClCompile Include="Tutorial01.cpp">
       <Filter>MainFile</Filter>
     </ClCompile>
-    <ClCompile Include="BaseRenderObject.cpp" />
+    <ClCompile Include="BaseRenderObject.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
