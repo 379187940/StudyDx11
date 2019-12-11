@@ -15,6 +15,9 @@
     <Filter Include="Resource Files">
       <UniqueIdentifier>{d4d938bf-b5f6-43d3-896f-a3fff1885877}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\DXUT">
+      <UniqueIdentifier>{4d4929cf-9171-4ddd-b271-61f72b58441f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="LoadOGL.cpp">
