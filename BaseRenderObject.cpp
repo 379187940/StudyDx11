@@ -5,6 +5,7 @@
 CBaseRenderObject::CBaseRenderObject(wstring strName)
 {
 	m_Name = strName;
+	m_isVisible = true;
 }
 
 

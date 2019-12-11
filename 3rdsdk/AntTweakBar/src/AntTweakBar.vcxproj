@@ -87,7 +87,7 @@
     <TargetName>$(ProjectName)64</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>../lib/debug\</OutDir>
+    <OutDir>../../../debug/</OutDir>
     <IntDir>debug32\</IntDir>
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
