@@ -66,14 +66,25 @@
 #       endif
 #   endif
 #else
-#   define TW_API TW_IMPORT_API
-#   if defined(_MSC_VER) && !defined(TW_NO_LIB_PRAGMA)
-#       ifdef _WIN64
-#           pragma comment(lib, "AntTweakBar64")
-#       else
-#           pragma comment(lib, "AntTweakBar")
-#       endif
-#   endif
+#   ifndef _DEBUG
+#		define TW_API TW_IMPORT_API
+#		if defined(_MSC_VER) && !defined(TW_NO_LIB_PRAGMA)
+#		    ifdef _WIN64
+#		        pragma comment(lib, "AntTweakBar64")
+#		    else
+#		        pragma comment(lib, "AntTweakBar")
+#		    endif
+#		endif
+#	else
+#		define TW_API TW_IMPORT_API
+#		if defined(_MSC_VER) && !defined(TW_NO_LIB_PRAGMA)
+#		    ifdef _WIN64
+#		        pragma comment(lib, "AntTweakBar64d")
+#		    else
+#		        pragma comment(lib, "AntTweakBard")
+#		    endif
+#		endif
+#	endif
 #endif
 
 
