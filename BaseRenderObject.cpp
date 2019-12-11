@@ -16,4 +16,4 @@ CBaseRenderObject::~CBaseRenderObject()
 wstring CBaseRenderObject::GetName()
 {
 	return m_Name;
-}
+} 
