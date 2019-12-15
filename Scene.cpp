@@ -60,7 +60,8 @@ bool CScene::Render(DWORD dwTimes)
 {
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
-		it->first->Render(dwTimes);
+		if ( it->first->IsVisible() )
+			it->first->Render(dwTimes);
 	}
 	return true;
 }
@@ -72,16 +73,20 @@ bool CScene::UpdateRenderParams(const RenderParams& renderParams)
 	}
 	return true;
 }
-void TW_CALL CScene::SetSpongeAOCB(const void *value, void * /*clientData*/)
-{
-	
+void TW_CALL CScene::SetSpongeAOCB(const void *value, void * clientData)
+{ 
+	bool bShow = *static_cast<const bool *>(value);
+	CBaseRenderObject* pRenderObject = static_cast<CBaseRenderObject*>(clientData);
+	pRenderObject->SetVisible(bShow);
 }
 
 
 // Callback function called by AntTweakBar to get the sponge recursion level
-void TW_CALL CScene::GetSpongeAOCB(void *value, void * /*clientData*/)
+void TW_CALL CScene::GetSpongeAOCB(void *value, void * clientData)
 {
-	/**static_cast<int *>(value) = g_SpongeLevel;*/
+	CBaseRenderObject* pRenderObject = static_cast<CBaseRenderObject*>(clientData);
+	*static_cast<bool *>(value) = pRenderObject->IsVisible();
+	
 }
 void CScene::BuildSelectRenderUi()
 {
@@ -97,6 +102,6 @@ void CScene::BuildSelectRenderUi()
 			continue;
 		wcstombs(temp, pRenderObject->GetName().data(), MAX_PATH);
 		sprintf_s(tempKey, MAX_PATH, "group=Sponge key=%d", it->second);
-		TwAddVarCB(bar, temp, TW_TYPE_BOOLCPP, SetSpongeAOCB, GetSpongeAOCB, NULL, tempKey);
+		TwAddVarCB(bar, temp, TW_TYPE_BOOLCPP, SetSpongeAOCB, GetSpongeAOCB, it->first, tempKey);
 	}
 }
