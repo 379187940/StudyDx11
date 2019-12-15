@@ -46,7 +46,7 @@ bool CScene::RegisterObject(IRenderObject* pRenderObject)
 {
 	if (m_allObject.find(pRenderObject) != m_allObject.end())
 		assert(0);
-	m_allObject[pRenderObject] = 1;
+	m_allObject[pRenderObject] = m_allObject.size()-1;
 	return true;
 }
 void CScene::Tick(DWORD dwTimes)
@@ -72,13 +72,31 @@ bool CScene::UpdateRenderParams(const RenderParams& renderParams)
 	}
 	return true;
 }
+void TW_CALL CScene::SetSpongeAOCB(const void *value, void * /*clientData*/)
+{
+	
+}
+
+
+// Callback function called by AntTweakBar to get the sponge recursion level
+void TW_CALL CScene::GetSpongeAOCB(void *value, void * /*clientData*/)
+{
+	/**static_cast<int *>(value) = g_SpongeLevel;*/
+}
 void CScene::BuildSelectRenderUi()
 {
-	/*TwBar *bar = TwNewBar("TweakBar");
+	TwBar *bar = TwNewBar("Show Object");
 	int barSize[2] = { 224, 320 };
 	TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
+	static char temp[MAX_PATH];
+	static char tempKey[MAX_PATH];
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
-		TwAddVarCB(bar, "Ambient Occlusion", TW_TYPE_BOOLCPP, SetSpongeAOCB, GetSpongeAOCB, NULL, "group=Sponge key=o");
-	}*/
+		CBaseRenderObject* pRenderObject = dynamic_cast<CBaseRenderObject*>(it->first);
+		if (!pRenderObject)
+			continue;
+		wcstombs(temp, pRenderObject->GetName().data(), MAX_PATH);
+		sprintf_s(tempKey, MAX_PATH, "group=Sponge key=%d", it->second);
+		TwAddVarCB(bar, temp, TW_TYPE_BOOLCPP, SetSpongeAOCB, GetSpongeAOCB, NULL, tempKey);
+	}
 }
