@@ -69,7 +69,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
             Render();
         }
     }
-
+	TwTerminate();
     CleanupDevice();
 
     return ( int )msg.wParam;
@@ -121,7 +121,8 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
 {
     PAINTSTRUCT ps;
     HDC hdc;
-
+	if (TwEventWin(hWnd, message, wParam, lParam))
+		return 0; // Event has been handled by AntTweakBar
     switch( message )
     {
         case WM_PAINT:
@@ -278,6 +279,7 @@ void Render()
     g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, ClearColor );
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	g_Scene.Render(GetTickCount());
+	TwDraw();
     g_pSwapChain->Present( 0, 0 );
 }
 

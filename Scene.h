@@ -17,6 +17,12 @@ public:
 	bool UpdateRenderParams(const RenderParams& renderParams);
 	//Tutoral Scene in general not use
 	bool LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext);
+	static void TW_CALL SetSpongeAOCB(const void *value, void * /*clientData*/);
+
+
+	// Callback function called by AntTweakBar to get the sponge recursion level
+	static void TW_CALL GetSpongeAOCB(void *value, void * /*clientData*/);
+	
 protected:
 	map<IRenderObject*,int> m_allObject;
 	void BuildSelectRenderUi();
