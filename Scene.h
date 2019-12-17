@@ -24,8 +24,10 @@ public:
 	static void TW_CALL GetSpongeAOCB(void *value, void * /*clientData*/);
 	
 protected:
-	map<IRenderObject*,int> m_allObject;
 	void BuildSelectRenderUi();
+private:
+	map<IRenderObject*, int> m_allObject;
+	bool m_bDrawDepth;
 };
 extern CScene g_Scene;
 

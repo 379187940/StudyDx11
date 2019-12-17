@@ -10,6 +10,7 @@
 CScene g_Scene;
 CScene::CScene()
 {
+	m_bDrawDepth = false;
 }
 
 
@@ -22,12 +23,12 @@ CScene::~CScene()
 }
 bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext)
 {
-	if (!TwInit(TW_DIRECT3D11, pd3d11Device))
-	{
-		MessageBoxA( NULL, TwGetLastError(), "AntTweakBar initialization failed", MB_OK | MB_ICONERROR);
-		return 0;
-	}
-	
+	static UINT viewportNum = 1;
+	D3D11_VIEWPORT viewPort;
+	pContext->RSGetViewports(&viewportNum, &viewPort);
+	D3D11_TEXTURE2D_DESC textureDesc;
+	textureDesc.
+	pd3d11Device->CreateTexture2D( )
 	CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
 	pNewTrianle->Init(pd3d11Device, pContext);
 	CCube* pNewCube = new CCube(_T("Cube"));
