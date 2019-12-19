@@ -27,7 +27,10 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	D3D11_VIEWPORT viewPort;
 	pContext->RSGetViewports(&viewportNum, &viewPort);
 	D3D11_TEXTURE2D_DESC textureDesc;
-	textureDesc.
+	textureDesc.Width = viewPort.Width;
+	textureDesc.Height = viewPort.Height;
+	textureDesc.ArraySize = 1;
+	textureDesc.BindFlags = 
 	pd3d11Device->CreateTexture2D( )
 	CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
 	pNewTrianle->Init(pd3d11Device, pContext);
