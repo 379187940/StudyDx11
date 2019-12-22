@@ -23,7 +23,8 @@ CScene::~CScene()
 }
 bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext)
 {
-	
+	m_pD3d11Device = pd3d11Device;
+	m_pD3d11Context = pContext;
 	static UINT viewportNum = 1;
 	D3D11_VIEWPORT viewPort;
 	pContext->RSGetViewports(&viewportNum, &viewPort);
@@ -69,6 +70,16 @@ void CScene::Tick(DWORD dwTimes)
 }
 bool CScene::Render(DWORD dwTimes)
 {
+	ID3D11RenderTargetView* pRenderTargetView = NULL;
+	ID3D11DepthStencilView* pDepthView = NULL;
+	m_pD3d11Context->OMGetRenderTargets(1, &pRenderTargetView, &pDepthView);
+	pRenderTargetView->Release();
+	ID3D11Resource* pResource = NULL;
+	pDepthView->GetResource(&pResource);
+	pDepthView->
+	D3D11_RESOURCE_DIMENSION resroure_dimesion;
+	pResource->GetType(&resroure_dimesion);
+
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
 		if ( it->first->IsVisible() )
