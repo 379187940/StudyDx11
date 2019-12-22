@@ -28,6 +28,7 @@ protected:
 private:
 	map<IRenderObject*, int> m_allObject;
 	bool m_bDrawDepth;
+	ID3D11Texture2D* m_pDepth = NULL;
 };
 extern CScene g_Scene;
 

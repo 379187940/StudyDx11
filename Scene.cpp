@@ -23,6 +23,7 @@ CScene::~CScene()
 }
 bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext)
 {
+	
 	static UINT viewportNum = 1;
 	D3D11_VIEWPORT viewPort;
 	pContext->RSGetViewports(&viewportNum, &viewPort);
@@ -30,8 +31,14 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	textureDesc.Width = viewPort.Width;
 	textureDesc.Height = viewPort.Height;
 	textureDesc.ArraySize = 1;
-	textureDesc.BindFlags = 
-	pd3d11Device->CreateTexture2D( )
+	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
+	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
+	textureDesc.MipLevels = 1;
+	textureDesc.SampleDesc = { 1,0 };
+	textureDesc.Usage = D3D11_USAGE_DEFAULT;
+	textureDesc.MiscFlags = 0;
+	pd3d11Device->CreateTexture2D(&textureDesc, NULL, &m_pDepth);
 	CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
 	pNewTrianle->Init(pd3d11Device, pContext);
 	CCube* pNewCube = new CCube(_T("Cube"));
