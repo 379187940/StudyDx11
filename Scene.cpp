@@ -32,9 +32,9 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	textureDesc.Width = viewPort.Width;
 	textureDesc.Height = viewPort.Height;
 	textureDesc.ArraySize = 1;
-	textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE;
-	textureDesc.Format = DXGI_FORMAT_R8G8B8A8_UINT;
+	textureDesc.BindFlags = 0;
+	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE ;
+	textureDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
 	textureDesc.MipLevels = 1;
 	textureDesc.SampleDesc = { 1,0 };
 	textureDesc.Usage = D3D11_USAGE_DEFAULT;
@@ -83,10 +83,9 @@ bool CScene::Render(DWORD dwTimes)
 	{
 		const UINT nSubResource = D3D11CalcSubresource(0, 0, 1);
 		m_pD3d11Context->CopySubresourceRegion(m_pDepth, nSubResource, 0, 0, 0, pResource, nSubResource, NULL);
-		ID3D11Texture2D* pTexture2D = dynamic_cast<ID3D11Texture2D*>(pResource);
 		D3D11_MAPPED_SUBRESOURCE mappedTexture;
-		m_pD3d11Context->Map(pTexture2D, 0, D3D11_MAP_READ, 0, &mappedTexture);
-		m_pD3d11Context->Unmap(pTexture2D, 0);
+		HRESULT hr = m_pD3d11Context->Map(m_pDepth, nSubResource, D3D11_MAP_READ, 0, &mappedTexture);
+		m_pD3d11Context->Unmap(m_pDepth, 0);
 	}
 
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
