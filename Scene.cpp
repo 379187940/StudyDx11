@@ -76,9 +76,18 @@ bool CScene::Render(DWORD dwTimes)
 	pRenderTargetView->Release();
 	ID3D11Resource* pResource = NULL;
 	pDepthView->GetResource(&pResource);
-	pDepthView->
+	pDepthView->Release();
 	D3D11_RESOURCE_DIMENSION resroure_dimesion;
 	pResource->GetType(&resroure_dimesion);
+	if (resroure_dimesion == D3D11_RESOURCE_DIMENSION_TEXTURE2D)
+	{
+		const UINT nSubResource = D3D11CalcSubresource(0, 0, 1);
+		m_pD3d11Context->CopySubresourceRegion(m_pDepth, nSubResource, 0, 0, 0, pResource, nSubResource, NULL);
+		ID3D11Texture2D* pTexture2D = dynamic_cast<ID3D11Texture2D*>(pResource);
+		D3D11_MAPPED_SUBRESOURCE mappedTexture;
+		m_pD3d11Context->Map(pTexture2D, 0, D3D11_MAP_READ, 0, &mappedTexture);
+		m_pD3d11Context->Unmap(pTexture2D, 0);
+	}
 
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
