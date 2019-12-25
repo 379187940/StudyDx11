@@ -33,13 +33,13 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	textureDesc.Height = viewPort.Height;
 	textureDesc.ArraySize = 1;
 	textureDesc.BindFlags = 0;
-	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE ;
-	textureDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	textureDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
 	textureDesc.MipLevels = 1;
 	textureDesc.SampleDesc = { 1,0 };
-	textureDesc.Usage = D3D11_USAGE_DEFAULT;
+	textureDesc.Usage = D3D11_USAGE_STAGING;
 	textureDesc.MiscFlags = 0;
-	pd3d11Device->CreateTexture2D(&textureDesc, NULL, &m_pDepth);
+	HRESULT hr = pd3d11Device->CreateTexture2D(&textureDesc, NULL, &m_pDepth);
 	CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
 	pNewTrianle->Init(pd3d11Device, pContext);
 	CCube* pNewCube = new CCube(_T("Cube"));
@@ -70,6 +70,11 @@ void CScene::Tick(DWORD dwTimes)
 }
 bool CScene::Render(DWORD dwTimes)
 {
+	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
+	{
+		if ( it->first->IsVisible() )
+			it->first->Render(dwTimes);
+	}
 	ID3D11RenderTargetView* pRenderTargetView = NULL;
 	ID3D11DepthStencilView* pDepthView = NULL;
 	m_pD3d11Context->OMGetRenderTargets(1, &pRenderTargetView, &pDepthView);
@@ -82,16 +87,12 @@ bool CScene::Render(DWORD dwTimes)
 	if (resroure_dimesion == D3D11_RESOURCE_DIMENSION_TEXTURE2D)
 	{
 		const UINT nSubResource = D3D11CalcSubresource(0, 0, 1);
-		m_pD3d11Context->CopySubresourceRegion(m_pDepth, nSubResource, 0, 0, 0, pResource, nSubResource, NULL);
+		//m_pD3d11Context->CopySubresourceRegion(m_pDepth, nSubResource, 0, 0, 0, pResource, nSubResource, NULL);
+		m_pD3d11Context->CopyResource(m_pDepth, pResource);
+		//m_pDepth->
 		D3D11_MAPPED_SUBRESOURCE mappedTexture;
 		HRESULT hr = m_pD3d11Context->Map(m_pDepth, nSubResource, D3D11_MAP_READ, 0, &mappedTexture);
 		m_pD3d11Context->Unmap(m_pDepth, 0);
-	}
-
-	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
-	{
-		if ( it->first->IsVisible() )
-			it->first->Render(dwTimes);
 	}
 	return true;
 }

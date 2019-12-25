@@ -42,7 +42,7 @@ PS_INPUT vs_main(VS_INPUT input)
 	output.Pos = mul(output.Pos, View);
 	output.Pos = mul(output.Pos, Projection);
 	output.Norm = mul(input.Norm, World);
-
+	output.Pos.z = 0.01f;
 	return output;
 }
 
