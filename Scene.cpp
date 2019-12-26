@@ -32,9 +32,9 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	textureDesc.Width = viewPort.Width;
 	textureDesc.Height = viewPort.Height;
 	textureDesc.ArraySize = 1;
-	textureDesc.BindFlags = 0;
+	textureDesc.BindFlags =0;
 	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-	textureDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	textureDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;;
 	textureDesc.MipLevels = 1;
 	textureDesc.SampleDesc = { 1,0 };
 	textureDesc.Usage = D3D11_USAGE_STAGING;
@@ -81,21 +81,30 @@ bool CScene::Render(DWORD dwTimes)
 	pRenderTargetView->Release();
 	ID3D11Resource* pResource = NULL;
 	pDepthView->GetResource(&pResource);
-	//pDepthView->Release();
-	D3D11_RESOURCE_DIMENSION resroure_dimesion;
-	pResource->GetType(&resroure_dimesion);
-	if (resroure_dimesion == D3D11_RESOURCE_DIMENSION_TEXTURE2D)
-	{
-		const UINT nSubResource = D3D11CalcSubresource(0, 0, 1);
-		//m_pD3d11Context->CopySubresourceRegion(m_pDepth, nSubResource, 0, 0, 0, pResource, nSubResource, NULL);
-		m_pD3d11Context->CopyResource(m_pDepth, pResource);
-		D3DX11SaveTextureToFileA(m_pD3d11Context, m_pDepth, D3DX11_IFF_JPG, "33332222.jpg");
-		//m_pDepth->
-		D3D11_MAPPED_SUBRESOURCE mappedTexture;
-		HRESULT hr = m_pD3d11Context->Map(m_pDepth, nSubResource, D3D11_MAP_READ, 0, &mappedTexture);
-		
-		m_pD3d11Context->Unmap(m_pDepth, 0);
-	}
+	ID3D10Texture2D* pTemp;
+	D3D10_TEXTURE2D_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D10_TEXTURE2D_DESC));
+	pResource->QueryInterface(__uuidof(ID3D10Texture2D), (LPVOID*)&pTemp);
+	pTemp->GetDesc(&desc);
+	D3D10_MAPPED_TEXTURE2D mappedTex2D;
+	pTemp->Map(0, D3D10_MAP_READ, 0, &mappedTex2D);
+	pTemp->Unmap(0);
+	CreateShaderResourceView
+	////pDepthView->Release();
+	//D3D11_RESOURCE_DIMENSION resroure_dimesion;
+	//pResource->GetType(&resroure_dimesion);
+	//if (resroure_dimesion == D3D11_RESOURCE_DIMENSION_TEXTURE2D)
+	//{
+	//	const UINT nSubResource = D3D11CalcSubresource(0, 0, 1);
+	//	//m_pD3d11Context->CopySubresourceRegion(m_pDepth, nSubResource, 0, 0, 0, pResource, nSubResource, NULL);
+	//	m_pD3d11Context->CopyResource(m_pDepth, pResource);
+	//	//D3DX11SaveTextureToFileA(m_pD3d11Context, m_pDepth, D3DX11_IFF_JPG, "33332222.jpg");
+	//	//m_pDepth->
+	//	D3D11_MAPPED_SUBRESOURCE mappedTexture;
+	//	HRESULT hr = m_pD3d11Context->Map(m_pDepth, nSubResource, D3D11_MAP_READ, 0, &mappedTexture);
+	//	
+	//	m_pD3d11Context->Unmap(m_pDepth, 0);
+	//}
 	return true;
 }
 bool CScene::UpdateRenderParams(const RenderParams& renderParams)
