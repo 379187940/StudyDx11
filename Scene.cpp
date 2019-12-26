@@ -81,7 +81,7 @@ bool CScene::Render(DWORD dwTimes)
 	pRenderTargetView->Release();
 	ID3D11Resource* pResource = NULL;
 	pDepthView->GetResource(&pResource);
-	pDepthView->Release();
+	//pDepthView->Release();
 	D3D11_RESOURCE_DIMENSION resroure_dimesion;
 	pResource->GetType(&resroure_dimesion);
 	if (resroure_dimesion == D3D11_RESOURCE_DIMENSION_TEXTURE2D)
@@ -89,9 +89,11 @@ bool CScene::Render(DWORD dwTimes)
 		const UINT nSubResource = D3D11CalcSubresource(0, 0, 1);
 		//m_pD3d11Context->CopySubresourceRegion(m_pDepth, nSubResource, 0, 0, 0, pResource, nSubResource, NULL);
 		m_pD3d11Context->CopyResource(m_pDepth, pResource);
+		D3DX11SaveTextureToFileA(m_pD3d11Context, m_pDepth, D3DX11_IFF_JPG, "33332222.jpg");
 		//m_pDepth->
 		D3D11_MAPPED_SUBRESOURCE mappedTexture;
 		HRESULT hr = m_pD3d11Context->Map(m_pDepth, nSubResource, D3D11_MAP_READ, 0, &mappedTexture);
+		
 		m_pD3d11Context->Unmap(m_pDepth, 0);
 	}
 	return true;
