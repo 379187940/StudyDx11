@@ -35,6 +35,9 @@
     <ClInclude Include="BaseRenderObject.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
+    <ClInclude Include="Quard.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -55,6 +58,9 @@
     <ClCompile Include="BaseRenderObject.cpp">
       <Filter>RenderObject</Filter>
     </ClCompile>
+    <ClCompile Include="Quard.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
@@ -70,5 +76,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cube.hlsl" />
+    <None Include="quard.hlsl" />
   </ItemGroup>
 </Project>

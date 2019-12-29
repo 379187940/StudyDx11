@@ -31,6 +31,7 @@ private:
 	ID3D11Texture2D* m_pDepth = NULL;
 	ID3D11Device*    m_pD3d11Device = NULL;
 	ID3D11DeviceContext* m_pD3d11Context = NULL;
+	ID3D11ShaderResourceView*    m_pDepthTextureSRV = NULL;
 };
 extern CScene g_Scene;
 

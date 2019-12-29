@@ -5,6 +5,7 @@
 #include "Cube.h"
 #include "Triangle.h"
 #include "CubeLight.h"
+#include "Quard.h"
 #include "unit.h"
 #include <tchar.h>
 CScene g_Scene;
@@ -34,7 +35,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	textureDesc.ArraySize = 1;
 	textureDesc.BindFlags =0;
 	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-	textureDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;;
+	textureDesc.Format = DXGI_FORMAT_R32_UINT;;
 	textureDesc.MipLevels = 1;
 	textureDesc.SampleDesc = { 1,0 };
 	textureDesc.Usage = D3D11_USAGE_STAGING;
@@ -46,12 +47,30 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	pNewCube->Init(pd3d11Device, pContext);
 	CCubeLight* pNewCubeLight = new CCubeLight(_T("CubeLight"));
 	pNewCubeLight->Init(pd3d11Device, pContext);
+	CQuard* pNewQuard = new CQuard(_T("CQuard"));
+	pNewQuard->Init(pd3d11Device, pContext);
 
 	RegisterObject(pNewTrianle);
 	RegisterObject(pNewCube);
 	RegisterObject(pNewCubeLight);
-
+	RegisterObject(pNewQuard);
 	BuildSelectRenderUi();
+
+	ID3D11RenderTargetView* pRenderTargetView = NULL;
+	ID3D11DepthStencilView* pDepthView = NULL;
+	m_pD3d11Context->OMGetRenderTargets(1, &pRenderTargetView, &pDepthView);
+	pRenderTargetView->Release();
+	ID3D11Resource* pResource = NULL;
+	pDepthView->GetResource(&pResource);
+	pDepthView->Release();
+	D3D11_SHADER_RESOURCE_VIEW_DESC SRDesc;
+	SRDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	SRDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	SRDesc.Texture2D.MostDetailedMip = 0;
+	SRDesc.Texture2D.MipLevels = 1;
+	hr = m_pD3d11Device->CreateShaderResourceView(pResource, &SRDesc, &m_pDepthTextureSRV );
+	pResource->Release();
+	pNewQuard->SetDepthTexture(m_pDepthTextureSRV);
 	return true;
 }
 bool CScene::RegisterObject(IRenderObject* pRenderObject)
@@ -75,13 +94,10 @@ bool CScene::Render(DWORD dwTimes)
 		if ( it->first->IsVisible() )
 			it->first->Render(dwTimes);
 	}
-	ID3D11RenderTargetView* pRenderTargetView = NULL;
-	ID3D11DepthStencilView* pDepthView = NULL;
-	m_pD3d11Context->OMGetRenderTargets(1, &pRenderTargetView, &pDepthView);
-	pRenderTargetView->Release();
+	/*HRESULT hr;
 	ID3D11Resource* pResource = NULL;
-	pDepthView->GetResource(&pResource);
-	ID3D10Texture2D* pTemp;
+	m_pDepthTextureSRV->GetResource(&pResource);*/
+	/*ID3D10Texture2D* pTemp;
 	D3D10_TEXTURE2D_DESC desc;
 	ZeroMemory(&desc, sizeof(D3D10_TEXTURE2D_DESC));
 	pResource->QueryInterface(__uuidof(ID3D10Texture2D), (LPVOID*)&pTemp);
@@ -89,7 +105,8 @@ bool CScene::Render(DWORD dwTimes)
 	D3D10_MAPPED_TEXTURE2D mappedTex2D;
 	pTemp->Map(0, D3D10_MAP_READ, 0, &mappedTex2D);
 	pTemp->Unmap(0);
-	CreateShaderResourceView
+	pResource->Release();*/
+	//CreateShaderResourceView
 	////pDepthView->Release();
 	//D3D11_RESOURCE_DIMENSION resroure_dimesion;
 	//pResource->GetType(&resroure_dimesion);

@@ -389,6 +389,7 @@
     <ClCompile Include="CubeLight.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Quard.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Tutorial01.cpp" />
@@ -397,6 +398,7 @@
     <None Include="cube.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </None>
+    <None Include="quard.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseRenderObject.h" />
@@ -404,6 +406,7 @@
     <ClInclude Include="CubeLight.h" />
     <ClInclude Include="IObject.h" />
     <ClInclude Include="IRenderObject.h" />
+    <ClInclude Include="Quard.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Triangle.h" />
