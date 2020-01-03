@@ -53,8 +53,8 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	RegisterObject(pNewTrianle);
 	RegisterObject(pNewCube);
 	RegisterObject(pNewCubeLight);
-	RegisterObject(pNewQuard);
-	BuildSelectRenderUi();
+	//RegisterObject(pNewQuard);
+	BuildUi();
 
 	ID3D11RenderTargetView* pRenderTargetView = NULL;
 	ID3D11DepthStencilView* pDepthView = NULL;
@@ -94,34 +94,6 @@ bool CScene::Render(DWORD dwTimes)
 		if ( it->first->IsVisible() )
 			it->first->Render(dwTimes);
 	}
-	/*HRESULT hr;
-	ID3D11Resource* pResource = NULL;
-	m_pDepthTextureSRV->GetResource(&pResource);*/
-	/*ID3D10Texture2D* pTemp;
-	D3D10_TEXTURE2D_DESC desc;
-	ZeroMemory(&desc, sizeof(D3D10_TEXTURE2D_DESC));
-	pResource->QueryInterface(__uuidof(ID3D10Texture2D), (LPVOID*)&pTemp);
-	pTemp->GetDesc(&desc);
-	D3D10_MAPPED_TEXTURE2D mappedTex2D;
-	pTemp->Map(0, D3D10_MAP_READ, 0, &mappedTex2D);
-	pTemp->Unmap(0);
-	pResource->Release();*/
-	//CreateShaderResourceView
-	////pDepthView->Release();
-	//D3D11_RESOURCE_DIMENSION resroure_dimesion;
-	//pResource->GetType(&resroure_dimesion);
-	//if (resroure_dimesion == D3D11_RESOURCE_DIMENSION_TEXTURE2D)
-	//{
-	//	const UINT nSubResource = D3D11CalcSubresource(0, 0, 1);
-	//	//m_pD3d11Context->CopySubresourceRegion(m_pDepth, nSubResource, 0, 0, 0, pResource, nSubResource, NULL);
-	//	m_pD3d11Context->CopyResource(m_pDepth, pResource);
-	//	//D3DX11SaveTextureToFileA(m_pD3d11Context, m_pDepth, D3DX11_IFF_JPG, "33332222.jpg");
-	//	//m_pDepth->
-	//	D3D11_MAPPED_SUBRESOURCE mappedTexture;
-	//	HRESULT hr = m_pD3d11Context->Map(m_pDepth, nSubResource, D3D11_MAP_READ, 0, &mappedTexture);
-	//	
-	//	m_pD3d11Context->Unmap(m_pDepth, 0);
-	//}
 	return true;
 }
 bool CScene::UpdateRenderParams(const RenderParams& renderParams)
@@ -147,7 +119,7 @@ void TW_CALL CScene::GetSpongeAOCB(void *value, void * clientData)
 	*static_cast<bool *>(value) = pRenderObject->IsVisible();
 	
 }
-void CScene::BuildSelectRenderUi()
+void CScene::BuildUi()
 {
 	TwBar *bar = TwNewBar("Show Object");
 	int barSize[2] = { 224, 320 };
