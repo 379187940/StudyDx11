@@ -4,6 +4,7 @@
 #include <Windows.h>
 #include "AntTweakBar.h"
 struct RenderParam;
+class CQuard;
 using namespace std;
 class CScene
 {
@@ -17,21 +18,25 @@ public:
 	bool UpdateRenderParams(const RenderParams& renderParams);
 	//Tutoral Scene in general not use
 	bool LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext);
-	static void TW_CALL SetSpongeAOCB(const void *value, void * /*clientData*/);
+protected:
+	static void TW_CALL SetObjectVisible(const void *value, void * /*clientData*/);
+	static void TW_CALL GetObjectVisible(void *value, void * /*clientData*/);
+	static void TW_CALL SetRenderDepth(const void *value, void * /*clientData*/);
+	static void TW_CALL GetRenderDepth(void *value, void * /*clientData*/);
 
 
-	// Callback function called by AntTweakBar to get the sponge recursion level
-	static void TW_CALL GetSpongeAOCB(void *value, void * /*clientData*/);
-	
 protected:
 	void BuildUi();
+	void SetRenderDepth(bool bDrawDepth) { m_bDrawDepth = bDrawDepth; }
+	bool GetDrawDepth() { return m_bDrawDepth; }
 private:
 	map<IRenderObject*, int> m_allObject;
-	bool m_bDrawDepth;
+	bool m_bDrawDepth = false ;
 	ID3D11Texture2D* m_pDepth = NULL;
 	ID3D11Device*    m_pD3d11Device = NULL;
 	ID3D11DeviceContext* m_pD3d11Context = NULL;
 	ID3D11ShaderResourceView*    m_pDepthTextureSRV = NULL;
+	CQuard* m_quardDepth = NULL;
 };
 extern CScene g_Scene;
 

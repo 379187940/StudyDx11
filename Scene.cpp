@@ -47,8 +47,8 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	pNewCube->Init(pd3d11Device, pContext);
 	CCubeLight* pNewCubeLight = new CCubeLight(_T("CubeLight"));
 	pNewCubeLight->Init(pd3d11Device, pContext);
-	CQuard* pNewQuard = new CQuard(_T("CQuard"));
-	pNewQuard->Init(pd3d11Device, pContext);
+	m_quardDepth = new CQuard(_T("CQuard"));
+	m_quardDepth->Init(pd3d11Device, pContext);
 
 	RegisterObject(pNewTrianle);
 	RegisterObject(pNewCube);
@@ -70,7 +70,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	SRDesc.Texture2D.MipLevels = 1;
 	hr = m_pD3d11Device->CreateShaderResourceView(pResource, &SRDesc, &m_pDepthTextureSRV );
 	pResource->Release();
-	pNewQuard->SetDepthTexture(m_pDepthTextureSRV);
+	m_quardDepth->SetDepthTexture(m_pDepthTextureSRV);
 	return true;
 }
 bool CScene::RegisterObject(IRenderObject* pRenderObject)
@@ -94,6 +94,10 @@ bool CScene::Render(DWORD dwTimes)
 		if ( it->first->IsVisible() )
 			it->first->Render(dwTimes);
 	}
+	if (GetDrawDepth())
+	{
+		m_quardDepth->Render(dwTimes);
+	}
 	return true;
 }
 bool CScene::UpdateRenderParams(const RenderParams& renderParams)
@@ -104,16 +108,22 @@ bool CScene::UpdateRenderParams(const RenderParams& renderParams)
 	}
 	return true;
 }
-void TW_CALL CScene::SetSpongeAOCB(const void *value, void * clientData)
+void TW_CALL CScene::SetRenderDepth(const void *value, void * clientData)
+{
+	bool bDraw = *static_cast<const bool *>(value);
+	g_Scene.SetRenderDepth(bDraw);
+}
+void TW_CALL CScene::GetRenderDepth(void *value, void * clientData)
+{
+	*static_cast<bool *>(value) = g_Scene.GetDrawDepth();
+}
+void TW_CALL CScene::SetObjectVisible(const void *value, void * clientData)
 { 
 	bool bShow = *static_cast<const bool *>(value);
 	CBaseRenderObject* pRenderObject = static_cast<CBaseRenderObject*>(clientData);
 	pRenderObject->SetVisible(bShow);
 }
-
-
-// Callback function called by AntTweakBar to get the sponge recursion level
-void TW_CALL CScene::GetSpongeAOCB(void *value, void * clientData)
+void TW_CALL CScene::GetObjectVisible(void *value, void * clientData)
 {
 	CBaseRenderObject* pRenderObject = static_cast<CBaseRenderObject*>(clientData);
 	*static_cast<bool *>(value) = pRenderObject->IsVisible();
@@ -121,9 +131,9 @@ void TW_CALL CScene::GetSpongeAOCB(void *value, void * clientData)
 }
 void CScene::BuildUi()
 {
-	TwBar *bar = TwNewBar("Show Object");
+	TwBar *showObjectBar = TwNewBar("Show Object");
 	int barSize[2] = { 224, 320 };
-	TwSetParam(bar, NULL, "size", TW_PARAM_INT32, 2, barSize);
+	TwSetParam(showObjectBar, NULL, "size", TW_PARAM_INT32, 2, barSize);
 	static char temp[MAX_PATH];
 	static char tempKey[MAX_PATH];
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
@@ -133,6 +143,8 @@ void CScene::BuildUi()
 			continue;
 		wcstombs(temp, pRenderObject->GetName().data(), MAX_PATH);
 		sprintf_s(tempKey, MAX_PATH, "group=Sponge key=%d", it->second);
-		TwAddVarCB(bar, temp, TW_TYPE_BOOLCPP, SetSpongeAOCB, GetSpongeAOCB, it->first, tempKey);
+		TwAddVarCB(showObjectBar, temp, TW_TYPE_BOOLCPP, SetObjectVisible, GetObjectVisible, it->first, tempKey);
 	}
+	TwBar *debugPanel = TwNewBar("Debug Panel");
+	TwAddVarCB(showObjectBar, temp, TW_TYPE_BOOLCPP, SetRenderDepth, GetRenderDepth, this, "");
 }
