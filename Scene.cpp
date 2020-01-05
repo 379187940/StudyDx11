@@ -146,5 +146,5 @@ void CScene::BuildUi()
 		TwAddVarCB(showObjectBar, temp, TW_TYPE_BOOLCPP, SetObjectVisible, GetObjectVisible, it->first, tempKey);
 	}
 	TwBar *debugPanel = TwNewBar("Debug Panel");
-	TwAddVarCB(showObjectBar, temp, TW_TYPE_BOOLCPP, SetRenderDepth, GetRenderDepth, this, "");
+	TwAddVarCB(debugPanel, temp, TW_TYPE_BOOLCPP, SetRenderDepth, GetRenderDepth, this, "");
 }

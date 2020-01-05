@@ -71,7 +71,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
     }
 	TwTerminate();
     CleanupDevice();
-
+	//ReportLiveObjects();
     return ( int )msg.wParam;
 }
 
