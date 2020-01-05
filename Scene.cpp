@@ -17,30 +17,23 @@ CScene::CScene()
 
 CScene::~CScene()
 {
+	
+}
+bool CScene::Release()
+{
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
 		delete it->first;
 	}
+	delete m_quardDepth;
+	m_pDepthTextureSRV->Release();
+	return true;
 }
 bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext)
 {
 	m_pD3d11Device = pd3d11Device;
 	m_pD3d11Context = pContext;
-	static UINT viewportNum = 1;
-	D3D11_VIEWPORT viewPort;
-	pContext->RSGetViewports(&viewportNum, &viewPort);
-	D3D11_TEXTURE2D_DESC textureDesc;
-	textureDesc.Width = viewPort.Width;
-	textureDesc.Height = viewPort.Height;
-	textureDesc.ArraySize = 1;
-	textureDesc.BindFlags =0;
-	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-	textureDesc.Format = DXGI_FORMAT_R32_UINT;;
-	textureDesc.MipLevels = 1;
-	textureDesc.SampleDesc = { 1,0 };
-	textureDesc.Usage = D3D11_USAGE_STAGING;
-	textureDesc.MiscFlags = 0;
-	HRESULT hr = pd3d11Device->CreateTexture2D(&textureDesc, NULL, &m_pDepth);
+	
 	CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
 	pNewTrianle->Init(pd3d11Device, pContext);
 	CCube* pNewCube = new CCube(_T("Cube"));
@@ -55,7 +48,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	RegisterObject(pNewCubeLight);
 	//RegisterObject(pNewQuard);
 	BuildUi();
-
+	HRESULT hr = S_FALSE ;
 	ID3D11RenderTargetView* pRenderTargetView = NULL;
 	ID3D11DepthStencilView* pDepthView = NULL;
 	m_pD3d11Context->OMGetRenderTargets(1, &pRenderTargetView, &pDepthView);

@@ -18,6 +18,7 @@ public:
 	bool UpdateRenderParams(const RenderParams& renderParams);
 	//Tutoral Scene in general not use
 	bool LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext);
+	bool Release();
 protected:
 	static void TW_CALL SetObjectVisible(const void *value, void * /*clientData*/);
 	static void TW_CALL GetObjectVisible(void *value, void * /*clientData*/);
@@ -32,7 +33,6 @@ protected:
 private:
 	map<IRenderObject*, int> m_allObject;
 	bool m_bDrawDepth = false ;
-	ID3D11Texture2D* m_pDepth = NULL;
 	ID3D11Device*    m_pD3d11Device = NULL;
 	ID3D11DeviceContext* m_pD3d11Context = NULL;
 	ID3D11ShaderResourceView*    m_pDepthTextureSRV = NULL;

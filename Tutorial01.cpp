@@ -70,7 +70,9 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
         }
     }
 	TwTerminate();
+	g_Scene.Release();
     CleanupDevice();
+	
 	//ReportLiveObjects();
     return ( int )msg.wParam;
 }
@@ -298,6 +300,19 @@ void CleanupDevice()
 
     if( g_pRenderTargetView ) g_pRenderTargetView->Release();
     if( g_pSwapChain ) g_pSwapChain->Release();
+	if (g_pDepthStencil) g_pDepthStencil->Release();
+	if (g_pDepthStencilView) g_pDepthStencilView->Release();
     if( g_pImmediateContext ) g_pImmediateContext->Release();
-    if( g_pd3dDevice ) g_pd3dDevice->Release();
+#if defined(DEBUG) || defined(_DEBUG)	
+	ID3D11Debug *d3dDebug;
+	HRESULT hr = g_pd3dDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&d3dDebug));
+	if (SUCCEEDED(hr))	
+	{		
+		hr = d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);	
+	}	
+	if (d3dDebug != nullptr)			
+		d3dDebug->Release();
+#endif
+    if( g_pd3dDevice ) 
+		g_pd3dDevice->Release();
 }
