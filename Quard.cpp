@@ -129,7 +129,8 @@ bool CQuard::Render(DWORD dwTimes)
 	m_pContext->PSSetShader(NULL, NULL, 0);
 	m_pContext->OMSetRenderTargets(1, &g_pRenderTargetView, g_pDepthStencilView);
 	m_pContext->OMSetDepthStencilState(oldState, temp);
-	oldState->Release();
+	if ( oldState )
+		oldState->Release();
 	//g_pDepthTextureVar->SetResource(NULL);
 	//g_pRenderCameraZ->GetPassByIndex(0)->Apply(0);
 	return false;

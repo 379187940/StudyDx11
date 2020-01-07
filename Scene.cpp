@@ -87,7 +87,7 @@ bool CScene::Render(DWORD dwTimes)
 		if ( it->first->IsVisible() )
 			it->first->Render(dwTimes);
 	}
-	if (GetDrawDepth())
+	if (IsDrawDepth())
 	{
 		m_quardDepth->Render(dwTimes);
 	}
@@ -108,7 +108,7 @@ void TW_CALL CScene::SetRenderDepth(const void *value, void * clientData)
 }
 void TW_CALL CScene::GetRenderDepth(void *value, void * clientData)
 {
-	*static_cast<bool *>(value) = g_Scene.GetDrawDepth();
+	*static_cast<bool *>(value) = g_Scene.IsDrawDepth();
 }
 void TW_CALL CScene::SetObjectVisible(const void *value, void * clientData)
 { 
@@ -139,5 +139,5 @@ void CScene::BuildUi()
 		TwAddVarCB(showObjectBar, temp, TW_TYPE_BOOLCPP, SetObjectVisible, GetObjectVisible, it->first, tempKey);
 	}
 	TwBar *debugPanel = TwNewBar("Debug Panel");
-	TwAddVarCB(debugPanel, temp, TW_TYPE_BOOLCPP, SetRenderDepth, GetRenderDepth, this, "");
+	TwAddVarCB(debugPanel, "RenderDepth", TW_TYPE_BOOLCPP, SetRenderDepth, GetRenderDepth, this, "");
 }

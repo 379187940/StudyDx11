@@ -29,7 +29,7 @@ protected:
 protected:
 	void BuildUi();
 	void SetRenderDepth(bool bDrawDepth) { m_bDrawDepth = bDrawDepth; }
-	bool GetDrawDepth() { return m_bDrawDepth; }
+	bool IsDrawDepth() { return m_bDrawDepth; }
 private:
 	map<IRenderObject*, int> m_allObject;
 	bool m_bDrawDepth = false ;
