@@ -62,6 +62,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	SRDesc.Texture2D.MostDetailedMip = 0;
 	SRDesc.Texture2D.MipLevels = 1;
 	hr = m_pD3d11Device->CreateShaderResourceView(pResource, &SRDesc, &m_pDepthTextureSRV );
+	
 	pResource->Release();
 	m_quardDepth->SetDepthTexture(m_pDepthTextureSRV);
 	return true;

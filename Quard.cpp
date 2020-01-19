@@ -120,6 +120,10 @@ extern ID3D11RenderTargetView* g_pRenderTargetView ;
 extern ID3D11DepthStencilView* g_pDepthStencilView ;
 bool CQuard::Render(DWORD dwTimes)
 {
+	static UINT viewportNum = 1;
+	D3D11_VIEWPORT viewPort;
+	m_pContext->RSGetViewports(&viewportNum, &viewPort);
+	
 	ID3D11Resource* pResource = NULL;
 	m_pDepthTextureSRV->GetResource(&pResource);
 	D3D11_RESOURCE_DIMENSION resDimension;
@@ -127,7 +131,18 @@ bool CQuard::Render(DWORD dwTimes)
 	
 	m_pContext->CopyResource(m_pDepthTexutre, pResource);
 	D3D11_MAPPED_SUBRESOURCE mappedTexture;
-	m_pContext->Map(m_pDepthTexutre, 0,D3D11_MAP_READ, 0, &mappedTexture);
+	m_pContext->Map(m_pDepthTexutre, 0,D3D11_MAP_READ_WRITE, 0, &mappedTexture);
+	float* pDepthData = static_cast<float*>(mappedTexture.pData);
+	for ( int i = 0 ; i < viewPort.Height ; i++ )
+		for (int j = 0; j < viewPort.Width; j++)
+		{
+			float depth =  pDepthData[(int)viewPort.Width*i  + j] ;
+			/*if (depth != 1.0f)
+				pDepthData[(int)viewPort.Width*i + j] = 0.0f;*/
+		}
+	m_pContext->Unmap(m_pDepthTexutre, 0);
+	m_pContext->CopyResource(pResource, m_pDepthTexutre);
+	pResource->Release();
 	D3D11_TEXTURE2D_DESC  desc;
 	m_pDepthTexutre->GetDesc(&desc);
 	UINT Stride = sizeof(SpriteVertex);
