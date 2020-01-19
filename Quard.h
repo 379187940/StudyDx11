@@ -22,4 +22,5 @@ private:
 	ID3D11ShaderResourceView*    m_pDepthTextureSRV = NULL;
 	ID3D11DepthStencilState*     m_pDepthState = NULL;
 	ID3D11SamplerState*          m_pSampleState = NULL;
+	ID3D11Texture2D* m_pDepthTexutre = NULL;
 };

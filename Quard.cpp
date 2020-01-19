@@ -82,6 +82,22 @@ bool CQuard::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 		assert(false);
 		return false;
 	}
+	static UINT viewportNum = 1;
+	D3D11_VIEWPORT viewPort;
+	pContext->RSGetViewports(&viewportNum, &viewPort);
+	D3D11_TEXTURE2D_DESC textureDesc;
+	textureDesc.Width = viewPort.Width;
+	textureDesc.Height = viewPort.Height;
+	textureDesc.ArraySize = 1;
+	textureDesc.BindFlags = 0;
+	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE|D3D11_CPU_ACCESS_READ;
+	textureDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	textureDesc.MipLevels = 1;
+	textureDesc.SampleDesc = { 1,0 };
+	textureDesc.Usage = D3D11_USAGE_STAGING;
+	textureDesc.MiscFlags = 0;
+	hr = m_pd3dDevice->CreateTexture2D(&textureDesc, NULL, &m_pDepthTexutre);
+	assert(SUCCEEDED(hr));
 	D3D11_DEPTH_STENCIL_DESC depthDesc;
 	ZeroMemory(&depthDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
 	depthDesc.DepthEnable = false;
@@ -104,6 +120,16 @@ extern ID3D11RenderTargetView* g_pRenderTargetView ;
 extern ID3D11DepthStencilView* g_pDepthStencilView ;
 bool CQuard::Render(DWORD dwTimes)
 {
+	ID3D11Resource* pResource = NULL;
+	m_pDepthTextureSRV->GetResource(&pResource);
+	D3D11_RESOURCE_DIMENSION resDimension;
+	pResource->GetType(&resDimension);
+	
+	m_pContext->CopyResource(m_pDepthTexutre, pResource);
+	D3D11_MAPPED_SUBRESOURCE mappedTexture;
+	m_pContext->Map(m_pDepthTexutre, 0,D3D11_MAP_READ, 0, &mappedTexture);
+	D3D11_TEXTURE2D_DESC  desc;
+	m_pDepthTexutre->GetDesc(&desc);
 	UINT Stride = sizeof(SpriteVertex);
 	UINT Offset = 0;
 	m_pContext->OMSetRenderTargets(1, &g_pRenderTargetView, NULL);

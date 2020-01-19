@@ -37,6 +37,7 @@ private:
 	ID3D11DeviceContext* m_pD3d11Context = NULL;
 	ID3D11ShaderResourceView*    m_pDepthTextureSRV = NULL;
 	CQuard* m_quardDepth = NULL;
+	
 };
 extern CScene g_Scene;
 
