@@ -57,7 +57,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	pDepthView->GetResource(&pResource);
 	pDepthView->Release();
 	D3D11_SHADER_RESOURCE_VIEW_DESC SRDesc;
-	SRDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	SRDesc.Format = DXGI_FORMAT_X24_TYPELESS_G8_UINT;
 	SRDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	SRDesc.Texture2D.MostDetailedMip = 0;
 	SRDesc.Texture2D.MipLevels = 1;

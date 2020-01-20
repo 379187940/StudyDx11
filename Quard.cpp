@@ -91,7 +91,7 @@ bool CQuard::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	textureDesc.ArraySize = 1;
 	textureDesc.BindFlags = 0;
 	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE|D3D11_CPU_ACCESS_READ;
-	textureDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	textureDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
 	textureDesc.MipLevels = 1;
 	textureDesc.SampleDesc = { 1,0 };
 	textureDesc.Usage = D3D11_USAGE_STAGING;
@@ -132,13 +132,16 @@ bool CQuard::Render(DWORD dwTimes)
 	m_pContext->CopyResource(m_pDepthTexutre, pResource);
 	D3D11_MAPPED_SUBRESOURCE mappedTexture;
 	m_pContext->Map(m_pDepthTexutre, 0,D3D11_MAP_READ_WRITE, 0, &mappedTexture);
-	float* pDepthData = static_cast<float*>(mappedTexture.pData);
+	DWORD* pDepthData = static_cast<DWORD*>(mappedTexture.pData);
 	for ( int i = 0 ; i < viewPort.Height ; i++ )
 		for (int j = 0; j < viewPort.Width; j++)
 		{
-			float depth =  pDepthData[(int)viewPort.Width*i  + j] ;
-			/*if (depth != 1.0f)
-				pDepthData[(int)viewPort.Width*i + j] = 0.0f;*/
+			DWORD temp =  pDepthData[(int)viewPort.Width*i  + j] ;
+			temp = temp & 0x00FFFFFF;
+				
+			float depth = (float)temp/0x00FFFFFF;
+			if (depth != 1.0f)
+				pDepthData[(int)viewPort.Width*i + j] = 0.0f;
 		}
 	m_pContext->Unmap(m_pDepthTexutre, 0);
 	m_pContext->CopyResource(pResource, m_pDepthTexutre);
