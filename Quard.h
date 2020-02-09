@@ -10,6 +10,11 @@ class CQuard :
 		XMFLOAT3 v3Pos;
 		XMFLOAT2 v2TexCoord;
 	};
+	struct CBufferConvertToWorld
+	{
+		float g_fQ;                         // far / (far - near)
+		float g_fQTimesZNear;               // Q * near
+	};
 public:
 	CQuard(wstring strName);
 	virtual ~CQuard();
@@ -23,4 +28,8 @@ private:
 	ID3D11DepthStencilState*     m_pDepthState = NULL;
 	ID3D11SamplerState*          m_pSampleState = NULL;
 	ID3D11Texture2D* m_pDepthTexutre = NULL;
+	//通过depthtexture建立的shaderresource不能通过cpu直接访问，所以需要一个中间层进行读取
+	ID3D11Texture2D* m_pDepthTexutreTemp = NULL;
+	ID3D11ShaderResourceView* m_pDepthView = NULL;
+	ID3D11Buffer*              m_pConvertDepthToWorld = NULL;
 };

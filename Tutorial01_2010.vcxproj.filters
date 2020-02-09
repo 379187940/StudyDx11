@@ -38,6 +38,8 @@
     <ClInclude Include="Quard.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -61,6 +63,8 @@
     <ClCompile Include="Quard.cpp">
       <Filter>RenderObject</Filter>
     </ClCompile>
+    <ClCompile Include="Common.cpp" />
+    <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">

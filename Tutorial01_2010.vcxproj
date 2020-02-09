@@ -383,6 +383,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseRenderObject.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Common.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="CubeLight.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
@@ -400,6 +402,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseRenderObject.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Common.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeLight.h" />
     <ClInclude Include="IObject.h" />

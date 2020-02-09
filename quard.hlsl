@@ -1,4 +1,10 @@
 
+cbuffer ConstantBuffer : register(b0)
+{
+	float g_fQ;                         // far / (far - near)
+	float g_fQTimesZNear;               // Q * near
+}
+
 struct VS_RenderQuadInput
 {
 	float3 f3Position : POSITION;

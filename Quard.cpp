@@ -1,6 +1,7 @@
 #include "quard.h"
 #include <assert.h>
 #include<tchar.h>
+#include "Common.h"
 CQuard::CQuard(wstring strName) :
 	CBaseRenderObject(strName)
 {
@@ -85,18 +86,30 @@ bool CQuard::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	static UINT viewportNum = 1;
 	D3D11_VIEWPORT viewPort;
 	pContext->RSGetViewports(&viewportNum, &viewPort);
-	D3D11_TEXTURE2D_DESC textureDesc;
-	textureDesc.Width = viewPort.Width;
-	textureDesc.Height = viewPort.Height;
-	textureDesc.ArraySize = 1;
-	textureDesc.BindFlags = 0;
-	textureDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE|D3D11_CPU_ACCESS_READ;
-	textureDesc.Format = DXGI_FORMAT_R24G8_TYPELESS;
-	textureDesc.MipLevels = 1;
-	textureDesc.SampleDesc = { 1,0 };
-	textureDesc.Usage = D3D11_USAGE_STAGING;
-	textureDesc.MiscFlags = 0;
-	hr = m_pd3dDevice->CreateTexture2D(&textureDesc, NULL, &m_pDepthTexutre);
+	m_pDepthTexutre = CreateTexture2d(
+		m_pd3dDevice,
+		viewPort.Width,
+		viewPort.Height,
+		D3D11_BIND_SHADER_RESOURCE,
+		DXGI_FORMAT_R32_TYPELESS,
+		D3D11_USAGE_DEFAULT,
+		0
+		);
+	m_pDepthTexutreTemp = CreateTexture2d(
+		m_pd3dDevice,
+		viewPort.Width,
+		viewPort.Height,
+		0,
+		DXGI_FORMAT_X24_TYPELESS_G8_UINT,
+		D3D11_USAGE_STAGING,
+		D3D11_CPU_ACCESS_READ | D3D11_CPU_ACCESS_WRITE
+	);
+	D3D11_SHADER_RESOURCE_VIEW_DESC SRDesc;
+	SRDesc.Format = DXGI_FORMAT_R32_FLOAT;
+	SRDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	SRDesc.Texture2D.MostDetailedMip = 0;
+	SRDesc.Texture2D.MipLevels = 1;
+	hr = m_pd3dDevice->CreateShaderResourceView(m_pDepthTexutre, &SRDesc, &m_pDepthView);
 	assert(SUCCEEDED(hr));
 	D3D11_DEPTH_STENCIL_DESC depthDesc;
 	ZeroMemory(&depthDesc, sizeof(D3D11_DEPTH_STENCIL_DESC));
@@ -114,12 +127,19 @@ bool CQuard::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	hr = m_pd3dDevice->CreateSamplerState(&sampDesc, &m_pSampleState);
 	if (FAILED(hr))
 		return hr;
+	D3D11_BUFFER_DESC  buffer_desc;
+	ZeroMemory(&buffer_desc, sizeof(D3D11_BUFFER_DESC));
+	buffer_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+	buffer_desc.ByteWidth = sizeof(CBufferConvertToWorld);
+	buffer_desc.Usage = D3D11_USAGE_DEFAULT;
+	hr = m_pd3dDevice->CreateBuffer(&buffer_desc, NULL, &m_pConvertDepthToWorld);
 	return true;
 }
 extern ID3D11RenderTargetView* g_pRenderTargetView ;
 extern ID3D11DepthStencilView* g_pDepthStencilView ;
 bool CQuard::Render(DWORD dwTimes)
 {
+	HRESULT hr;
 	static UINT viewportNum = 1;
 	D3D11_VIEWPORT viewPort;
 	m_pContext->RSGetViewports(&viewportNum, &viewPort);
@@ -128,11 +148,14 @@ bool CQuard::Render(DWORD dwTimes)
 	m_pDepthTextureSRV->GetResource(&pResource);
 	D3D11_RESOURCE_DIMENSION resDimension;
 	pResource->GetType(&resDimension);
-	
-	m_pContext->CopyResource(m_pDepthTexutre, pResource);
+	m_pContext->CopyResource(m_pDepthTexutreTemp, pResource);
+
 	D3D11_MAPPED_SUBRESOURCE mappedTexture;
-	m_pContext->Map(m_pDepthTexutre, 0,D3D11_MAP_READ_WRITE, 0, &mappedTexture);
+	hr = m_pContext->Map(m_pDepthTexutreTemp, 0, D3D11_MAP_READ_WRITE, 0, &mappedTexture);
+	/*D3D11_MAPPED_SUBRESOURCE mappedTextureReal;
+	hr = m_pContext->Map(m_pDepthTexutre, 0, D3D11_MAP_READ, 0, &mappedTextureReal);*/
 	DWORD* pDepthData = static_cast<DWORD*>(mappedTexture.pData);
+	float* pDepthDataReal = new float[viewPort.Height*viewPort.Width]/*static_cast<DWORD*>(mappedTextureReal.pData)*/;
 	for ( int i = 0 ; i < viewPort.Height ; i++ )
 		for (int j = 0; j < viewPort.Width; j++)
 		{
@@ -140,11 +163,22 @@ bool CQuard::Render(DWORD dwTimes)
 			temp = temp & 0x00FFFFFF;
 				
 			float depth = (float)temp/0x00FFFFFF;
-			if (depth != 1.0f)
-				pDepthData[(int)viewPort.Width*i + j] = 0.0f;
+			//if (depth != 1.0f)
+			pDepthDataReal[(int)viewPort.Width*i + j] = depth;
 		}
-	m_pContext->Unmap(m_pDepthTexutre, 0);
-	m_pContext->CopyResource(pResource, m_pDepthTexutre);
+
+	D3D11_BOX destRegion;
+	destRegion.left = 0;
+	destRegion.right = viewPort.Width;
+	destRegion.top = 0;
+	destRegion.bottom = viewPort.Height;
+	destRegion.front = 0;
+	destRegion.back = 1;
+
+	m_pContext->UpdateSubresource(m_pDepthTexutre, 0, &destRegion, pDepthDataReal, mappedTexture.RowPitch, mappedTexture.DepthPitch);
+	/*m_pContext->Unmap(m_pDepthTexutre, 0);*/
+	m_pContext->Unmap(m_pDepthTexutreTemp, 0);
+	//m_pContext->CopyResource(pResource, m_pDepthTexutre);
 	pResource->Release();
 	D3D11_TEXTURE2D_DESC  desc;
 	m_pDepthTexutre->GetDesc(&desc);
@@ -160,7 +194,7 @@ bool CQuard::Render(DWORD dwTimes)
 	m_pContext->IASetInputLayout(m_pLayoutInput);
 	m_pContext->VSSetShader(m_pVertexShader, NULL, 0);
 	m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
-	m_pContext->PSSetShaderResources(0, 1, &m_pDepthTextureSRV);
+	m_pContext->PSSetShaderResources(0, 1, &m_pDepthView);
 	m_pContext->PSSetSamplers(0, 1, &m_pSampleState);
 	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &Stride, &Offset);
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
