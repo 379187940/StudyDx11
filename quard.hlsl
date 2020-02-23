@@ -43,7 +43,7 @@ PS_RenderQuadInput VS_RenderQuad(VS_RenderQuadInput I)
 	return O;
 }
 
-float4 PS_RenderCameraZ(PS_RenderQuadInput I) : SV_Target
+float4 PS_RenderCameraZ(PS_RenderQuadInput I) : SV_Target0
 {
 	float fDepth;
 	float4 f4CameraZ;
