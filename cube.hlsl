@@ -4,9 +4,10 @@ struct vs_out
 	float4 postion:SV_POSITION;
 	float4 color:COLOR0;
 };
-cbuffer ConstantBuffer:register(b1)
+matrix world;
+cbuffer ConstantBuffer:register(b0)
 {
-	matrix world;
+	//matrix world;
 	matrix view;
 	matrix Projection;
 };

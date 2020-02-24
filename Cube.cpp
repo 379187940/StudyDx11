@@ -25,7 +25,7 @@ bool CCube::Render(DWORD dwTimes)
 	UINT offset = 0;
 	m_pContext->IASetVertexBuffers(0,1,&m_pVertexBuffer , &stride , &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
-	m_pContext->VSSetConstantBuffers(1, 1, &m_pConstBuffer);
+	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstBuffer);
 	
 	//m_pContext->vsset
 	m_pContext->DrawIndexed(36, 0, 0);
@@ -118,13 +118,8 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 	hr = m_pd3dDevice->CreatePixelShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_pPixelShader);
 	assert(SUCCEEDED(hr));
 
-	D3D11_BUFFER_DESC constBufferDesc;
-	ZeroMemory(&constBufferDesc, sizeof(constBufferDesc));
-	constBufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	constBufferDesc.CPUAccessFlags = 0;
-	constBufferDesc.ByteWidth = sizeof(ConstantBuffer);
-	constBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	hr = m_pd3dDevice->CreateBuffer(&constBufferDesc, NULL, &m_pConstBuffer);
+	m_pConstBuffer = CreateBuffer(m_pd3dDevice, sizeof(ConstantBuffer), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0);
+	m_pConstBufferTest = CreateBuffer(m_pd3dDevice, sizeof(TestConstantBuffer), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0);
 	assert(SUCCEEDED(hr));
 
 
@@ -133,10 +128,12 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 bool CCube::UpdateRenderParams(const RenderParams& renderParams)
 {
 	ConstantBuffer cb;
-	cb.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
+	TestConstantBuffer cb1;
+	cb1.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
 	cb.mView = XMMatrixTranspose(renderParams.m_viewMatrix);
 	cb.mProjection = XMMatrixTranspose(renderParams.m_projMatrix);
 	m_pContext->UpdateSubresource(m_pConstBuffer, 0, NULL, &cb, 0, 0);
+	m_pContext->UpdateSubresource(m_pConstBufferTest, 0, NULL, &cb1, 0, 0);
 	return true;
 }
 void CCube::Tick(DWORD dwTimes)
