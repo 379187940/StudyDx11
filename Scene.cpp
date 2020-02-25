@@ -43,9 +43,9 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	m_quardDepth = new CQuard(_T("CQuard"));
 	m_quardDepth->Init(pd3d11Device, pContext);
 
-	//RegisterObject(pNewTrianle);
+	RegisterObject(pNewTrianle);
 	RegisterObject(pNewCube);
-	//RegisterObject(pNewCubeLight);
+	RegisterObject(pNewCubeLight);
 	BuildUi();
 	HRESULT hr = S_FALSE ;
 	ID3D11RenderTargetView* pRenderTargetView = NULL;

@@ -18,6 +18,7 @@ CCube::~CCube()
 
 bool CCube::Render(DWORD dwTimes)
 {
+	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pContext->IASetInputLayout(m_pLayoutInput);
 	m_pContext->VSSetShader(m_pVertexShader,NULL , 0);
 	m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
@@ -25,8 +26,9 @@ bool CCube::Render(DWORD dwTimes)
 	UINT offset = 0;
 	m_pContext->IASetVertexBuffers(0,1,&m_pVertexBuffer , &stride , &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
-	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstBuffer);
-	
+	m_pContext->VSSetConstantBuffers(0, 1, &m_pConstBufferTest);
+	m_pContext->VSSetConstantBuffers(2, 1, &m_pConstBufferTest1);
+	m_pContext->VSSetConstantBuffers(1, 1, &m_pConstBuffer);
 	//m_pContext->vsset
 	m_pContext->DrawIndexed(36, 0, 0);
 	return false;
@@ -119,7 +121,8 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 	assert(SUCCEEDED(hr));
 
 	m_pConstBuffer = CreateBuffer(m_pd3dDevice, sizeof(ConstantBuffer), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0);
-	m_pConstBufferTest = CreateBuffer(m_pd3dDevice, sizeof(TestConstantBuffer), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0);
+	m_pConstBufferTest = CreateBuffer(m_pd3dDevice, sizeof(TestConstantBuffer), D3D11_USAGE_DYNAMIC, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0);
+	m_pConstBufferTest1 = CreateBuffer(m_pd3dDevice, sizeof(TestConstantBuffer1), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0);
 	assert(SUCCEEDED(hr));
 
 
@@ -129,11 +132,16 @@ bool CCube::UpdateRenderParams(const RenderParams& renderParams)
 {
 	ConstantBuffer cb;
 	TestConstantBuffer cb1;
+	TestConstantBuffer1 cb2;
 	cb1.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
-	cb.mView = XMMatrixTranspose(renderParams.m_viewMatrix);
+	cb2.mView = XMMatrixTranspose(renderParams.m_viewMatrix);
 	cb.mProjection = XMMatrixTranspose(renderParams.m_projMatrix);
 	m_pContext->UpdateSubresource(m_pConstBuffer, 0, NULL, &cb, 0, 0);
-	m_pContext->UpdateSubresource(m_pConstBufferTest, 0, NULL, &cb1, 0, 0);
+	D3D11_MAPPED_SUBRESOURCE mapSubResource;
+	m_pContext->Map(m_pConstBufferTest, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapSubResource);
+	memcpy(mapSubResource.pData, &cb1, sizeof(TestConstantBuffer));
+	m_pContext->Unmap(m_pConstBufferTest , 0 ) ;
+	m_pContext->UpdateSubresource(m_pConstBufferTest1, 0, nullptr, &cb2, 0, 0);
 	return true;
 }
 void CCube::Tick(DWORD dwTimes)

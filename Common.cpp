@@ -43,6 +43,7 @@ ID3D11Buffer* CreateBuffer(
 	ZeroMemory(&constBufferDesc, sizeof(constBufferDesc));
 	constBufferDesc.BindFlags = bindFlag;
 	constBufferDesc.CPUAccessFlags = cpuAccessFlag;
+	byteWidth = (byteWidth + 15)&~15;
 	constBufferDesc.ByteWidth = byteWidth;
 	constBufferDesc.Usage = usage;
 	ID3D11Buffer* reBuffer;

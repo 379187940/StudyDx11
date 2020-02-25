@@ -5,10 +5,13 @@ struct vs_out
 	float4 color:COLOR0;
 };
 matrix world;
-cbuffer ConstantBuffer:register(b0)
+cbuffer ConstantBuffer1:register(b2)
+{
+	matrix view;
+};
+cbuffer ConstantBuffer:register(b1)
 {
 	//matrix world;
-	matrix view;
 	matrix Projection;
 };
 vs_out vs_main(float4 in_postion:POSITION , float4 in_color:COLOR )

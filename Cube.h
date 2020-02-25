@@ -15,9 +15,12 @@ class CCube :
 	{
 		XMMATRIX mWorld;
 	};
-	struct ConstantBuffer
+	struct TestConstantBuffer1
 	{
 		XMMATRIX mView;
+	};
+	struct ConstantBuffer
+	{
 		XMMATRIX mProjection;
 	};
 public:
@@ -29,8 +32,8 @@ public:
 	virtual void Tick(DWORD dwTimes);
 private:
 	ID3D11Buffer* m_pConstBuffer;
-	//没有必要写两个constbuffer，为了测试global constbuffer 把矩阵拆分为两部分
+	//没有必要写两个constbuffer，为了学习ConstBuffer 把矩阵拆分为两部分
 	ID3D11Buffer* m_pConstBufferTest;
-
+	ID3D11Buffer* m_pConstBufferTest1;
 };
 
