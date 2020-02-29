@@ -11,10 +11,16 @@ class CCube :
 		XMFLOAT3 postion;
 		XMFLOAT4 color;
 	};
-	struct ConstantBuffer
+	struct TestConstantBuffer
 	{
 		XMMATRIX mWorld;
+	};
+	struct TestConstantBuffer1
+	{
 		XMMATRIX mView;
+	};
+	struct ConstantBuffer
+	{
 		XMMATRIX mProjection;
 	};
 public:
@@ -26,6 +32,8 @@ public:
 	virtual void Tick(DWORD dwTimes);
 private:
 	ID3D11Buffer* m_pConstBuffer;
-
+	//没有必要写两个constbuffer，为了学习ConstBuffer 把矩阵拆分为两部分
+	ID3D11Buffer* m_pConstBufferTest;
+	ID3D11Buffer* m_pConstBufferTest1;
 };
 

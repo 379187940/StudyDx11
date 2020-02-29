@@ -131,12 +131,7 @@ bool CQuard::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	hr = m_pd3dDevice->CreateSamplerState(&sampDesc, &m_pSampleState);
 	if (FAILED(hr))
 		return hr;
-	D3D11_BUFFER_DESC  buffer_desc;
-	ZeroMemory(&buffer_desc, sizeof(D3D11_BUFFER_DESC));
-	buffer_desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	buffer_desc.ByteWidth = sizeof(CBufferConvertToWorld);
-	buffer_desc.Usage = D3D11_USAGE_DEFAULT;
-	hr = m_pd3dDevice->CreateBuffer(&buffer_desc, NULL, &m_pConvertDepthToWorld);
+	m_pConvertDepthToWorld = CreateBuffer(m_pd3dDevice, sizeof(CBufferConvertToWorld), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0);
 	return true;
 }
 extern ID3D11RenderTargetView* g_pRenderTargetView ;

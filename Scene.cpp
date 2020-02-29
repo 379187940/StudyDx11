@@ -46,7 +46,6 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	RegisterObject(pNewTrianle);
 	RegisterObject(pNewCube);
 	RegisterObject(pNewCubeLight);
-	//RegisterObject(pNewQuard);
 	BuildUi();
 	HRESULT hr = S_FALSE ;
 	ID3D11RenderTargetView* pRenderTargetView = NULL;

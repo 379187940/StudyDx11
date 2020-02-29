@@ -31,3 +31,23 @@ ID3D11Texture2D* CreateTexture2d(
 	assert(SUCCEEDED(hr));
 	return pResultTexture;
 }
+ID3D11Buffer* CreateBuffer(
+	ID3D11Device* pDevice ,
+	UINT byteWidth,
+	D3D11_USAGE usage,
+	UINT bindFlag,
+	UINT cpuAccessFlag,
+	UINT miscFlag)
+{
+	D3D11_BUFFER_DESC constBufferDesc;
+	ZeroMemory(&constBufferDesc, sizeof(constBufferDesc));
+	constBufferDesc.BindFlags = bindFlag;
+	constBufferDesc.CPUAccessFlags = cpuAccessFlag;
+	byteWidth = (byteWidth + 15)&~15;
+	constBufferDesc.ByteWidth = byteWidth;
+	constBufferDesc.Usage = usage;
+	ID3D11Buffer* reBuffer;
+	HRESULT hr = pDevice->CreateBuffer(&constBufferDesc, NULL, &reBuffer);
+	assert(SUCCEEDED(hr));
+	return reBuffer;
+}

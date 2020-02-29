@@ -306,6 +306,8 @@ void CleanupDevice()
 #if defined(DEBUG) || defined(_DEBUG)	
 	ID3D11Debug *d3dDebug;
 	HRESULT hr = g_pd3dDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&d3dDebug));
+	if (g_pd3dDevice)
+		g_pd3dDevice->Release();
 	if (SUCCEEDED(hr))	
 	{		
 		hr = d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);	
@@ -313,6 +315,5 @@ void CleanupDevice()
 	if (d3dDebug != nullptr)			
 		d3dDebug->Release();
 #endif
-    if( g_pd3dDevice ) 
-		g_pd3dDevice->Release();
+    
 }
