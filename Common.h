@@ -22,3 +22,9 @@ ID3D11Buffer* CreateBuffer(
 	UINT cpuAccessFlag,
 	UINT miscFlag
 );
+#ifndef SAFE_DELETE
+#define SAFE_DELETE(p) {delete (p) ; (p) = NULL ;}
+#endif
+#ifndef V_RETURN
+#define V_RETURN(p)
+#endif

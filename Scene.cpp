@@ -8,6 +8,7 @@
 #include "Quard.h"
 #include "unit.h"
 #include <tchar.h>
+#include "ObjModel.h"
 CScene g_Scene;
 CScene::CScene()
 {
@@ -42,7 +43,9 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	pNewCubeLight->Init(pd3d11Device, pContext);
 	m_quardDepth = new CQuard(_T("CQuard"));
 	m_quardDepth->Init(pd3d11Device, pContext);
-
+	CObjModel* ObjMode = new CObjModel(_T("fromobjload"));
+	ObjMode->Init(pd3d11Device, pContext);
+	ObjMode->LoadFromObjFile(_T("basketball_OBJ.obj"));
 	RegisterObject(pNewTrianle);
 	RegisterObject(pNewCube);
 	RegisterObject(pNewCubeLight);

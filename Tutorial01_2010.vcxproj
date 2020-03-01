@@ -389,6 +389,8 @@
     <ClCompile Include="CubeLight.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="MeshLoader11.cpp" />
+    <ClCompile Include="ObjModel.cpp" />
     <ClCompile Include="Quard.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Triangle.cpp" />
@@ -408,6 +410,8 @@
     <ClInclude Include="CubeLight.h" />
     <ClInclude Include="IObject.h" />
     <ClInclude Include="IRenderObject.h" />
+    <ClInclude Include="MeshLoader11.h" />
+    <ClInclude Include="ObjModel.h" />
     <ClInclude Include="Quard.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
