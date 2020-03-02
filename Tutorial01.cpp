@@ -297,23 +297,24 @@ void Render()
 void CleanupDevice()
 {
     if( g_pImmediateContext ) g_pImmediateContext->ClearState();
-
+	
     if( g_pRenderTargetView ) g_pRenderTargetView->Release();
     if( g_pSwapChain ) g_pSwapChain->Release();
 	if (g_pDepthStencil) g_pDepthStencil->Release();
 	if (g_pDepthStencilView) g_pDepthStencilView->Release();
     if( g_pImmediateContext ) g_pImmediateContext->Release();
+	TwTerminate();
 #if defined(DEBUG) || defined(_DEBUG)	
 	ID3D11Debug *d3dDebug;
 	HRESULT hr = g_pd3dDevice->QueryInterface(__uuidof(ID3D11Debug), reinterpret_cast<void**>(&d3dDebug));
-	if (g_pd3dDevice)
-		g_pd3dDevice->Release();
 	if (SUCCEEDED(hr))	
 	{		
-		hr = d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);	
+		hr = d3dDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
 	}	
 	if (d3dDebug != nullptr)			
 		d3dDebug->Release();
+	if (g_pd3dDevice)
+		g_pd3dDevice->Release();
 #endif
     
 }
