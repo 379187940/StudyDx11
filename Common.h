@@ -1,6 +1,7 @@
 #pragma once
 #include "d3d11.h"
 #include "unit.h"
+#include "d3dx11core.h"
 ID3D11Texture2D* CreateTexture2d(
 	ID3D11Device* pDevice,
 	DWORD width,
@@ -22,6 +23,19 @@ ID3D11Buffer* CreateBuffer(
 	UINT cpuAccessFlag,
 	UINT miscFlag
 );
+HRESULT CompileShaderFromFile(
+	CString fileName,
+	const D3D10_SHADER_MACRO* pMacro,
+	LPD3D10INCLUDE pInclude,
+	char* functionName,
+	char* proFile,
+	UINT flag1,
+	UINT flag2,
+	ID3DX11ThreadPump* pPump,
+	ID3D10Blob** pShader 
+);
+//会在exe目录或者工作目录查找
+bool GetFullPath(CString fileName, CString& result);
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p) {delete (p) ; (p) = NULL ;}
 #endif

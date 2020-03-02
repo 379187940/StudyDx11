@@ -1,5 +1,7 @@
 #pragma once
 #include <string>
-#include "Common.h"
+#include <Windows.h>
 #include "xnamath.h"
+#include "atlstr.h"
+#include "Common.h"
 using std::wstring;

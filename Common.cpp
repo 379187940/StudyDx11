@@ -51,3 +51,55 @@ ID3D11Buffer* CreateBuffer(
 	assert(SUCCEEDED(hr));
 	return reBuffer;
 }
+
+bool GetFullPath(CString fileName , CString& result)
+{
+	if (fileName.Find(_T('\\')) != -1 ||
+		fileName.Find(_T('/')) != -1)
+	{
+		result = fileName;
+		return true;
+	}
+	else
+	{
+		WCHAR tempStr[MAX_PATH];
+		_tgetcwd(tempStr, MAX_PATH - 1);
+		CString fullFilePath = tempStr;
+		fullFilePath += _T("\\");
+		fullFilePath += fileName;
+		if (PathFileExists(fullFilePath))
+		{
+			result = std::move(fullFilePath);
+			return true;
+		}
+		GetModuleFileName(NULL, tempStr, MAX_PATH - 1);
+		fullFilePath = tempStr;
+		fullFilePath += _T("\\");
+		fullFilePath += fileName;
+		if (PathFileExists(fullFilePath))
+		{
+			result = std::move(fullFilePath);
+			return true;
+		}
+	}
+	return false;
+}
+HRESULT CompileShaderFromFile(
+	CString fileName,
+	const D3D10_SHADER_MACRO* pMacro,
+	LPD3D10INCLUDE pInclude,
+	char* functionName,
+	char* proFile,
+	UINT flag1,
+	UINT flag2,
+	ID3DX11ThreadPump* pPump,
+	ID3D10Blob** pShader
+)
+{
+	CString fullFilePath;
+	if (!GetFullPath(fileName, fullFilePath))
+		return S_FALSE;
+	HRESULT hr;
+	hr = CompileShaderFromFile(_T("triangle.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, pShader);
+	return hr;
+}

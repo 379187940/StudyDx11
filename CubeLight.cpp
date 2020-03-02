@@ -126,7 +126,7 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 	ID3D10Blob* pVertexShader = NULL;
 	ID3D10Blob* pErrorMsg = NULL;
 	//pErrorMsg->GetBufferPointer();
-	D3DX11CompileFromFile(_T("cubelight.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader, &pErrorMsg, &hr);
+	hr = CompileShaderFromFile(_T("cubelight.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader);
 	if (pErrorMsg)
 	{
 		OutputDebugStringA((char*)pErrorMsg->GetBufferPointer());
@@ -142,7 +142,7 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 	assert(SUCCEEDED(hr));
 	
 	ID3D10Blob* pPixelShader = NULL;
-	D3DX11CompileFromFile(_T("cubelight.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader, &pErrorMsg, &hr);
+	hr = CompileShaderFromFile(_T("cubelight.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader);
 	assert(SUCCEEDED(hr));
 	if (pErrorMsg)
 		pErrorMsg->Release();

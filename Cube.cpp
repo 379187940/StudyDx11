@@ -109,7 +109,7 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 		{ "COLOR",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA ,0 },
 	};
 	ID3D10Blob* pVertexShader = NULL;
-	D3DX11CompileFromFile(_T("cube.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader, NULL, &hr);
+	hr = CompileShaderFromFile(_T("cube.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader);
 	assert(SUCCEEDED(hr));
 	hr = m_pd3dDevice->CreateInputLayout(inputDesc, ARRAYSIZE(inputDesc), pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), &m_pLayoutInput);
 	assert(SUCCEEDED(hr));
@@ -118,7 +118,7 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 	assert(SUCCEEDED(hr));
 	
 	ID3D10Blob* pPixelShader = NULL;
-	D3DX11CompileFromFile(_T("cube.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader, NULL, &hr);
+	hr = CompileShaderFromFile(_T("cube.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader);
 	assert(SUCCEEDED(hr));
 	//pixel shader
 	hr = m_pd3dDevice->CreatePixelShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_pPixelShader);

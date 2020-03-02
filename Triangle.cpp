@@ -25,7 +25,7 @@ bool CTriangle::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	ID3D10Blob* pVertexShader = NULL;
 	ID3D10Blob* pErrorMsg = NULL;
 	HRESULT hr;
-	D3DX11CompileFromFile(_T("triangle.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader, &pErrorMsg, &hr);
+	hr = CompileShaderFromFile(_T("triangle.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader);
 	if (FAILED(hr))
 		assert(false);
 	D3D11_INPUT_ELEMENT_DESC desc[] = {
@@ -60,15 +60,8 @@ bool CTriangle::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 		assert(false); return false;
 	}
 	ID3D10Blob* pPixelShader = NULL;
-	ID3D10Blob*	pBlob_Errors = NULL;
 
-	D3DX11CompileFromFile(_T("triangle.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader, &pBlob_Errors, &hr);
-	LPVOID l_pError = NULL;
-	if (FAILED(hr))
-	{
-		l_pError = pBlob_Errors->GetBufferPointer();
-		assert(false); return false;
-	}
+	hr = CompileShaderFromFile(_T("triangle.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader);
 	if (FAILED(m_pd3dDevice->CreatePixelShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_pPixelShader)))
 	{
 		assert(false);
