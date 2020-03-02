@@ -14,6 +14,10 @@ CCube::~CCube()
 	
 	if (m_pConstBuffer)
 		m_pConstBuffer->Release();
+	if (m_pConstBufferTest)
+		m_pConstBufferTest->Release();
+	if (m_pConstBufferTest1)
+		m_pConstBufferTest1->Release();
 }
 
 bool CCube::Render(DWORD dwTimes)

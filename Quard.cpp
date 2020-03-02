@@ -14,6 +14,10 @@ CQuard::~CQuard()
 	//m_pDepthTextureSRV->Release();
 	m_pDepthState->Release();
 	m_pSampleState->Release();
+	m_pDepthTexutre->Release();
+	m_pDepthTexutreTemp->Release();
+	m_pDepthView->Release();
+	m_pConvertDepthToWorld->Release();
 }
 
 void CQuard::Tick(DWORD dwTimes)

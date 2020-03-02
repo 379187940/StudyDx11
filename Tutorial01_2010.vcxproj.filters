@@ -11,6 +11,9 @@
     <Filter Include="MainFile">
       <UniqueIdentifier>{c008ac3f-b770-486d-9853-8bd0d987f87c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="shader">
+      <UniqueIdentifier>{dbae2216-b5a0-497f-9ae2-dd809ac01d91}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderObject.h">
@@ -40,6 +43,10 @@
     </ClInclude>
     <ClInclude Include="Common.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="MeshLoader11.h" />
+    <ClInclude Include="ObjModel.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -65,6 +72,10 @@
     </ClCompile>
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="MeshLoader11.cpp" />
+    <ClCompile Include="ObjModel.cpp">
+      <Filter>RenderObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
@@ -75,11 +86,19 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="triangle.hlsl" />
-    <FxCompile Include="cubelight.hlsl" />
+    <FxCompile Include="cubelight.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
+    <FxCompile Include="triangle.hlsl">
+      <Filter>shader</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="cube.hlsl" />
-    <None Include="quard.hlsl" />
+    <None Include="cube.hlsl">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="quard.hlsl">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
