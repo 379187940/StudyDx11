@@ -19,21 +19,10 @@ void CObjModel::Tick(DWORD dwTimes)
 }
 bool CObjModel::LoadFromObjFile(WCHAR* fileName)
 {
-	m_ObjData.Create(m_pd3dDevice, fileName);
-	WCHAR workDir[MAX_PATH] = L"";
-	if ( wcsrchr(fileName, L'\\') == nullptr &&
-		wcsrchr(fileName, L'/') == nullptr )
-		_tgetcwd(workDir, MAX_PATH - 1);
-	if (
-		workDir[lstrlenW(workDir) - 1] != L'\\' &&
-		workDir[lstrlenW(workDir) - 1] != L'/'
-		)
-	{
-		workDir[lstrlenW(workDir)] = L'\\';
-		workDir[lstrlenW(workDir)] = L'\0';
-	}
-	WCHAR* fullPathName = lstrcatW(workDir, fileName);
-	LoadFromObjFile(fullPathName);
+	CString fullPath;
+	GetFullPath(fileName, fullPath);
+	HRESULT hr = m_ObjData.Create(m_pd3dDevice, fullPath);
+	return SUCCEEDED(hr) ? true : false;
 }
 bool CObjModel::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext )
 {

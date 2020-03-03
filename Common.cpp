@@ -107,7 +107,7 @@ HRESULT CompileShaderFromFile(
 		return S_FALSE;
 	HRESULT hr;
 	ID3D10Blob*	pBlob_Errors = NULL;
-	D3DX11CompileFromFile(fullFilePath, pMacro, pInclude, "vs_main", "vs_4_0", flag1, flag2, pPump, pShader,&pBlob_Errors , &hr);
+	D3DX11CompileFromFile(fullFilePath, pMacro, pInclude, functionName, proFile, flag1, flag2, pPump, pShader,&pBlob_Errors , &hr);
 	if (FAILED(hr))
 	{
 		if (pBlob_Errors)

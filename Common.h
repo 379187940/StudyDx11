@@ -40,5 +40,5 @@ bool GetFullPath(CString fileName, CString& result);
 #define SAFE_DELETE(p) {delete (p) ; (p) = NULL ;}
 #endif
 #ifndef V_RETURN
-#define V_RETURN(p)
+#define V_RETURN(p) (p)
 #endif

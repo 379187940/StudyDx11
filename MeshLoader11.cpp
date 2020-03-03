@@ -7,6 +7,7 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 //--------------------------------------------------------------------------------------
 #pragma warning(disable: 4995)
+#include"unit.h"
 #include "meshloader11.h"
 #include <fstream>
 #include "Common.h"
@@ -163,19 +164,6 @@ HRESULT CMeshLoader11::Create( ID3D11Device* pd3dDevice, const WCHAR* strFilenam
 HRESULT CMeshLoader11::LoadGeometryFromOBJ( const WCHAR* strFileName )
 {
     WCHAR strMaterialFilename[MAX_PATH] = {0};
-    WCHAR wstr[MAX_PATH];
-    char str[MAX_PATH];
-    HRESULT hr;
-
-    // Find the file
-    V_RETURN( DXUTFindDXSDKMediaFileCch( wstr, MAX_PATH, strFileName ) );
-    WideCharToMultiByte( CP_ACP, 0, wstr, -1, str, MAX_PATH, NULL, NULL );
-
-    // Store the directory where the mesh was found
-    wcscpy_s( m_strMediaDir, MAX_PATH - 1, wstr );
-    WCHAR* pch = wcsrchr( m_strMediaDir, L'\\' );
-    if( pch )
-        *pch = NULL;
 
     // Create temporary storage for the input data. Once the data has been loaded into
     // a reasonable format we can create a D3DXMesh object and load it with the mesh data.
@@ -196,7 +184,7 @@ HRESULT CMeshLoader11::LoadGeometryFromOBJ( const WCHAR* strFileName )
 
     // File input
     WCHAR strCommand[256] = {0};
-    wifstream InFile( str );
+    wifstream InFile(strFileName);
     if( !InFile )
         return S_FALSE;
 
@@ -330,7 +318,9 @@ HRESULT CMeshLoader11::LoadGeometryFromOBJ( const WCHAR* strFileName )
     // If an associated material file was found, read that in as well.
     if( strMaterialFilename[0] )
     {
-        V_RETURN( LoadMaterialsFromMTL( strMaterialFilename ) );
+		CString fullPathMaterialFileName;
+		GetFullPath(strMaterialFilename, fullPathMaterialFileName);
+        V_RETURN( LoadMaterialsFromMTL( fullPathMaterialFileName) );
     }
 
     return S_OK;
@@ -435,26 +425,14 @@ void CMeshLoader11::DeleteCache()
 HRESULT CMeshLoader11::LoadMaterialsFromMTL( const WCHAR* strFileName )
 {
     HRESULT hr;
-
-    // Set the current directory based on where the mesh was found
-    WCHAR wstrOldDir[MAX_PATH] = {0};
-    GetCurrentDirectory( MAX_PATH, wstrOldDir );
-    SetCurrentDirectory( m_strMediaDir );
-
-    // Find the file
-    WCHAR strPath[MAX_PATH];
-    char cstrPath[MAX_PATH];
-    V_RETURN( DXUTFindDXSDKMediaFileCch( strPath, MAX_PATH, strFileName ) );
-    WideCharToMultiByte( CP_ACP, 0, strPath, -1, cstrPath, MAX_PATH, NULL, NULL );
-
     // File input
     WCHAR strCommand[256] = {0};
-    wifstream InFile( cstrPath );
+    wifstream InFile( strFileName );
     if( !InFile )
         return S_FALSE;
 
     // Restore the original current directory
-    SetCurrentDirectory( wstrOldDir );
+    //SetCurrentDirectory( wstrOldDir );
 
     Material* pMaterial = NULL;
 
