@@ -1,3 +1,4 @@
+#include "unit.h"
 #include "Common.h"
 #include <assert.h>
 ID3D11Texture2D* CreateTexture2d(
@@ -74,6 +75,11 @@ bool GetFullPath(CString fileName , CString& result)
 		}
 		GetModuleFileName(NULL, tempStr, MAX_PATH - 1);
 		fullFilePath = tempStr;
+		int iFind = fullFilePath.ReverseFind(_T('\\'));
+		if (iFind == -1)
+			iFind == fullFilePath.ReverseFind(_T('/'));
+		assert(iFind != -1);
+		fullFilePath = fullFilePath.Left(iFind);
 		fullFilePath += _T("\\");
 		fullFilePath += fileName;
 		if (PathFileExists(fullFilePath))
@@ -100,6 +106,15 @@ HRESULT CompileShaderFromFile(
 	if (!GetFullPath(fileName, fullFilePath))
 		return S_FALSE;
 	HRESULT hr;
-	hr = CompileShaderFromFile(_T("triangle.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, pShader);
+	ID3D10Blob*	pBlob_Errors = NULL;
+	D3DX11CompileFromFile(fullFilePath, pMacro, pInclude, "vs_main", "vs_4_0", flag1, flag2, pPump, pShader,&pBlob_Errors , &hr);
+	if (FAILED(hr))
+	{
+		if (pBlob_Errors)
+		{
+			OutputDebugStringA((char*)pBlob_Errors->GetBufferPointer());
+			pBlob_Errors->Release();
+		}
+	}
 	return hr;
 }
