@@ -45,7 +45,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	m_quardDepth->Init(pd3d11Device, pContext);
 	CObjModel* ObjMode = new CObjModel(_T("fromobjload"));
 	ObjMode->Init(pd3d11Device, pContext);
-	ObjMode->LoadFromObjFile(_T("basketball_OBJ.obj"));
+	ObjMode->LoadFromObjFile(_T("cup.obj"));
 	RegisterObject(pNewTrianle);
 	RegisterObject(pNewCube);
 	RegisterObject(pNewCubeLight);
