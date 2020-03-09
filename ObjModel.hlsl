@@ -57,7 +57,10 @@ ps_input vs_main(vs_input input)
 
 	output.vColor.a = g_fMaterialAlpha;
 }
+texture2D diffuseTex;
+SamplerState samLiner;
 float4 ps_main( vs_output psInput ):SV_Target
 {
-	float colorResult = 
-}
+	float colorResult = psInput.vColor;
+    colorResult.rgb *= diffuseTex.sample(samLiner , psInput.texcoord , 0);
+} 
