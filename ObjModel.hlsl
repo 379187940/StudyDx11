@@ -20,7 +20,7 @@ cbuffer material
 	float  alpha;
 	bool   bSpecular;
 };
-struct vs_input
+struct vs_input 
 {
 	float4 postion:SV_POSTION;
 	float3 normal:NORMAL;

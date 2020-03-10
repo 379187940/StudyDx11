@@ -34,6 +34,7 @@ HRESULT CompileShaderFromFile(
 	ID3DX11ThreadPump* pPump,
 	ID3D10Blob** pShader 
 );
+void DeleteComPtr(IUnknown* comPtr);
 //会在exe目录或者工作目录查找
 bool GetFullPath(CString fileName, CString& result);
 #ifndef SAFE_DELETE

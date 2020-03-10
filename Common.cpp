@@ -118,3 +118,8 @@ HRESULT CompileShaderFromFile(
 	}
 	return hr;
 }
+void DeleteComPtr(IUnknown* comPtr)
+{
+	assert(comPtr);
+	comPtr->Release();
+}
