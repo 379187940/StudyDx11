@@ -1,8 +1,10 @@
 #pragma once
 #include <string>
-#include <Windows.h>
-#include "xnamath.h"
+//#include <Windows.h>
 #include "atlstr.h"
-#include "Common.h"
+#include "d3dx11core.h"
 #include <memory>
+#include "Common.h"
+//#include "xnamath.h"
+
 using std::wstring;

@@ -1,7 +1,7 @@
 #pragma once
-#include "d3d11.h"
-#include "unit.h"
-#include "d3dx11core.h"
+//#include "d3d11.h"
+
+
 ID3D11Texture2D* CreateTexture2d(
 	ID3D11Device* pDevice,
 	DWORD width,

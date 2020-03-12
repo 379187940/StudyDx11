@@ -403,6 +403,7 @@
     <ClCompile Include="CubeLight.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GLTFLoader.cpp" />
     <ClCompile Include="MeshLoader11.cpp" />
     <ClCompile Include="ObjModel.cpp" />
     <ClCompile Include="Quard.cpp" />
@@ -418,17 +419,22 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseRenderObject.h" />
+    <ClInclude Include="BasicMath.hpp" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeLight.h" />
+    <ClInclude Include="GLTFLoader.hpp" />
+    <ClInclude Include="HashUtils.hpp" />
     <ClInclude Include="IObject.h" />
     <ClInclude Include="IRenderObject.h" />
+    <ClInclude Include="json.hpp" />
     <ClInclude Include="MeshLoader11.h" />
     <ClInclude Include="ObjModel.h" />
     <ClInclude Include="Quard.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="tiny_gltf.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="unit.h" />
     <ResourceCompile Include="Tutorial01.rc" />
