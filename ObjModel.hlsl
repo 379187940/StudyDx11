@@ -5,11 +5,12 @@ cbuffer globalmatrix
 	matrix view;
 	matrix proj;
 	matrix matviewproj;
+	float3 camerapos;
 };
 cbuffer lightinfo
 {
-	float4 lightPos;
-	float4 lightcolor;
+	float3 lightDir;
+	float3 lightcolor;
 };
 cbuffer material
 {
@@ -20,47 +21,47 @@ cbuffer material
 	float  alpha;
 	bool   bSpecular;
 };
-struct vs_input 
+struct vs_input
 {
 	float4 postion:SV_POSTION;
 	float3 normal:NORMAL;
-	float2 texcoord; TEXCOORD;
-}
+	float2 texcoord:TEXCOORD;
+};
 
 struct ps_input
 {
 	float4 postion:SV_POSITION;
 	float3 normal:NORMAL;
-	float3 color:COLOR;
+	float4 color:COLOR;
 	float2 texcoord:TEXCOORD;
 };
 ps_input vs_main(vs_input input)
 {
 	ps_input output;
-	output.postion = mul(input.positon, world);
-	output.postion = mul(output.postion, matviewproj);
-	output.normal =  mul(normal,(float3x3)world);
+	float4 vPosWorld = mul(input.postion, world);
+	output.postion = mul(vPosWorld, matviewproj);
+	output.normal =  mul(input.normal,(float3x3)world);
 	output.texcoord = input.texcoord;
 
-	output.vColor.rgb = g_vLightColor * g_vMaterialAmbient;
-	output.vColor.rgb += g_vLightColor * g_vMaterialDiffuse * saturate(dot(vLight, vNormalWorld));
+	output.color.rgb = lightcolor * ambient;
+	output.color.rgb += lightcolor * diffuse * saturate(dot(lightDir, output.normal));
 
 	// If enabled, calculate the specular term
-	if (bSpecular)
-	{
-		float3 vCamera = normalize(vPosWorld.xyz - g_vCameraPosition);
-		float3 vReflection = reflect(vLight, vNormalWorld);
-		float  fPhoneValue = saturate(dot(vReflection, vCamera));
+	
+	float3 vCamera = normalize(vPosWorld.xyz - camerapos);
+	float3 vReflection = reflect(lightDir, output.normal);
+	float  fPhoneValue = saturate(dot(vReflection, vCamera));
 
-		output.vColor.rgb += g_vMaterialSpecular * pow(fPhoneValue, g_nMaterialShininess);
-	}
+	output.color.rgb += specular * pow(fPhoneValue, shininess);
+	
 
-	output.vColor.a = g_fMaterialAlpha;
+	output.color.a = alpha;
 }
 texture2D diffuseTex;
 SamplerState samLiner;
-float4 ps_main( vs_output psInput ):SV_Target
+float4 ps_main(ps_input psInput ):SV_Target
 {
-	float colorResult = psInput.vColor;
-    colorResult.rgb *= diffuseTex.sample(samLiner , psInput.texcoord , 0);
+	float4 colorResult = psInput.color;
+    colorResult.rgb *= diffuseTex.Sample(samLiner , psInput.texcoord , 0);
+	return colorResult;
 } 

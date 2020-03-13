@@ -27,10 +27,12 @@
 
 #include <vector>
 //#include <memory>
+#include <algorithm>
 #include <cmath>
+#include <fstream>
 #include "BasicMath.hpp"
 #include "unit.h"
-
+#include <limits>
 #include "GLTFLoader.hpp"
 
 #define TINYGLTF_IMPLEMENTATION
@@ -38,9 +40,6 @@
 #define TINYGLTF_NO_STB_IMAGE_WRITE
 
 #include "tiny_gltf.h"
-
-typedef ID3D11Device IRenderDevice;
-typedef ID3D11DeviceContext IDeviceContext;
 
 namespace Diligent
 {
@@ -54,9 +53,9 @@ namespace GLTF
 //                                             const tinygltf::Image& gltfimage,
 //                                             ISampler*              pSampler)
 //{
-//    std::vector<Uint8> RGBA;
+//    std::vector<unsigned char> RGBA;
 //
-//    const Uint8* pTextureData = nullptr;
+//    const unsigned char* pTextureData = nullptr;
 //    if (gltfimage.component == 3)
 //    {
 //        RGBA.resize(gltfimage.width * gltfimage.height * 4);
@@ -92,7 +91,7 @@ namespace GLTF
 //    TexDesc.Format    = TEX_FORMAT_RGBA8_UNORM;
 //    TexDesc.MipLevels = 0;
 //    TexDesc.MiscFlags = MISC_TEXTURE_FLAG_GENERATE_MIPS;
-//    RefCntAutoPtr<ITexture> pTexture;
+//    std::shared_ptr<ITexture> pTexture;
 //
 //    pDevice->CreateTexture(TexDesc, nullptr, &pTexture);
 //    Box UpdateBox;
@@ -148,7 +147,7 @@ void Node::Update()
         {
             // Update join matrices
             auto   InverseTransform = _Mesh->Transforms.matrix.Inverse(); // TODO: do not use inverse tranform here
-            size_t numJoints        = std::min((uint32_t)_Skin->Joints.size(), Uint32{Mesh::TransformData::MaxNumJoints});
+            size_t numJoints        = (std::min)((uint32_t)_Skin->Joints.size(), uint32_t{Mesh::TransformData::MaxNumJoints});
             for (size_t i = 0; i < numJoints; i++)
             {
                 auto* JointNode = _Skin->Joints[i];
@@ -249,7 +248,6 @@ void Model::LoadNode(IRenderDevice*         pDevice,
                 const float*    bufferWeights      = nullptr;
 
                 auto position_it = primitive.attributes.find("POSITION");
-                VERIFY(position_it != primitive.attributes.end(), "Position attribute is required");
 
                 const tinygltf::Accessor&   posAccessor = gltf_model.accessors[position_it->second];
                 const tinygltf::BufferView& posView     = gltf_model.bufferViews[posAccessor.bufferView];
@@ -375,7 +373,7 @@ void Model::LoadNode(IRenderDevice*         pDevice,
                         break;
                     }
                     default:
-                        std::cerr << "Index component type " << accessor.componentType << " not supported!" << std::endl;
+						assert(0);
                         return;
                 }
             }
@@ -401,8 +399,8 @@ void Model::LoadNode(IRenderDevice*         pDevice,
                 NewMesh->BB        = prim->BB;
                 NewMesh->IsValidBB = true;
             }
-            float3 bb_min = std::min(NewMesh->BB.Min, prim->BB.Min);
-            float3 bb_max = std::max(NewMesh->BB.Max, prim->BB.Max);
+            float3 bb_min = (std::min)(NewMesh->BB.Min, prim->BB.Min);
+            float3 bb_max = (std::max)(NewMesh->BB.Max, prim->BB.Max);
             NewMesh->SetBoundingBox(bb_min, bb_max);
         }
         NewNode->_Mesh = std::move(NewMesh);
@@ -462,75 +460,75 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
                          IDeviceContext*        pCtx,
                          const tinygltf::Model& gltf_model)
 {
-    for (const tinygltf::Texture& gltf_tex : gltf_model.textures)
-    {
-        const tinygltf::Image&  gltf_image = gltf_model.images[gltf_tex.source];
-        RefCntAutoPtr<ISampler> pSampler;
-        if (gltf_tex.sampler == -1)
-        {
-            // No sampler specified, use a default one
-            pDevice->CreateSampler(Sam_LinearWrap, &pSampler);
-        }
-        else
-        {
-            pSampler = TextureSamplers[gltf_tex.sampler];
-        }
-        auto pTexture = TextureFromGLTFImage(pDevice, pCtx, gltf_image, pSampler);
-        Textures.push_back(std::move(pTexture));
-    }
+    //for (const tinygltf::Texture& gltf_tex : gltf_model.textures)
+    //{
+    //    const tinygltf::Image&  gltf_image = gltf_model.images[gltf_tex.source];
+    //    std::shared_ptr<ISampler> pSampler;
+    //    if (gltf_tex.sampler == -1)
+    //    {
+    //        // No sampler specified, use a default one
+    //        pDevice->CreateSampler(Sam_LinearWrap, &pSampler);
+    //    }
+    //    else
+    //    {
+    //        pSampler = TextureSamplers[gltf_tex.sampler];
+    //    }
+    //    auto pTexture = TextureFromGLTFImage(pDevice, pCtx, gltf_image, pSampler);
+    //    Textures.push_back(std::move(pTexture));
+    //}
 
-    std::vector<StateTransitionDesc> Barriers;
-    for (auto& Tex : Textures)
-    {
-        pCtx->GenerateMips(Tex->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE));
+    //std::vector<StateTransitionDesc> Barriers;
+    //for (auto& Tex : Textures)
+    //{
+    //    pCtx->GenerateMips(Tex->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE));
 
-        StateTransitionDesc Barrier{Tex, RESOURCE_STATE_UNKNOWN, RESOURCE_STATE_SHADER_RESOURCE};
-        Barrier.UpdateResourceState = true;
-        Barriers.emplace_back(Barrier);
-    }
-    pCtx->TransitionResourceStates(static_cast<Uint32>(Barriers.size()), Barriers.data());
+    //    StateTransitionDesc Barrier{Tex, RESOURCE_STATE_UNKNOWN, RESOURCE_STATE_SHADER_RESOURCE};
+    //    Barrier.UpdateResourceState = true;
+    //    Barriers.emplace_back(Barrier);
+    //}
+    //pCtx->TransitionResourceStates(static_cast<UINT32>(Barriers.size()), Barriers.data());
 }
 
 namespace
 {
 
-TEXTURE_ADDRESS_MODE GetWrapMode(int32_t wrapMode)
-{
-    switch (wrapMode)
-    {
-        case 10497:
-            return TEXTURE_ADDRESS_WRAP;
-        case 33071:
-            return TEXTURE_ADDRESS_CLAMP;
-        case 33648:
-            return TEXTURE_ADDRESS_MIRROR;
-        default:
-            LOG_WARNING_MESSAGE("Unknown gltf address wrap mode: ", wrapMode, ". Defaulting to WRAP.");
-            return TEXTURE_ADDRESS_WRAP;
-    }
-}
-
-std::pair<FILTER_TYPE, FILTER_TYPE> GetFilterMode(int32_t filterMode)
-{
-    switch (filterMode)
-    {
-        case 9728: // NEAREST
-            return {FILTER_TYPE_POINT, FILTER_TYPE_POINT};
-        case 9729: // LINEAR
-            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR};
-        case 9984: // NEAREST_MIPMAP_NEAREST
-            return {FILTER_TYPE_POINT, FILTER_TYPE_POINT};
-        case 9985: // LINEAR_MIPMAP_NEAREST
-            return {FILTER_TYPE_LINEAR, FILTER_TYPE_POINT};
-        case 9986:                                           // NEAREST_MIPMAP_LINEAR
-            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR}; // use linear min filter instead as point makes no sesne
-        case 9987:                                           // LINEAR_MIPMAP_LINEAR
-            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR};
-        default:
-            LOG_WARNING_MESSAGE("Unknown gltf filter mode: ", filterMode, ". Defaulting to linear.");
-            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR};
-    }
-}
+//TEXTURE_ADDRESS_MODE GetWrapMode(int32_t wrapMode)
+//{
+//    switch (wrapMode)
+//    {
+//        case 10497:
+//            return TEXTURE_ADDRESS_WRAP;
+//        case 33071:
+//            return TEXTURE_ADDRESS_CLAMP;
+//        case 33648:
+//            return TEXTURE_ADDRESS_MIRROR;
+//        default:
+//            LOG_WARNING_MESSAGE("Unknown gltf address wrap mode: ", wrapMode, ". Defaulting to WRAP.");
+//            return TEXTURE_ADDRESS_WRAP;
+//    }
+//}
+//
+//std::pair<FILTER_TYPE, FILTER_TYPE> GetFilterMode(int32_t filterMode)
+//{
+//    switch (filterMode)
+//    {
+//        case 9728: // NEAREST
+//            return {FILTER_TYPE_POINT, FILTER_TYPE_POINT};
+//        case 9729: // LINEAR
+//            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR};
+//        case 9984: // NEAREST_MIPMAP_NEAREST
+//            return {FILTER_TYPE_POINT, FILTER_TYPE_POINT};
+//        case 9985: // LINEAR_MIPMAP_NEAREST
+//            return {FILTER_TYPE_LINEAR, FILTER_TYPE_POINT};
+//        case 9986:                                           // NEAREST_MIPMAP_LINEAR
+//            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR}; // use linear min filter instead as point makes no sesne
+//        case 9987:                                           // LINEAR_MIPMAP_LINEAR
+//            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR};
+//        default:
+//            LOG_WARNING_MESSAGE("Unknown gltf filter mode: ", filterMode, ". Defaulting to linear.");
+//            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR};
+//    }
+//}
 
 } // namespace
 
@@ -538,7 +536,7 @@ void Model::LoadTextureSamplers(IRenderDevice* pDevice, const tinygltf::Model& g
 {
     for (const tinygltf::Sampler& smpl : gltf_model.samplers)
     {
-        SamplerDesc SamDesc;
+       /* SamplerDesc SamDesc;
         SamDesc.MagFilter = GetFilterMode(smpl.magFilter).first;
         auto MinMipFilter = GetFilterMode(smpl.minFilter);
         SamDesc.MinFilter = MinMipFilter.first;
@@ -546,9 +544,9 @@ void Model::LoadTextureSamplers(IRenderDevice* pDevice, const tinygltf::Model& g
         SamDesc.AddressU  = GetWrapMode(smpl.wrapS);
         SamDesc.AddressV  = GetWrapMode(smpl.wrapT);
         SamDesc.AddressW  = SamDesc.AddressV;
-        RefCntAutoPtr<ISampler> pSampler;
+        std::shared_ptr<ISampler> pSampler;
         pDevice->CreateSampler(SamDesc, &pSampler);
-        TextureSamplers.push_back(std::move(pSampler));
+        TextureSamplers.push_back(std::move(pSampler));*/
     }
 }
 
@@ -564,7 +562,7 @@ void Model::LoadMaterials(const tinygltf::Model& gltf_model)
             if (base_color_tex_it != gltf_mat.values.end())
             {
                 Mat.pBaseColorTexture      = Textures[base_color_tex_it->second.TextureIndex()];
-                Mat.TexCoordSets.BaseColor = static_cast<Uint8>(base_color_tex_it->second.TextureTexCoord());
+                Mat.TexCoordSets.BaseColor = static_cast<unsigned char>(base_color_tex_it->second.TextureTexCoord());
             }
         }
 
@@ -573,7 +571,7 @@ void Model::LoadMaterials(const tinygltf::Model& gltf_model)
             if (metal_rough_tex_it != gltf_mat.values.end())
             {
                 Mat.pMetallicRoughnessTexture      = Textures[metal_rough_tex_it->second.TextureIndex()];
-                Mat.TexCoordSets.MetallicRoughness = static_cast<Uint8>(metal_rough_tex_it->second.TextureTexCoord());
+                Mat.TexCoordSets.MetallicRoughness = static_cast<unsigned char>(metal_rough_tex_it->second.TextureTexCoord());
             }
         }
 
@@ -606,7 +604,7 @@ void Model::LoadMaterials(const tinygltf::Model& gltf_model)
             if (normal_tex_it != gltf_mat.additionalValues.end())
             {
                 Mat.pNormalTexture      = Textures[normal_tex_it->second.TextureIndex()];
-                Mat.TexCoordSets.Normal = static_cast<Uint8>(normal_tex_it->second.TextureTexCoord());
+                Mat.TexCoordSets.Normal = static_cast<unsigned char>(normal_tex_it->second.TextureTexCoord());
             }
         }
 
@@ -615,7 +613,7 @@ void Model::LoadMaterials(const tinygltf::Model& gltf_model)
             if (emssive_tex_it != gltf_mat.additionalValues.end())
             {
                 Mat.pEmissiveTexture      = Textures[emssive_tex_it->second.TextureIndex()];
-                Mat.TexCoordSets.Emissive = static_cast<Uint8>(emssive_tex_it->second.TextureTexCoord());
+                Mat.TexCoordSets.Emissive = static_cast<unsigned char>(emssive_tex_it->second.TextureTexCoord());
             }
         }
 
@@ -624,7 +622,7 @@ void Model::LoadMaterials(const tinygltf::Model& gltf_model)
             if (occlusion_tex_it != gltf_mat.additionalValues.end())
             {
                 Mat.pOcclusionTexture      = Textures[occlusion_tex_it->second.TextureIndex()];
-                Mat.TexCoordSets.Occlusion = static_cast<Uint8>(occlusion_tex_it->second.TextureTexCoord());
+                Mat.TexCoordSets.Occlusion = static_cast<unsigned char>(occlusion_tex_it->second.TextureTexCoord());
             }
         }
 
@@ -673,7 +671,7 @@ void Model::LoadMaterials(const tinygltf::Model& gltf_model)
                     auto index                               = ext_it->second.Get("specularGlossinessTexture").Get("index");
                     Mat.extension.pSpecularGlossinessTexture = Textures[index.Get<int>()];
                     auto texCoordSet                         = ext_it->second.Get("specularGlossinessTexture").Get("texCoord");
-                    Mat.TexCoordSets.SpecularGlossiness      = static_cast<Uint8>(texCoordSet.Get<int>());
+                    Mat.TexCoordSets.SpecularGlossiness      = static_cast<unsigned char>(texCoordSet.Get<int>());
                     Mat.workflow                             = Material::PbrWorkflow::SpecularGlossiness;
                 }
 
@@ -748,7 +746,7 @@ void Model::LoadAnimations(const tinygltf::Model& gltf_model)
                 const tinygltf::BufferView& bufferView = gltf_model.bufferViews[accessor.bufferView];
                 const tinygltf::Buffer&     buffer     = gltf_model.buffers[bufferView.buffer];
 
-                VERIFY_EXPR(accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
+                assert(accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
 
                 const void*  dataPtr = &buffer.data[accessor.byteOffset + bufferView.byteOffset];
                 const float* buf     = static_cast<const float*>(dataPtr);
@@ -776,7 +774,7 @@ void Model::LoadAnimations(const tinygltf::Model& gltf_model)
                 const tinygltf::BufferView& bufferView = gltf_model.bufferViews[accessor.bufferView];
                 const tinygltf::Buffer&     buffer     = gltf_model.buffers[bufferView.buffer];
 
-                VERIFY_EXPR(accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
+                assert(accessor.componentType == TINYGLTF_COMPONENT_TYPE_FLOAT);
 
                 const void* dataPtr = &buffer.data[accessor.byteOffset + bufferView.byteOffset];
 
@@ -804,7 +802,8 @@ void Model::LoadAnimations(const tinygltf::Model& gltf_model)
 
                     default:
                     {
-                        LOG_WARNING_MESSAGE("Unknown type", accessor.type);
+                        /*LOG_WARNING_MESSAGE("Unknown type", accessor.type);*/
+						assert(0);
                         break;
                     }
                 }
@@ -832,7 +831,8 @@ void Model::LoadAnimations(const tinygltf::Model& gltf_model)
             }
             else if (source.target_path == "weights")
             {
-                LOG_WARNING_MESSAGE("Weights not yet supported, skipping channel");
+                //LOG_WARNING_MESSAGE("Weights not yet supported, skipping channel");
+				assert(0);
                 continue;
             }
 
@@ -869,107 +869,107 @@ bool LoadImageData(tinygltf::Image*     gltf_image,
     (void)user_data;
     (void)warning;
 
-    ImageLoadInfo LoadInfo;
-    LoadInfo.Format = Image::GetFileFormat(image_data, size);
-    if (LoadInfo.Format == EImageFileFormat::unknown)
-    {
-        if (error != nullptr)
-        {
-            *error += FormatString("Unknown format for image[", gltf_image_idx, "] name = '", gltf_image->name, "'");
-        }
-        return false;
-    }
+    //ImageLoadInfo LoadInfo;
+    //LoadInfo.Format = Image::GetFileFormat(image_data, size);
+    //if (LoadInfo.Format == EImageFileFormat::unknown)
+    //{
+    //    if (error != nullptr)
+    //    {
+    //        *error += FormatString("Unknown format for image[", gltf_image_idx, "] name = '", gltf_image->name, "'");
+    //    }
+    //    return false;
+    //}
 
-    RefCntAutoPtr<DataBlobImpl> pImageData(MakeNewRCObj<DataBlobImpl>()(size));
-    memcpy(pImageData->GetDataPtr(), image_data, size);
-    RefCntAutoPtr<Image> pImage;
-    Image::CreateFromDataBlob(pImageData, LoadInfo, &pImage);
-    if (!pImage)
-    {
-        if (error != nullptr)
-        {
-            *error += FormatString("Failed to load image[", gltf_image_idx, "] name = '", gltf_image->name, "'");
-        }
-        return false;
-    }
-    const auto& ImgDesc = pImage->GetDesc();
+    //std::shared_ptr<DataBlobImpl> pImageData(MakeNewRCObj<DataBlobImpl>()(size));
+    //memcpy(pImageData->GetDataPtr(), image_data, size);
+    //std::shared_ptr<Image> pImage;
+    //Image::CreateFromDataBlob(pImageData, LoadInfo, &pImage);
+    //if (!pImage)
+    //{
+    //    if (error != nullptr)
+    //    {
+    //        *error += FormatString("Failed to load image[", gltf_image_idx, "] name = '", gltf_image->name, "'");
+    //    }
+    //    return false;
+    //}
+    //const auto& ImgDesc = pImage->GetDesc();
 
-    if (req_width > 0)
-    {
-        if (static_cast<Uint32>(req_width) != ImgDesc.Width)
-        {
-            if (error != nullptr)
-            {
-                (*error) += FormatString("Image width mismatch for image[",
-                                         gltf_image_idx, "] name = '", gltf_image->name,
-                                         "': requested width: ",
-                                         req_width, ", actual width: ",
-                                         ImgDesc.Width);
-            }
-            return false;
-        }
-    }
+    //if (req_width > 0)
+    //{
+    //    if (static_cast<UINT32>(req_width) != ImgDesc.Width)
+    //    {
+    //        if (error != nullptr)
+    //        {
+    //            (*error) += FormatString("Image width mismatch for image[",
+    //                                     gltf_image_idx, "] name = '", gltf_image->name,
+    //                                     "': requested width: ",
+    //                                     req_width, ", actual width: ",
+    //                                     ImgDesc.Width);
+    //        }
+    //        return false;
+    //    }
+    //}
 
-    if (req_height > 0)
-    {
-        if (static_cast<Uint32>(req_height) != ImgDesc.Height)
-        {
-            if (error != nullptr)
-            {
-                (*error) += FormatString("Image height mismatch for image[",
-                                         gltf_image_idx, "] name = '", gltf_image->name,
-                                         "': requested height: ",
-                                         req_height, ", actual height: ",
-                                         ImgDesc.Height);
-            }
-            return false;
-        }
-    }
+    //if (req_height > 0)
+    //{
+    //    if (static_cast<UINT32>(req_height) != ImgDesc.Height)
+    //    {
+    //        if (error != nullptr)
+    //        {
+    //            (*error) += FormatString("Image height mismatch for image[",
+    //                                     gltf_image_idx, "] name = '", gltf_image->name,
+    //                                     "': requested height: ",
+    //                                     req_height, ", actual height: ",
+    //                                     ImgDesc.Height);
+    //        }
+    //        return false;
+    //    }
+    //}
 
-    gltf_image->width      = ImgDesc.Width;
-    gltf_image->height     = ImgDesc.Height;
-    gltf_image->component  = 4;
-    gltf_image->bits       = GetValueSize(ImgDesc.ComponentType) * 8;
-    gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
-    auto DstRowSize        = gltf_image->width * gltf_image->component * (gltf_image->bits / 8);
-    gltf_image->image.resize(static_cast<size_t>(gltf_image->height * DstRowSize));
-    auto*        pPixelsBlob = pImage->GetData();
-    const Uint8* pSrcPixels  = reinterpret_cast<const Uint8*>(pPixelsBlob->GetDataPtr());
-    if (ImgDesc.NumComponents == 3)
-    {
-        for (Uint32 row = 0; row < ImgDesc.Height; ++row)
-        {
-            for (Uint32 col = 0; col < ImgDesc.Width; ++col)
-            {
-                Uint8*       DstPixel = gltf_image->image.data() + DstRowSize * row + col * gltf_image->component;
-                const Uint8* SrcPixel = pSrcPixels + ImgDesc.RowStride * row + col * ImgDesc.NumComponents;
+    //gltf_image->width      = ImgDesc.Width;
+    //gltf_image->height     = ImgDesc.Height;
+    //gltf_image->component  = 4;
+    //gltf_image->bits       = GetValueSize(ImgDesc.ComponentType) * 8;
+    //gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
+    //auto DstRowSize        = gltf_image->width * gltf_image->component * (gltf_image->bits / 8);
+    //gltf_image->image.resize(static_cast<size_t>(gltf_image->height * DstRowSize));
+    //auto*        pPixelsBlob = pImage->GetData();
+    //const unsigned char* pSrcPixels  = reinterpret_cast<const unsigned char*>(pPixelsBlob->GetDataPtr());
+    //if (ImgDesc.NumComponents == 3)
+    //{
+    //    for (UINT32 row = 0; row < ImgDesc.Height; ++row)
+    //    {
+    //        for (UINT32 col = 0; col < ImgDesc.Width; ++col)
+    //        {
+    //            unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * row + col * gltf_image->component;
+    //            const unsigned char* SrcPixel = pSrcPixels + ImgDesc.RowStride * row + col * ImgDesc.NumComponents;
 
-                DstPixel[0] = SrcPixel[0];
-                DstPixel[1] = SrcPixel[1];
-                DstPixel[2] = SrcPixel[2];
-                DstPixel[3] = 1;
-            }
-        }
-    }
-    else if (gltf_image->component == 4)
-    {
-        for (Uint32 row = 0; row < ImgDesc.Height; ++row)
-        {
-            memcpy(gltf_image->image.data() + DstRowSize * row, pSrcPixels + ImgDesc.RowStride * row, DstRowSize);
-        }
-    }
-    else
-    {
-        *error += FormatString("Unexpected number of image comonents (", ImgDesc.NumComponents, ")");
-        return false;
-    }
+    //            DstPixel[0] = SrcPixel[0];
+    //            DstPixel[1] = SrcPixel[1];
+    //            DstPixel[2] = SrcPixel[2];
+    //            DstPixel[3] = 1;
+    //        }
+    //    }
+    //}
+    //else if (gltf_image->component == 4)
+    //{
+    //    for (UINT32 row = 0; row < ImgDesc.Height; ++row)
+    //    {
+    //        memcpy(gltf_image->image.data() + DstRowSize * row, pSrcPixels + ImgDesc.RowStride * row, DstRowSize);
+    //    }
+    //}
+    //else
+    //{
+    //    *error += FormatString("Unexpected number of image comonents (", ImgDesc.NumComponents, ")");
+    //    return false;
+    //}
 
     return true;
 }
 
 bool FileExists(const std::string& abs_filename, void*)
 {
-    return FileSystem::FileExists(abs_filename.c_str());
+    return PathFileExistsA(abs_filename.c_str());
 }
 
 bool ReadWholeFile(std::vector<unsigned char>* out,
@@ -977,28 +977,22 @@ bool ReadWholeFile(std::vector<unsigned char>* out,
                    const std::string&          filepath,
                    void*)
 {
-    FileWrapper pFile(filepath.c_str(), EFileAccessMode::Read);
-    if (!pFile)
+	std::ifstream infile;
+	infile.open(filepath.c_str(), std::ios::in);
+    if (!infile.is_open())
     {
-        if (err)
-        {
-            (*err) += FormatString("Unable to open file ", filepath, "\n");
-        }
         return false;
     }
-
-    auto size = pFile->GetSize();
+	infile.seekg(0, std::ios::end);
+	size_t size = infile.tellg();
     if (size == 0)
     {
-        if (err)
-        {
-            (*err) += FormatString("File is empty: ", filepath, "\n");
-        }
+    
         return false;
     }
 
     out->resize(size);
-    pFile->Read(out->data(), size);
+    infile.read((char*)out->data(), size);
 
     return true;
 }
@@ -1037,14 +1031,14 @@ void Model::LoadFromFile(IRenderDevice* pDevice, IDeviceContext* pContext, const
         fileLoaded = gltf_context.LoadASCIIFromFile(&gltf_model, &error, &warning, filename.c_str());
     if (!fileLoaded)
     {
-        LOG_ERROR_AND_THROW("Failed to load gltf file ", filename, ": ", error);
+        //LOG_ERROR_AND_THROW("Failed to load gltf file ", filename, ": ", error);
     }
     if (!warning.empty())
     {
-        LOG_WARNING_MESSAGE("Loaded gltf file ", filename, " with the following warning:", warning);
+        //LOG_WARNING_MESSAGE("Loaded gltf file ", filename, " with the following warning:", warning);
     }
 
-    std::vector<Uint32> IndexBuffer;
+    std::vector<UINT32> IndexBuffer;
     std::vector<Vertex> VertexBuffer;
 
     LoadTextureSamplers(pDevice, gltf_model);
@@ -1084,33 +1078,25 @@ void Model::LoadFromFile(IRenderDevice* pDevice, IDeviceContext* pContext, const
     Extensions = gltf_model.extensionsUsed;
 
     size_t vertexBufferSize = VertexBuffer.size() * sizeof(Vertex);
-    size_t indexBufferSize  = IndexBuffer.size() * sizeof(Uint32);
+    size_t indexBufferSize  = IndexBuffer.size() * sizeof(UINT32);
 
-    IndexCount = static_cast<Uint32>(IndexBuffer.size());
+    IndexCount = static_cast<UINT32>(IndexBuffer.size());
 
-    VERIFY_EXPR(vertexBufferSize > 0);
-
+    assert(vertexBufferSize > 0);
+	if ( vertexBufferSize > 0 )
     {
-        BufferDesc VBDesc;
-        VBDesc.Name          = "GLTF vertex buffer";
-        VBDesc.uiSizeInBytes = static_cast<Uint32>(vertexBufferSize);
-        VBDesc.BindFlags     = BIND_VERTEX_BUFFER;
-        VBDesc.Usage         = USAGE_STATIC;
-
-        BufferData BuffData(VertexBuffer.data(), static_cast<Uint32>(vertexBufferSize));
-        pDevice->CreateBuffer(VBDesc, &BuffData, &pVertexBuffer);
+		VertexBuffer.data();
+		char* initData = (char*)VertexBuffer.data();
+		ID3D11Buffer* result = CreateBuffer(pDevice, vertexBufferSize, D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, 0, 0 , initData);
+		pVertexBuffer.reset(result, DeleteComPtr);
     }
 
     if (indexBufferSize > 0)
     {
-        BufferDesc IBDesc;
-        IBDesc.Name          = "GLTF inde buffer";
-        IBDesc.uiSizeInBytes = static_cast<Uint32>(indexBufferSize);
-        IBDesc.BindFlags     = BIND_INDEX_BUFFER;
-        IBDesc.Usage         = USAGE_STATIC;
+		char* initData = (char*)IndexBuffer.data();
+		ID3D11Buffer* result = CreateBuffer(pDevice, indexBufferSize, D3D11_USAGE_DYNAMIC, D3D11_BIND_INDEX_BUFFER, 0, 0, initData);
+		pIndexBuffer.reset(result, DeleteComPtr);
 
-        BufferData BuffData(IndexBuffer.data(), static_cast<Uint32>(indexBufferSize));
-        pDevice->CreateBuffer(IBDesc, &BuffData, &pIndexBuffer);
     }
 
     GetSceneDimensions();
@@ -1130,22 +1116,22 @@ BoundBox GetAABB(const BoundBox& bb, const float4x4& m)
 
     v0 = right * bb.Min.x;
     v1 = right * bb.Max.x;
-    min += std::min(v0, v1);
-    max += std::max(v0, v1);
+    min += (std::min)(v0, v1);
+    max += (std::max)(v0, v1);
 
     float3 up = float3::MakeVector(m[1]);
 
     v0 = up * bb.Min.y;
     v1 = up * bb.Max.y;
-    min += std::min(v0, v1);
-    max += std::max(v0, v1);
+    min += (std::min)(v0, v1);
+    max += (std::max)(v0, v1);
 
     float3 back = float3::MakeVector(m[2]);
 
     v0 = back * bb.Min.z;
     v1 = back * bb.Max.z;
-    min += std::min(v0, v1);
-    max += std::max(v0, v1);
+    min += (std::min)(v0, v1);
+    max += (std::max)(v0, v1);
 
     return BoundBox{min, max};
 }
@@ -1170,8 +1156,8 @@ void Model::CalculateBoundingBox(Node* node, const Node* parent)
         }
     }
 
-    parentBvh.Min = std::min(parentBvh.Min, node->BVH.Min);
-    parentBvh.Max = std::min(parentBvh.Max, node->BVH.Max);
+    parentBvh.Min = (std::min)(parentBvh.Min, node->BVH.Min);
+    parentBvh.Max = (std::min)(parentBvh.Max, node->BVH.Max);
 
     for (auto& child : node->Children)
     {
@@ -1194,8 +1180,8 @@ void Model::GetSceneDimensions()
     {
         if (node->IsValidBVH)
         {
-            dimensions.min = std::min(dimensions.min, node->BVH.Min);
-            dimensions.max = std::max(dimensions.max, node->BVH.Max);
+            dimensions.min = (std::min)(dimensions.min, node->BVH.Min);
+            dimensions.max = (std::max)(dimensions.max, node->BVH.Max);
         }
     }
 
@@ -1206,11 +1192,11 @@ void Model::GetSceneDimensions()
     aabb[3][2] = dimensions.min[2];
 }
 
-void Model::UpdateAnimation(Uint32 index, float time)
+void Model::UpdateAnimation(UINT32 index, float time)
 {
-    if (index > static_cast<Uint32>(Animations.size()) - 1)
+    if (index > static_cast<UINT32>(Animations.size()) - 1)
     {
-        LOG_WARNING_MESSAGE("No animation with index ", index);
+        //LOG_WARNING_MESSAGE("No animation with index ", index);
         return;
     }
     Animation& animation = Animations[index];
@@ -1228,7 +1214,7 @@ void Model::UpdateAnimation(Uint32 index, float time)
         {
             if ((time >= sampler.Inputs[i]) && (time <= sampler.Inputs[i + 1]))
             {
-                float u = std::max(0.0f, time - sampler.Inputs[i]) / (sampler.Inputs[i + 1] - sampler.Inputs[i]);
+                float u = (std::max)(0.0f, time - sampler.Inputs[i]) / (sampler.Inputs[i + 1] - sampler.Inputs[i]);
                 if (u <= 1.0f)
                 {
                     switch (channel.PathType)
@@ -1281,7 +1267,7 @@ void Model::UpdateAnimation(Uint32 index, float time)
 }
 
 
-Node* Model::FindNode(Node* parent, Uint32 index)
+Node* Model::FindNode(Node* parent, UINT32 index)
 {
     Node* nodeFound = nullptr;
     if (parent->Index == index)

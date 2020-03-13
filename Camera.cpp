@@ -15,7 +15,7 @@ void CPerspectiveProjectionCamera::Tick(DWORD dwTimes)
 {
 
 }
-void CPerspectiveProjectionCamera::SetPostionAndDir(XMFLOAT3 pos, XMFLOAT3 dir)
+void CPerspectiveProjectionCamera::SetPostionAndDir(float3 pos, float3 dir)
 {
 
 }

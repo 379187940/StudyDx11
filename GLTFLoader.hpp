@@ -31,7 +31,11 @@
 //#include <memory>
 #include <cfloat>
 
-
+typedef ID3D11Device IRenderDevice;
+typedef ID3D11DeviceContext IDeviceContext;
+typedef ID3D11Buffer        IBuffer;
+typedef ID3D11Texture2D		ITexture;
+typedef ID3D11SamplerState ISampler;
 namespace tinygltf
 {
 
@@ -98,7 +102,11 @@ struct Material
     PbrWorkflow workflow = PbrWorkflow::MetallicRoughness;
 };
 
-
+struct BoundBox
+{
+	float3 Min;
+	float3 Max;
+};
 struct Primitive
 {
     UINT32    FirstIndex  = 0;
@@ -177,7 +185,7 @@ struct Node
     float4x4              Matrix;
     std::unique_ptr<Mesh> _Mesh;
     Skin*                 _Skin     = nullptr;
-    Int32                 SkinIndex = -1;
+    INT32                 SkinIndex = -1;
     float3                Translation;
     float3                Scale = float3(1.0f, 1.0f, 1.0f);
     Quaternion            Rotation;
@@ -224,8 +232,8 @@ struct Animation
     std::vector<AnimationSampler> Samplers;
     std::vector<AnimationChannel> Channels;
 
-    float Start = std::numeric_limits<float>::max();
-    float End   = std::numeric_limits<float>::min();
+    float Start = (std::numeric_limits<float>::max)();
+    float End   = (std::numeric_limits<float>::min)();
 };
 
 
@@ -241,8 +249,8 @@ struct Model
         float4 weight0;
     };
 
-    RefCntAutoPtr<IBuffer> pVertexBuffer;
-    RefCntAutoPtr<IBuffer> pIndexBuffer;
+    std::shared_ptr<IBuffer> pVertexBuffer;
+	std::shared_ptr<IBuffer> pIndexBuffer;
     UINT32                 IndexCount = 0;
 
     float4x4 aabb;
@@ -252,8 +260,8 @@ struct Model
 
     std::vector<std::unique_ptr<Skin>> Skins;
 
-    std::vector<RefCntAutoPtr<ITexture>> Textures;
-    std::vector<RefCntAutoPtr<ISampler>> TextureSamplers;
+    std::vector<std::shared_ptr<ITexture>> Textures;
+    std::vector<std::shared_ptr<ISampler>> TextureSamplers;
     std::vector<Material>                Materials;
     std::vector<Animation>               Animations;
     std::vector<std::string>             Extensions;

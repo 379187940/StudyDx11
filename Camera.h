@@ -9,12 +9,12 @@ public:
 	~CPerspectiveProjectionCamera();
 public:
 	void Tick(DWORD dwTimes);
-	void SetPostionAndDir(XMFLOAT3 pos,XMFLOAT3 dir);
+	void SetPostionAndDir(float3 pos,float3 dir);
 	void SetProjectionForLH(float fov, float aspect, float znear, float zfar);
 private:
-	XMFLOAT3 m_CameraPos;
-	XMMATRIX m_ViewMatrix;
-	XMMATRIX m_ProjectionMatrix;
+	float3 m_CameraPos;
+	float3 m_ViewMatrix;
+	float3 m_ProjectionMatrix;
 	bool m_ViewDirty;
 	bool m_ProjectionDirty;
 };

@@ -1,3 +1,4 @@
+#include "unit.h"
 #include "Scene.h"
 #include "assert.h"
 #include <Windows.h>
@@ -6,7 +7,6 @@
 #include "Triangle.h"
 #include "CubeLight.h"
 #include "Quard.h"
-#include "unit.h"
 #include <tchar.h>
 #include "ObjModel.h"
 CScene g_Scene;

@@ -1,10 +1,14 @@
 #pragma once
+#include "BasicMath.hpp"
+#include "d3dx11core.h"
+#include <memory>
+#include <algorithm>
+#include <xstring>
 #include <string>
 //#include <Windows.h>
 #include "atlstr.h"
-#include "d3dx11core.h"
-#include <memory>
 #include "Common.h"
+using namespace Diligent;
+using namespace std;
 //#include "xnamath.h"
 
-using std::wstring;

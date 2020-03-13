@@ -21,7 +21,8 @@ ID3D11Buffer* CreateBuffer(
 	D3D11_USAGE usage,
 	UINT bindFlag,
 	UINT cpuAccessFlag,
-	UINT miscFlag
+	UINT miscFlag,
+	const char* pInitData = NULL
 );
 HRESULT CompileShaderFromFile(
 	CString fileName,

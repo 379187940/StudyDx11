@@ -1,8 +1,6 @@
 #pragma once
 #include "IRenderObject.h"
-#include "unit.h"
-#include "Common.h"
-using std::wstring;
+
 class CBaseRenderObject :public IRenderObject
 {
 public:

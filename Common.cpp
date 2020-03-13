@@ -38,7 +38,8 @@ ID3D11Buffer* CreateBuffer(
 	D3D11_USAGE usage,
 	UINT bindFlag,
 	UINT cpuAccessFlag,
-	UINT miscFlag)
+	UINT miscFlag,
+	const char* pInitData /*= NULL */)
 {
 	D3D11_BUFFER_DESC constBufferDesc;
 	ZeroMemory(&constBufferDesc, sizeof(constBufferDesc));
@@ -47,8 +48,10 @@ ID3D11Buffer* CreateBuffer(
 	byteWidth = (byteWidth + 15)&~15;
 	constBufferDesc.ByteWidth = byteWidth;
 	constBufferDesc.Usage = usage;
+	D3D11_SUBRESOURCE_DATA subSourceData;
+	subSourceData.pSysMem = pInitData;
 	ID3D11Buffer* reBuffer;
-	HRESULT hr = pDevice->CreateBuffer(&constBufferDesc, NULL, &reBuffer);
+	HRESULT hr = pDevice->CreateBuffer(&constBufferDesc, &subSourceData, &reBuffer);
 	assert(SUCCEEDED(hr));
 	return reBuffer;
 }
