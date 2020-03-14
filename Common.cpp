@@ -126,3 +126,13 @@ void DeleteComPtr(IUnknown* comPtr)
 	assert(comPtr);
 	comPtr->Release();
 }
+char* CustomW2A(const WCHAR* wstr)
+{
+	assert(wstr);
+	int len = lstrlenW(wstr);
+	DWORD dwMinSize = WideCharToMultiByte(CP_ACP, 0, wstr , len, NULL, 0, NULL, FALSE);
+	char *pBuf = new char[dwMinSize + 1]; // 若不加1，字符串最后会有乱码	    
+	memset(pBuf, 0, dwMinSize + 1);
+	dwMinSize = WideCharToMultiByte(CP_ACP, 0, wstr, len, pBuf, dwMinSize, NULL, FALSE);
+	return pBuf;
+}

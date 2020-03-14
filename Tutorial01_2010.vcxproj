@@ -404,6 +404,7 @@
     <ClCompile Include="CubeLight.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GLTF.cpp" />
     <ClCompile Include="GLTFLoader.cpp" />
     <ClCompile Include="MeshLoader11.cpp" />
     <ClCompile Include="ObjModel.cpp" />
@@ -425,6 +426,7 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeLight.h" />
+    <ClInclude Include="GLTF.h" />
     <ClInclude Include="GLTFLoader.hpp" />
     <ClInclude Include="HashUtils.hpp" />
     <ClInclude Include="IObject.h" />

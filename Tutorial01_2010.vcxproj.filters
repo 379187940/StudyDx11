@@ -72,6 +72,9 @@
     <ClInclude Include="HashUtils.hpp">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="GLTF.h">
+      <Filter>RenderObject</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -107,6 +110,9 @@
     </ClCompile>
     <ClCompile Include="Common.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="GLTF.cpp">
+      <Filter>RenderObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

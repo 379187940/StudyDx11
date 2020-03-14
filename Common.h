@@ -38,6 +38,8 @@ HRESULT CompileShaderFromFile(
 void DeleteComPtr(IUnknown* comPtr);
 //会在exe目录或者工作目录查找
 bool GetFullPath(CString fileName, CString& result);
+
+char* CustomW2A(const WCHAR* wstr);
 #ifndef SAFE_DELETE
 #define SAFE_DELETE(p) {delete (p) ; (p) = NULL ;}
 #endif
