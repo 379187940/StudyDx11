@@ -9,6 +9,9 @@
 #include "Quard.h"
 #include <tchar.h>
 #include "ObjModel.h"
+#include "tiny_gltf.h"
+#include "GLTFLoader.hpp"
+#include "GLTF.h"
 CScene g_Scene;
 CScene::CScene()
 {
@@ -43,12 +46,16 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	pNewCubeLight->Init(pd3d11Device, pContext);
 	m_quardDepth = new CQuard(_T("CQuard"));
 	m_quardDepth->Init(pd3d11Device, pContext);
-	CObjModel* ObjMode = new CObjModel(_T("fromobjload"));
+	/*CObjModel* ObjMode = new CObjModel(_T("fromobjload"));
 	ObjMode->Init(pd3d11Device, pContext);
-	ObjMode->LoadFromObjFile(_T("cup.obj"));
+	ObjMode->LoadFromObjFile(_T("cup.obj"));*/
+	CGLTF* pNewGltf = new CGLTF(_T("GltfLoad"));
+	pNewGltf->Init(pd3d11Device, pContext);
+	pNewGltf->LoadFromObjFile(_T("cup2uv.gltf"));
 	RegisterObject(pNewTrianle);
 	RegisterObject(pNewCube);
 	RegisterObject(pNewCubeLight);
+	RegisterObject(pNewGltf);
 	BuildUi();
 	HRESULT hr = S_FALSE ;
 	ID3D11RenderTargetView* pRenderTargetView = NULL;

@@ -869,100 +869,100 @@ bool LoadImageData(tinygltf::Image*     gltf_image,
     (void)user_data;
     (void)warning;
 
-    //ImageLoadInfo LoadInfo;
-    //LoadInfo.Format = Image::GetFileFormat(image_data, size);
-    //if (LoadInfo.Format == EImageFileFormat::unknown)
-    //{
-    //    if (error != nullptr)
-    //    {
-    //        *error += FormatString("Unknown format for image[", gltf_image_idx, "] name = '", gltf_image->name, "'");
-    //    }
-    //    return false;
-    //}
+    ImageLoadInfo LoadInfo;
+    LoadInfo.Format = Image::GetFileFormat(image_data, size);
+    if (LoadInfo.Format == EImageFileFormat::unknown)
+    {
+        if (error != nullptr)
+        {
+            *error += FormatString("Unknown format for image[", gltf_image_idx, "] name = '", gltf_image->name, "'");
+        }
+        return false;
+    }
 
-    //std::shared_ptr<DataBlobImpl> pImageData(MakeNewRCObj<DataBlobImpl>()(size));
-    //memcpy(pImageData->GetDataPtr(), image_data, size);
-    //std::shared_ptr<Image> pImage;
-    //Image::CreateFromDataBlob(pImageData, LoadInfo, &pImage);
-    //if (!pImage)
-    //{
-    //    if (error != nullptr)
-    //    {
-    //        *error += FormatString("Failed to load image[", gltf_image_idx, "] name = '", gltf_image->name, "'");
-    //    }
-    //    return false;
-    //}
-    //const auto& ImgDesc = pImage->GetDesc();
+    std::shared_ptr<DataBlobImpl> pImageData(MakeNewRCObj<DataBlobImpl>()(size));
+    memcpy(pImageData->GetDataPtr(), image_data, size);
+    std::shared_ptr<Image> pImage;
+    Image::CreateFromDataBlob(pImageData, LoadInfo, &pImage);
+    if (!pImage)
+    {
+        if (error != nullptr)
+        {
+            *error += FormatString("Failed to load image[", gltf_image_idx, "] name = '", gltf_image->name, "'");
+        }
+        return false;
+    }
+    const auto& ImgDesc = pImage->GetDesc();
 
-    //if (req_width > 0)
-    //{
-    //    if (static_cast<UINT32>(req_width) != ImgDesc.Width)
-    //    {
-    //        if (error != nullptr)
-    //        {
-    //            (*error) += FormatString("Image width mismatch for image[",
-    //                                     gltf_image_idx, "] name = '", gltf_image->name,
-    //                                     "': requested width: ",
-    //                                     req_width, ", actual width: ",
-    //                                     ImgDesc.Width);
-    //        }
-    //        return false;
-    //    }
-    //}
+    if (req_width > 0)
+    {
+        if (static_cast<UINT32>(req_width) != ImgDesc.Width)
+        {
+            if (error != nullptr)
+            {
+                (*error) += FormatString("Image width mismatch for image[",
+                                         gltf_image_idx, "] name = '", gltf_image->name,
+                                         "': requested width: ",
+                                         req_width, ", actual width: ",
+                                         ImgDesc.Width);
+            }
+            return false;
+        }
+    }
 
-    //if (req_height > 0)
-    //{
-    //    if (static_cast<UINT32>(req_height) != ImgDesc.Height)
-    //    {
-    //        if (error != nullptr)
-    //        {
-    //            (*error) += FormatString("Image height mismatch for image[",
-    //                                     gltf_image_idx, "] name = '", gltf_image->name,
-    //                                     "': requested height: ",
-    //                                     req_height, ", actual height: ",
-    //                                     ImgDesc.Height);
-    //        }
-    //        return false;
-    //    }
-    //}
+    if (req_height > 0)
+    {
+        if (static_cast<UINT32>(req_height) != ImgDesc.Height)
+        {
+            if (error != nullptr)
+            {
+                (*error) += FormatString("Image height mismatch for image[",
+                                         gltf_image_idx, "] name = '", gltf_image->name,
+                                         "': requested height: ",
+                                         req_height, ", actual height: ",
+                                         ImgDesc.Height);
+            }
+            return false;
+        }
+    }
 
-    //gltf_image->width      = ImgDesc.Width;
-    //gltf_image->height     = ImgDesc.Height;
-    //gltf_image->component  = 4;
-    //gltf_image->bits       = GetValueSize(ImgDesc.ComponentType) * 8;
-    //gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
-    //auto DstRowSize        = gltf_image->width * gltf_image->component * (gltf_image->bits / 8);
-    //gltf_image->image.resize(static_cast<size_t>(gltf_image->height * DstRowSize));
-    //auto*        pPixelsBlob = pImage->GetData();
-    //const unsigned char* pSrcPixels  = reinterpret_cast<const unsigned char*>(pPixelsBlob->GetDataPtr());
-    //if (ImgDesc.NumComponents == 3)
-    //{
-    //    for (UINT32 row = 0; row < ImgDesc.Height; ++row)
-    //    {
-    //        for (UINT32 col = 0; col < ImgDesc.Width; ++col)
-    //        {
-    //            unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * row + col * gltf_image->component;
-    //            const unsigned char* SrcPixel = pSrcPixels + ImgDesc.RowStride * row + col * ImgDesc.NumComponents;
+    gltf_image->width      = ImgDesc.Width;
+    gltf_image->height     = ImgDesc.Height;
+    gltf_image->component  = 4;
+    gltf_image->bits       = GetValueSize(ImgDesc.ComponentType) * 8;
+    gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
+    auto DstRowSize        = gltf_image->width * gltf_image->component * (gltf_image->bits / 8);
+    gltf_image->image.resize(static_cast<size_t>(gltf_image->height * DstRowSize));
+    auto*        pPixelsBlob = pImage->GetData();
+    const unsigned char* pSrcPixels  = reinterpret_cast<const unsigned char*>(pPixelsBlob->GetDataPtr());
+    if (ImgDesc.NumComponents == 3)
+    {
+        for (UINT32 row = 0; row < ImgDesc.Height; ++row)
+        {
+            for (UINT32 col = 0; col < ImgDesc.Width; ++col)
+            {
+                unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * row + col * gltf_image->component;
+                const unsigned char* SrcPixel = pSrcPixels + ImgDesc.RowStride * row + col * ImgDesc.NumComponents;
 
-    //            DstPixel[0] = SrcPixel[0];
-    //            DstPixel[1] = SrcPixel[1];
-    //            DstPixel[2] = SrcPixel[2];
-    //            DstPixel[3] = 1;
-    //        }
-    //    }
-    //}
-    //else if (gltf_image->component == 4)
-    //{
-    //    for (UINT32 row = 0; row < ImgDesc.Height; ++row)
-    //    {
-    //        memcpy(gltf_image->image.data() + DstRowSize * row, pSrcPixels + ImgDesc.RowStride * row, DstRowSize);
-    //    }
-    //}
-    //else
-    //{
-    //    *error += FormatString("Unexpected number of image comonents (", ImgDesc.NumComponents, ")");
-    //    return false;
-    //}
+                DstPixel[0] = SrcPixel[0];
+                DstPixel[1] = SrcPixel[1];
+                DstPixel[2] = SrcPixel[2];
+                DstPixel[3] = 1;
+            }
+        }
+    }
+    else if (gltf_image->component == 4)
+    {
+        for (UINT32 row = 0; row < ImgDesc.Height; ++row)
+        {
+            memcpy(gltf_image->image.data() + DstRowSize * row, pSrcPixels + ImgDesc.RowStride * row, DstRowSize);
+        }
+    }
+    else
+    {
+        *error += FormatString("Unexpected number of image comonents (", ImgDesc.NumComponents, ")");
+        return false;
+    }
 
     return true;
 }
@@ -987,13 +987,12 @@ bool ReadWholeFile(std::vector<unsigned char>* out,
 	size_t size = infile.tellg();
     if (size == 0)
     {
-    
         return false;
     }
-
+	infile.seekg(0, std::ios::beg);
     out->resize(size);
     infile.read((char*)out->data(), size);
-
+	infile.close();
     return true;
 }
 

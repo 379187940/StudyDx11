@@ -51,7 +51,9 @@ ID3D11Buffer* CreateBuffer(
 	D3D11_SUBRESOURCE_DATA subSourceData;
 	subSourceData.pSysMem = pInitData;
 	ID3D11Buffer* reBuffer;
-	HRESULT hr = pDevice->CreateBuffer(&constBufferDesc, &subSourceData, &reBuffer);
+	HRESULT hr = pDevice->CreateBuffer(&constBufferDesc, 
+		subSourceData.pSysMem == nullptr ? nullptr:&subSourceData, 
+		&reBuffer);
 	assert(SUCCEEDED(hr));
 	return reBuffer;
 }

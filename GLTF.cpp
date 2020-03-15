@@ -26,8 +26,8 @@ bool CGLTF::LoadFromObjFile(WCHAR* fileName)
 	CString fullPath;
 	GetFullPath(fileName, fullPath);
 	char* filePath = CustomW2A(fullPath);
-	
-	m_pGLTFModel.reset(new Model(m_pd3dDevice, m_pContext,filePath));
+	m_pGLTFModel = std::make_shared<Model>(m_pd3dDevice, m_pContext, filePath);
+	//m_pGLTFModel.reset(new Model(m_pd3dDevice, m_pContext,filePath));
 	delete[]filePath;
 	return true;
 }
