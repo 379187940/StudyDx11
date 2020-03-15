@@ -869,6 +869,37 @@ bool LoadImageData(tinygltf::Image*     gltf_image,
     (void)user_data;
     (void)warning;
 
+	// 图片格式
+	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
+	unsigned char* tempData = const_cast<unsigned char*>(image_data);
+	FIMEMORY fimemory{ tempData };
+	fif = FreeImage_GetFileTypeFromMemory(&fimemory);
+	if (fif == FIF_UNKNOWN)
+		fif = FreeImage_GetFIFFromFilename(gltf_image->name.c_str());
+
+	FIBITMAP *image = NULL;
+	if ((fif != FIF_UNKNOWN) && FreeImage_FIFSupportsReading(fif)) {
+		image = FreeImage_LoadFromMemory(fif, &fimemory, PNG_DEFAULT);
+	}
+	assert(image);
+
+	// 获取影像的宽高，都以像素为单位
+	int width = FreeImage_GetWidth(image);
+	int height = FreeImage_GetHeight(image);
+
+	// 获取总共的像素数目
+	int pixel_num = width*height;
+
+	// 获取保存每个像素的字节数 这里为3,分别为RGB
+	unsigned int byte_per_pixel = FreeImage_GetLine(image) / width;
+
+	printf("Width:%d\t Height:%d\t 像素总数:%d\t 每像素字节数:%d\n", width, height, pixel_num, byte_per_pixel);
+
+	// 获取保存图片的字节数组
+	unsigned char *bits1 = FreeImage_GetBits(image);
+	
+	FreeImage_Unload(image);
+	
     ImageLoadInfo LoadInfo;
     LoadInfo.Format = Image::GetFileFormat(image_data, size);
     if (LoadInfo.Format == EImageFileFormat::unknown)

@@ -46,7 +46,8 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 {
     UNREFERENCED_PARAMETER( hPrevInstance );
     UNREFERENCED_PARAMETER( lpCmdLine );
-
+	// ≥ı ºªØ  FreeImage
+	FreeImage_Initialise(TRUE);
     if( FAILED( InitWindow( hInstance, nCmdShow ) ) )
         return 0;
 
@@ -73,7 +74,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 	TwTerminate();
 	g_Scene.Release();
     CleanupDevice();
-	
+	FreeImage_DeInitialise();
 	//ReportLiveObjects();
     return ( int )msg.wParam;
 }
