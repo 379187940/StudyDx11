@@ -883,21 +883,53 @@ bool LoadImageData(tinygltf::Image*     gltf_image,
 	}
 	assert(image);
 
-	// 获取影像的宽高，都以像素为单位
-	int width = FreeImage_GetWidth(image);
-	int height = FreeImage_GetHeight(image);
-
 	// 获取总共的像素数目
 	int pixel_num = width*height;
-
+	FREE_IMAGE_COLOR_TYPE type = FreeImage_GetColorType( )
 	// 获取保存每个像素的字节数 这里为3,分别为RGB
 	unsigned int byte_per_pixel = FreeImage_GetLine(image) / width;
-
+	
 	printf("Width:%d\t Height:%d\t 像素总数:%d\t 每像素字节数:%d\n", width, height, pixel_num, byte_per_pixel);
 
 	// 获取保存图片的字节数组
 	unsigned char *bits1 = FreeImage_GetBits(image);
-	
+	gltf_image->width = FreeImage_GetWidth(image);
+	gltf_image->height = FreeImage_GetHeight(image);
+	gltf_image->component = 4;
+	gltf_image->bits = GetValueSize(ImgDesc.ComponentType) * 8;
+	gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
+	auto DstRowSize = gltf_image->width * gltf_image->component * (gltf_image->bits / 8);
+	gltf_image->image.resize(static_cast<size_t>(gltf_image->height * DstRowSize));
+	auto*        pPixelsBlob = pImage->GetData();
+	const unsigned char* pSrcPixels = reinterpret_cast<const unsigned char*>(pPixelsBlob->GetDataPtr());
+	if (ImgDesc.NumComponents == 3)
+	{
+		for (UINT32 row = 0; row < ImgDesc.Height; ++row)
+		{
+			for (UINT32 col = 0; col < ImgDesc.Width; ++col)
+			{
+				unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * row + col * gltf_image->component;
+				const unsigned char* SrcPixel = pSrcPixels + ImgDesc.RowStride * row + col * ImgDesc.NumComponents;
+
+				DstPixel[0] = SrcPixel[0];
+				DstPixel[1] = SrcPixel[1];
+				DstPixel[2] = SrcPixel[2];
+				DstPixel[3] = 1;
+			}
+		}
+	}
+	else if (gltf_image->component == 4)
+	{
+		for (UINT32 row = 0; row < ImgDesc.Height; ++row)
+		{
+			memcpy(gltf_image->image.data() + DstRowSize * row, pSrcPixels + ImgDesc.RowStride * row, DstRowSize);
+		}
+	}
+	else
+	{
+		*error += FormatString("Unexpected number of image comonents (", ImgDesc.NumComponents, ")");
+		return false;
+	}
 	FreeImage_Unload(image);
 	
     ImageLoadInfo LoadInfo;
