@@ -883,33 +883,36 @@ bool LoadImageData(tinygltf::Image*     gltf_image,
 	}
 	assert(image);
 
-	// 获取总共的像素数目
-	int pixel_num = width*height;
-	FREE_IMAGE_COLOR_TYPE type = FreeImage_GetColorType( )
-	// 获取保存每个像素的字节数 这里为3,分别为RGB
-	unsigned int byte_per_pixel = FreeImage_GetLine(image) / width;
+	FREE_IMAGE_COLOR_TYPE type = FreeImage_GetColorType(image);
 	
-	printf("Width:%d\t Height:%d\t 像素总数:%d\t 每像素字节数:%d\n", width, height, pixel_num, byte_per_pixel);
-
 	// 获取保存图片的字节数组
 	unsigned char *bits1 = FreeImage_GetBits(image);
 	gltf_image->width = FreeImage_GetWidth(image);
 	gltf_image->height = FreeImage_GetHeight(image);
 	gltf_image->component = 4;
-	gltf_image->bits = GetValueSize(ImgDesc.ComponentType) * 8;
+	if (type == FIC_RGB || type == FIC_RGBALPHA)
+		gltf_image->bits = 8;
+	else
+		assert(0);
+	// 获取保存每个像素的字节数 这里为3,分别为RGB
+	unsigned int byte_per_pixel = FreeImage_GetLine(image) / gltf_image->width;
+
+	//gltf_image->bits = GetValueSize(ImgDesc.ComponentType) * 8;
 	gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
 	auto DstRowSize = gltf_image->width * gltf_image->component * (gltf_image->bits / 8);
 	gltf_image->image.resize(static_cast<size_t>(gltf_image->height * DstRowSize));
-	auto*        pPixelsBlob = pImage->GetData();
-	const unsigned char* pSrcPixels = reinterpret_cast<const unsigned char*>(pPixelsBlob->GetDataPtr());
-	if (ImgDesc.NumComponents == 3)
+	const unsigned char* pSrcPixels = bits1;
+	//因为会按照32字节对齐 所以每一行字节数有可能和width*byte_per_pixel并不一致
+	unsigned int pitchByte = FreeImage_GetPitch(image);
+
+	if ( byte_per_pixel  == 3)
 	{
-		for (UINT32 row = 0; row < ImgDesc.Height; ++row)
+		for (UINT32 row = 0; row < gltf_image->height; ++row)
 		{
-			for (UINT32 col = 0; col < ImgDesc.Width; ++col)
+			for (UINT32 col = 0; col < gltf_image->width; ++col)
 			{
 				unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * row + col * gltf_image->component;
-				const unsigned char* SrcPixel = pSrcPixels + ImgDesc.RowStride * row + col * ImgDesc.NumComponents;
+				const unsigned char* SrcPixel = pSrcPixels + pitchByte* row + col * byte_per_pixel;
 
 				DstPixel[0] = SrcPixel[0];
 				DstPixel[1] = SrcPixel[1];
@@ -920,112 +923,17 @@ bool LoadImageData(tinygltf::Image*     gltf_image,
 	}
 	else if (gltf_image->component == 4)
 	{
-		for (UINT32 row = 0; row < ImgDesc.Height; ++row)
+		for (UINT32 row = 0; row < gltf_image->height; ++row)
 		{
-			memcpy(gltf_image->image.data() + DstRowSize * row, pSrcPixels + ImgDesc.RowStride * row, DstRowSize);
+			memcpy(gltf_image->image.data() + DstRowSize * row, pSrcPixels + pitchByte * row, DstRowSize);
 		}
 	}
 	else
 	{
-		*error += FormatString("Unexpected number of image comonents (", ImgDesc.NumComponents, ")");
+		assert(0);
 		return false;
 	}
 	FreeImage_Unload(image);
-	
-    ImageLoadInfo LoadInfo;
-    LoadInfo.Format = Image::GetFileFormat(image_data, size);
-    if (LoadInfo.Format == EImageFileFormat::unknown)
-    {
-        if (error != nullptr)
-        {
-            *error += FormatString("Unknown format for image[", gltf_image_idx, "] name = '", gltf_image->name, "'");
-        }
-        return false;
-    }
-
-    std::shared_ptr<DataBlobImpl> pImageData(MakeNewRCObj<DataBlobImpl>()(size));
-    memcpy(pImageData->GetDataPtr(), image_data, size);
-    std::shared_ptr<Image> pImage;
-    Image::CreateFromDataBlob(pImageData, LoadInfo, &pImage);
-    if (!pImage)
-    {
-        if (error != nullptr)
-        {
-            *error += FormatString("Failed to load image[", gltf_image_idx, "] name = '", gltf_image->name, "'");
-        }
-        return false;
-    }
-    const auto& ImgDesc = pImage->GetDesc();
-
-    if (req_width > 0)
-    {
-        if (static_cast<UINT32>(req_width) != ImgDesc.Width)
-        {
-            if (error != nullptr)
-            {
-                (*error) += FormatString("Image width mismatch for image[",
-                                         gltf_image_idx, "] name = '", gltf_image->name,
-                                         "': requested width: ",
-                                         req_width, ", actual width: ",
-                                         ImgDesc.Width);
-            }
-            return false;
-        }
-    }
-
-    if (req_height > 0)
-    {
-        if (static_cast<UINT32>(req_height) != ImgDesc.Height)
-        {
-            if (error != nullptr)
-            {
-                (*error) += FormatString("Image height mismatch for image[",
-                                         gltf_image_idx, "] name = '", gltf_image->name,
-                                         "': requested height: ",
-                                         req_height, ", actual height: ",
-                                         ImgDesc.Height);
-            }
-            return false;
-        }
-    }
-
-    gltf_image->width      = ImgDesc.Width;
-    gltf_image->height     = ImgDesc.Height;
-    gltf_image->component  = 4;
-    gltf_image->bits       = GetValueSize(ImgDesc.ComponentType) * 8;
-    gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
-    auto DstRowSize        = gltf_image->width * gltf_image->component * (gltf_image->bits / 8);
-    gltf_image->image.resize(static_cast<size_t>(gltf_image->height * DstRowSize));
-    auto*        pPixelsBlob = pImage->GetData();
-    const unsigned char* pSrcPixels  = reinterpret_cast<const unsigned char*>(pPixelsBlob->GetDataPtr());
-    if (ImgDesc.NumComponents == 3)
-    {
-        for (UINT32 row = 0; row < ImgDesc.Height; ++row)
-        {
-            for (UINT32 col = 0; col < ImgDesc.Width; ++col)
-            {
-                unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * row + col * gltf_image->component;
-                const unsigned char* SrcPixel = pSrcPixels + ImgDesc.RowStride * row + col * ImgDesc.NumComponents;
-
-                DstPixel[0] = SrcPixel[0];
-                DstPixel[1] = SrcPixel[1];
-                DstPixel[2] = SrcPixel[2];
-                DstPixel[3] = 1;
-            }
-        }
-    }
-    else if (gltf_image->component == 4)
-    {
-        for (UINT32 row = 0; row < ImgDesc.Height; ++row)
-        {
-            memcpy(gltf_image->image.data() + DstRowSize * row, pSrcPixels + ImgDesc.RowStride * row, DstRowSize);
-        }
-    }
-    else
-    {
-        *error += FormatString("Unexpected number of image comonents (", ImgDesc.NumComponents, ")");
-        return false;
-    }
 
     return true;
 }
