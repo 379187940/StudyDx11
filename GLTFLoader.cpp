@@ -460,33 +460,33 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
                          IDeviceContext*        pCtx,
                          const tinygltf::Model& gltf_model)
 {
-    //for (const tinygltf::Texture& gltf_tex : gltf_model.textures)
-    //{
-    //    const tinygltf::Image&  gltf_image = gltf_model.images[gltf_tex.source];
-    //    std::shared_ptr<ISampler> pSampler;
-    //    if (gltf_tex.sampler == -1)
-    //    {
-    //        // No sampler specified, use a default one
-    //        pDevice->CreateSampler(Sam_LinearWrap, &pSampler);
-    //    }
-    //    else
-    //    {
-    //        pSampler = TextureSamplers[gltf_tex.sampler];
-    //    }
-    //    auto pTexture = TextureFromGLTFImage(pDevice, pCtx, gltf_image, pSampler);
-    //    Textures.push_back(std::move(pTexture));
-    //}
+    for (const tinygltf::Texture& gltf_tex : gltf_model.textures)
+    {
+        const tinygltf::Image&  gltf_image = gltf_model.images[gltf_tex.source];
+        std::shared_ptr<ISampler> pSampler;
+        if (gltf_tex.sampler == -1)
+        {
+            // No sampler specified, use a default one
+            pDevice->CreateSampler(Sam_LinearWrap, &pSampler);
+        }
+        else
+        {
+            pSampler = TextureSamplers[gltf_tex.sampler];
+        }
+        auto pTexture = TextureFromGLTFImage(pDevice, pCtx, gltf_image, pSampler);
+        Textures.push_back(std::move(pTexture));
+    }
 
-    //std::vector<StateTransitionDesc> Barriers;
-    //for (auto& Tex : Textures)
-    //{
-    //    pCtx->GenerateMips(Tex->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE));
+    std::vector<StateTransitionDesc> Barriers;
+    for (auto& Tex : Textures)
+    {
+        pCtx->GenerateMips(Tex->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE));
 
-    //    StateTransitionDesc Barrier{Tex, RESOURCE_STATE_UNKNOWN, RESOURCE_STATE_SHADER_RESOURCE};
-    //    Barrier.UpdateResourceState = true;
-    //    Barriers.emplace_back(Barrier);
-    //}
-    //pCtx->TransitionResourceStates(static_cast<UINT32>(Barriers.size()), Barriers.data());
+        StateTransitionDesc Barrier{Tex, RESOURCE_STATE_UNKNOWN, RESOURCE_STATE_SHADER_RESOURCE};
+        Barrier.UpdateResourceState = true;
+        Barriers.emplace_back(Barrier);
+    }
+    pCtx->TransitionResourceStates(static_cast<UINT32>(Barriers.size()), Barriers.data());
 }
 
 namespace
