@@ -492,43 +492,57 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
 namespace
 {
 
-//TEXTURE_ADDRESS_MODE GetWrapMode(int32_t wrapMode)
-//{
-//    switch (wrapMode)
-//    {
-//        case 10497:
-//            return TEXTURE_ADDRESS_WRAP;
-//        case 33071:
-//            return TEXTURE_ADDRESS_CLAMP;
-//        case 33648:
-//            return TEXTURE_ADDRESS_MIRROR;
-//        default:
-//            LOG_WARNING_MESSAGE("Unknown gltf address wrap mode: ", wrapMode, ". Defaulting to WRAP.");
-//            return TEXTURE_ADDRESS_WRAP;
-//    }
-//}
-//
-//std::pair<FILTER_TYPE, FILTER_TYPE> GetFilterMode(int32_t filterMode)
-//{
-//    switch (filterMode)
-//    {
-//        case 9728: // NEAREST
-//            return {FILTER_TYPE_POINT, FILTER_TYPE_POINT};
-//        case 9729: // LINEAR
-//            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR};
-//        case 9984: // NEAREST_MIPMAP_NEAREST
-//            return {FILTER_TYPE_POINT, FILTER_TYPE_POINT};
-//        case 9985: // LINEAR_MIPMAP_NEAREST
-//            return {FILTER_TYPE_LINEAR, FILTER_TYPE_POINT};
-//        case 9986:                                           // NEAREST_MIPMAP_LINEAR
-//            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR}; // use linear min filter instead as point makes no sesne
-//        case 9987:                                           // LINEAR_MIPMAP_LINEAR
-//            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR};
-//        default:
-//            LOG_WARNING_MESSAGE("Unknown gltf filter mode: ", filterMode, ". Defaulting to linear.");
-//            return {FILTER_TYPE_LINEAR, FILTER_TYPE_LINEAR};
-//    }
-//}
+D3D11_TEXTURE_ADDRESS_MODE GetWrapMode(int32_t wrapMode)
+{
+    switch (wrapMode)
+    {
+        case 10497:
+            return D3D11_TEXTURE_ADDRESS_WRAP;
+        case 33071:
+            return D3D11_TEXTURE_ADDRESS_CLAMP;
+        case 33648:
+            return D3D11_TEXTURE_ADDRESS_MIRROR;
+        default:
+            return D3D11_TEXTURE_ADDRESS_WRAP;
+    }
+}
+
+D3D11_FILTER GetFilterMode(int32_t magFilter , int32_t minFilter)
+{
+    switch (magFilter)
+    {
+	case 9728: // NEAREST
+		switch (minFilter)
+		{
+		case 9984:
+			return D3D11_FILTER_MIN_MAG_MIP_POINT;
+		case 9985:
+			return D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+		case 9986:
+			return D3D11_FILTER_MIN_LINEAR_MAG_MIP_POINT;
+		case 9987:
+			return D3D11_FILTER_MIN_LINEAR_MAG_POINT_MIP_LINEAR;
+		default:
+			return D3D11_FILTER_MIN_MAG_MIP_POINT;
+		}
+	case 9729: // LINEAR
+		switch (minFilter)
+		{
+		case 9984:
+			return D3D11_FILTER_MIN_POINT_MAG_LINEAR_MIP_POINT;
+		case 9985:
+			return D3D11_FILTER_MIN_POINT_MAG_MIP_LINEAR;
+		case 9986:
+			return D3D11_FILTER_MIN_MAG_LINEAR_MIP_POINT;
+		case 9987:
+			return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		default:
+			return D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+		}
+     default:
+            return D3D11_FILTER_MIN_MAG_MIP_POINT;	
+    }
+}
 
 } // namespace
 
@@ -536,17 +550,19 @@ void Model::LoadTextureSamplers(IRenderDevice* pDevice, const tinygltf::Model& g
 {
     for (const tinygltf::Sampler& smpl : gltf_model.samplers)
     {
-       /* SamplerDesc SamDesc;
-        SamDesc.MagFilter = GetFilterMode(smpl.magFilter).first;
-        auto MinMipFilter = GetFilterMode(smpl.minFilter);
-        SamDesc.MinFilter = MinMipFilter.first;
-        SamDesc.MipFilter = MinMipFilter.second;
-        SamDesc.AddressU  = GetWrapMode(smpl.wrapS);
-        SamDesc.AddressV  = GetWrapMode(smpl.wrapT);
-        SamDesc.AddressW  = SamDesc.AddressV;
-        std::shared_ptr<ISampler> pSampler;
-        pDevice->CreateSampler(SamDesc, &pSampler);
-        TextureSamplers.push_back(std::move(pSampler));*/
+		D3D11_SAMPLER_DESC sampDesc;
+		ZeroMemory(&sampDesc, sizeof(sampDesc));
+		sampDesc.Filter = GetFilterMode(smpl.magFilter, smpl.minFilter);
+		sampDesc.AddressU = GetWrapMode(smpl.wrapS);
+		sampDesc.AddressV = GetWrapMode(smpl.wrapT);
+		sampDesc.AddressW = sampDesc.AddressV;
+		sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		sampDesc.MinLOD = 0;
+		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+		ID3D11SamplerState* pSampleState = NULL ;
+		HRESULT hr = pDevice->CreateSamplerState(&sampDesc, &pSampleState);
+		assert(SUCCEEDED(hr));
+		TextureSamplers.push_back(std::shared_ptr<std::remove_reference<decltype(*pSampleState)>::type>(pSampleState));
     }
 }
 
