@@ -8,7 +8,7 @@
 //#include <Windows.h>
 #include "atlstr.h"
 #include "Common.h"
-#include"FreeImage.h"
+#include "FreeImage.h"
 using namespace Diligent;
 using namespace std;
 //#include "xnamath.h"
