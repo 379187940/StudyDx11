@@ -467,7 +467,8 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
         if (gltf_tex.sampler == -1)
         {
             // No sampler specified, use a default one
-            pDevice->CreateSampler(Sam_LinearWrap, &pSampler);
+            //pDevice->CreateSampler(Sam_LinearWrap, &pSampler);
+			assert(0);
         }
         else
         {
