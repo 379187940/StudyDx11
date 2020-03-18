@@ -474,9 +474,20 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
         {
             pSampler = TextureSamplers[gltf_tex.sampler];
         }
-        auto pTexture = TextureFromGLTFImage(pDevice, pCtx, gltf_image, pSampler);
-        Textures.push_back(std::move(pTexture));
+		ID3D11Texture2D* pTexuter2d = NULL;
+		D3D11_TEXTURE2D_DESC texDesc;
+		memset(&texDesc, 0, sizeof(D3D11_TEXTURE2D_DESC));
+		texDesc.ArraySize = 1;
+		texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		texDesc.Height = gltf_image.height;
+		texDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+		texDesc.SampleDesc = { 1,0 };
+		texDesc.Usage = D3D11_USAGE_DEFAULT;
+		pDevice->CreateTexture2D(&texDesc, NULL, &pTexuter2d);
+        Textures.push_back(std::shared_ptr<ID3D11Texture2D>(pTexuter2d,DeleteComPtr));
     }
+	pCtx->GenerateMips;
 
     std::vector<StateTransitionDesc> Barriers;
     for (auto& Tex : Textures)
@@ -563,7 +574,7 @@ void Model::LoadTextureSamplers(IRenderDevice* pDevice, const tinygltf::Model& g
 		ID3D11SamplerState* pSampleState = NULL ;
 		HRESULT hr = pDevice->CreateSamplerState(&sampDesc, &pSampleState);
 		assert(SUCCEEDED(hr));
-		TextureSamplers.push_back(std::shared_ptr<std::remove_reference<decltype(*pSampleState)>::type>(pSampleState));
+		TextureSamplers.push_back(std::shared_ptr<std::remove_reference<decltype(*pSampleState)>::type>(pSampleState,DeleteComPtr));
     }
 }
 
