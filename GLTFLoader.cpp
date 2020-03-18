@@ -489,16 +489,11 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
     }
 	pCtx->GenerateMips;
 
-    std::vector<StateTransitionDesc> Barriers;
     for (auto& Tex : Textures)
     {
-        pCtx->GenerateMips(Tex->GetDefaultView(TEXTURE_VIEW_SHADER_RESOURCE));
+        pCtx->GenerateMips( Tex->get);
 
-        StateTransitionDesc Barrier{Tex, RESOURCE_STATE_UNKNOWN, RESOURCE_STATE_SHADER_RESOURCE};
-        Barrier.UpdateResourceState = true;
-        Barriers.emplace_back(Barrier);
     }
-    pCtx->TransitionResourceStates(static_cast<UINT32>(Barriers.size()), Barriers.data());
 }
 
 namespace
