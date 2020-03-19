@@ -130,7 +130,7 @@
     <FxCompile Include="triangle.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
-    <FxCompile Include="ObjModel.hlsl">
+    <FxCompile Include="gltfmodel.hlsl">
       <Filter>shader</Filter>
     </FxCompile>
   </ItemGroup>

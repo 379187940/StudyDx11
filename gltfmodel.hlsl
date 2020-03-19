@@ -25,7 +25,10 @@ struct vs_input
 {
 	float4 postion:SV_POSTION;
 	float3 normal:NORMAL;
-	float2 texcoord:TEXCOORD;
+	float2 texcoord:TEXCOORD0;
+	float2 texcoord1:TEXCOORD1;
+	float4 joint0:NORMAL1;
+	float4 weight0:NORMAL2;
 };
 
 struct ps_input
