@@ -261,6 +261,7 @@ struct Model
     std::vector<std::unique_ptr<Skin>> Skins;
 
     std::vector<std::shared_ptr<ITexture>> Textures;
+	std::vector<std::shared_ptr<ID3D11ShaderResourceView>> ResoruceView;
     std::vector<std::shared_ptr<ISampler>> TextureSamplers;
     std::vector<Material>                Materials;
     std::vector<Animation>               Animations;

@@ -487,12 +487,18 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
 		pDevice->CreateTexture2D(&texDesc, NULL, &pTexuter2d);
         Textures.push_back(std::shared_ptr<ID3D11Texture2D>(pTexuter2d,DeleteComPtr));
     }
-	pCtx->GenerateMips;
 
     for (auto& Tex : Textures)
     {
-        pCtx->GenerateMips( Tex->get);
-
+        //pCtx->GenerateMips( Tex->get);
+		D3D11_SHADER_RESOURCE_VIEW_DESC shaViewDesc;
+		shaViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		shaViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		shaViewDesc.Texture2D.MipLevels = 0;
+		shaViewDesc.Texture2D.MostDetailedMip = 0;
+		ID3D11ShaderResourceView* pSrv = NULL;
+		pDevice->CreateShaderResourceView(Tex.get(), &shaViewDesc, &pSrv);
+		ResoruceView.push_back(std::shared_ptr<ID3D11ShaderResourceView>(pSrv, DeleteComPtr));
     }
 }
 
