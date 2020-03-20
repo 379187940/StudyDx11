@@ -23,7 +23,7 @@ cbuffer material
 };
 struct vs_input
 {
-	float4 postion:SV_POSTION;
+	float4 postion:POSTION;
 	float3 normal:NORMAL;
 	float2 texcoord:TEXCOORD0;
 	float2 texcoord1:TEXCOORD1;
@@ -33,7 +33,7 @@ struct vs_input
 
 struct ps_input
 {
-	float4 postion:SV_POSITION;
+	float4 postion:POSITION;
 	float3 normal:NORMAL;
 	float4 color:COLOR;
 	float2 texcoord:TEXCOORD;
@@ -59,6 +59,7 @@ ps_input vs_main(vs_input input)
 	
 
 	output.color.a = alpha;
+	return output;
 }
 texture2D diffuseTex;
 SamplerState samLiner;
