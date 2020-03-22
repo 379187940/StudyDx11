@@ -141,5 +141,6 @@
     <None Include="quard.hlsl">
       <Filter>shader</Filter>
     </None>
+    <None Include="3rdsdk\FreeImage\FreeImage.2013.vcxproj" />
   </ItemGroup>
 </Project>

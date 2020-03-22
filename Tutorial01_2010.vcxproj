@@ -415,6 +415,7 @@
     <ClCompile Include="Tutorial01.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="3rdsdk\FreeImage\FreeImage.2013.vcxproj" />
     <None Include="cube.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </None>
