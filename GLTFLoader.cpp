@@ -901,14 +901,15 @@ bool LoadImageData(tinygltf::Image*     gltf_image,
 	// Õº∆¨∏Ò Ω
 	FREE_IMAGE_FORMAT fif = FIF_UNKNOWN;
 	unsigned char* tempData = const_cast<unsigned char*>(image_data);
-	FIMEMORY fimemory{ tempData };
-	fif = FreeImage_GetFileTypeFromMemory(&fimemory);
+	FIMEMORY * fiMemory = FreeImage_OpenMemory(tempData,size);
+
+	fif = FreeImage_GetFileTypeFromMemory(fiMemory);
 	if (fif == FIF_UNKNOWN)
-		fif = FreeImage_GetFIFFromFilename(gltf_image->name.c_str());
+		fif = FreeImage_GetFIFFromMime(gltf_image->mimeType.c_str());
 
 	FIBITMAP *image = NULL;
 	if ((fif != FIF_UNKNOWN) && FreeImage_FIFSupportsReading(fif)) {
-		image = FreeImage_LoadFromMemory(fif, &fimemory, PNG_DEFAULT);
+		image = FreeImage_LoadFromMemory(fif, fiMemory, PNG_DEFAULT);
 	}
 	assert(image);
 
