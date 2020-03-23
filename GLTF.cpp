@@ -53,7 +53,6 @@ bool CGLTF::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext )
 		{ "NORMAL",1,DXGI_FORMAT_R32G32B32A32_FLOAT,0,40,D3D11_INPUT_PER_VERTEX_DATA,0 },
 		{ "NORMAL",2,DXGI_FORMAT_R32G32B32A32_FLOAT,0,56,D3D11_INPUT_PER_VERTEX_DATA,0 },
 	};
-	ID3D11InputLayout* pInputLayout = NULL;
 	pd3dDevice->CreateInputLayout(elements, ARRAYSIZE(elements), pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), &m_pLayoutInput);
 	//vertex shader
 	hr = m_pd3dDevice->CreateVertexShader(pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), NULL, &m_pVertexShader);

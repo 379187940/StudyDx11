@@ -463,20 +463,18 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
     for (const tinygltf::Texture& gltf_tex : gltf_model.textures)
     {
         const tinygltf::Image&  gltf_image = gltf_model.images[gltf_tex.source];
-        std::shared_ptr<ISampler> pSampler;
+        ISampler* pSampler = NULL ;
+		int index = gltf_tex.sampler;
         if (gltf_tex.sampler == -1)
         {
             // No sampler specified, use a default one
-            //pDevice->CreateSampler(Sam_LinearWrap, &pSampler);
-			assert(0);
+			index = 0;
         }
-        else
-        {
-            pSampler = TextureSamplers[gltf_tex.sampler];
-        }
+      
 		ID3D11Texture2D* pTexuter2d = NULL;
 		D3D11_TEXTURE2D_DESC texDesc;
 		memset(&texDesc, 0, sizeof(D3D11_TEXTURE2D_DESC));
+		texDesc.Width = gltf_image.width;
 		texDesc.ArraySize = 1;
 		texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -486,6 +484,7 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
 		texDesc.Usage = D3D11_USAGE_DEFAULT;
 		pDevice->CreateTexture2D(&texDesc, NULL, &pTexuter2d);
         Textures.push_back(std::shared_ptr<ID3D11Texture2D>(pTexuter2d,DeleteComPtr));
+		TextureSamplersIndex.push_back(TextureSamplers[index]);
     }
 
     for (auto& Tex : Textures)
@@ -577,6 +576,22 @@ void Model::LoadTextureSamplers(IRenderDevice* pDevice, const tinygltf::Model& g
 		assert(SUCCEEDED(hr));
 		TextureSamplers.push_back(std::shared_ptr<std::remove_reference<decltype(*pSampleState)>::type>(pSampleState,DeleteComPtr));
     }
+	if (gltf_model.samplers.size() == 0)
+	{
+		D3D11_SAMPLER_DESC sampDesc;
+		ZeroMemory(&sampDesc, sizeof(sampDesc));
+		sampDesc.Filter = D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+		sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+		sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		sampDesc.MinLOD = 0;
+		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+		ID3D11SamplerState* pSampleState = NULL;
+		HRESULT hr = pDevice->CreateSamplerState(&sampDesc, &pSampleState);
+		assert(SUCCEEDED(hr));
+		TextureSamplers.push_back(std::shared_ptr<std::remove_reference<decltype(*pSampleState)>::type>(pSampleState, DeleteComPtr));
+	}
 }
 
 
@@ -1085,16 +1100,15 @@ void Model::LoadFromFile(IRenderDevice* pDevice, IDeviceContext* pContext, const
     assert(vertexBufferSize > 0);
 	if ( vertexBufferSize > 0 )
     {
-		VertexBuffer.data();
 		char* initData = (char*)VertexBuffer.data();
-		ID3D11Buffer* result = CreateBuffer(pDevice, vertexBufferSize, D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, 0, 0 , initData);
+		ID3D11Buffer* result = CreateBuffer(pDevice, vertexBufferSize, D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0 , initData);
 		pVertexBuffer.reset(result, DeleteComPtr);
     }
 
     if (indexBufferSize > 0)
     {
 		char* initData = (char*)IndexBuffer.data();
-		ID3D11Buffer* result = CreateBuffer(pDevice, indexBufferSize, D3D11_USAGE_DYNAMIC, D3D11_BIND_INDEX_BUFFER, 0, 0, initData);
+		ID3D11Buffer* result = CreateBuffer(pDevice, indexBufferSize, D3D11_USAGE_DYNAMIC, D3D11_BIND_INDEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, initData);
 		pIndexBuffer.reset(result, DeleteComPtr);
 
     }

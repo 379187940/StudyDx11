@@ -9,6 +9,7 @@
 #include "atlstr.h"
 #include "Common.h"
 #include "FreeImage.h"
+#include <map>
 using namespace Diligent;
 using namespace std;
 //#include "xnamath.h"

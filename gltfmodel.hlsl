@@ -23,7 +23,7 @@ cbuffer material
 };
 struct vs_input
 {
-	float4 postion:POSTION;
+	float4 postion:POSITION;
 	float3 normal:NORMAL;
 	float2 texcoord:TEXCOORD0;
 	float2 texcoord1:TEXCOORD1;

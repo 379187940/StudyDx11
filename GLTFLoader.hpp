@@ -263,6 +263,7 @@ struct Model
     std::vector<std::shared_ptr<ITexture>> Textures;
 	std::vector<std::shared_ptr<ID3D11ShaderResourceView>> ResoruceView;
     std::vector<std::shared_ptr<ISampler>> TextureSamplers;
+	std::vector<std::shared_ptr<ISampler>> TextureSamplersIndex;
     std::vector<Material>                Materials;
     std::vector<Animation>               Animations;
     std::vector<std::string>             Extensions;
