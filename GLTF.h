@@ -22,7 +22,7 @@ class CGLTF :
 		XMMATRIX world;
 		XMMATRIX view;
 		XMMATRIX proj;
-		XMMATRIX matviewproj;
+		//XMMATRIX matviewproj;
 	};
 	struct lightinfo
 	{
@@ -43,7 +43,7 @@ public:
 	virtual ~CGLTF();
 	virtual void Tick(DWORD dwTimes) override;
 	virtual bool Render(DWORD dwTimes) override;
-	virtual bool UpdateRenderParams(const RenderParams& renderParams) { return true; }
+	virtual bool UpdateRenderParams(const RenderParams& renderParams);
 	virtual bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
 	bool LoadFromObjFile(WCHAR* fileName);
 private:

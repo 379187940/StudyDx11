@@ -76,8 +76,9 @@ bool CGLTF::Render(DWORD dwTimes)
 	UINT offset = 0;*/
 	/*m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);*/
-
-	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+	ID3D11Buffer*pTemp =  m_TransMatrixBuffer.get();
+	m_pContext->VSSetConstantBuffers(0, 1, &pTemp);
+	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//m_pContext->DrawIndexed(36, 0, 0);
 	//Update
 	UINT stride = sizeof(Model::Vertex);
@@ -92,4 +93,13 @@ bool CGLTF::Render(DWORD dwTimes)
 		
 	}*/
 	return false;
+}
+bool CGLTF::UpdateRenderParams(const RenderParams& renderParams)
+{
+	globalmatrix glbMatrix;
+	glbMatrix.world = XMMatrixTranspose(renderParams.m_worldMatrix);
+	glbMatrix.view = XMMatrixTranspose(renderParams.m_viewMatrix);
+	glbMatrix.proj = XMMatrixTranspose(renderParams.m_projMatrix);
+	m_pContext->UpdateSubresource(m_TransMatrixBuffer.get(), 0, nullptr, &glbMatrix, 0, 0);
+	return true;
 }
