@@ -41,8 +41,8 @@ public:
 	virtual bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
 	bool LoadFromObjFile(WCHAR* fileName);
 	CMeshLoader11 m_ObjData;
-	std::shared_ptr<ID3D11Buffer> m_TransMatrixBuffer;
-	std::shared_ptr<ID3D11Buffer> m_LightInfoBuffer;
-	std::shared_ptr<ID3D11Buffer> m_MaterialBuffer;
+	CComPtr<ID3D11Buffer> m_TransMatrixBuffer;
+	CComPtr<ID3D11Buffer> m_LightInfoBuffer;
+	CComPtr<ID3D11Buffer> m_MaterialBuffer;
 };
 

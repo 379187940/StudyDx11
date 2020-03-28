@@ -33,9 +33,9 @@ bool CObjModel::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext )
 	m_pd3dDevice = pd3dDevice;
 	m_pContext	 = pContext;
 	
-	m_TransMatrixBuffer = std::shared_ptr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(globalmatrix), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0) , DeleteComPtr ) ;
-	m_LightInfoBuffer = std::shared_ptr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(lightinfo), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0) , DeleteComPtr );
-	m_MaterialBuffer = std::shared_ptr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(material), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0), DeleteComPtr);
+	m_TransMatrixBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(globalmatrix), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0) , DeleteComPtr ) ;
+	m_LightInfoBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(lightinfo), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0) , DeleteComPtr );
+	m_MaterialBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(material), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0), DeleteComPtr);
 
 	return true;
 }

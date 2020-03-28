@@ -48,7 +48,7 @@ namespace Diligent
 namespace GLTF
 {
 
-//std::shared_ptr<ITexture> TextureFromGLTFImage(IRenderDevice*         pDevice,
+//CComPtr<ITexture> TextureFromGLTFImage(IRenderDevice*         pDevice,
 //                                             IDeviceContext*        pCtx,
 //                                             const tinygltf::Image& gltfimage,
 //                                             ISampler*              pSampler)
@@ -91,7 +91,7 @@ namespace GLTF
 //    TexDesc.Format    = TEX_FORMAT_RGBA8_UNORM;
 //    TexDesc.MipLevels = 0;
 //    TexDesc.MiscFlags = MISC_TEXTURE_FLAG_GENERATE_MIPS;
-//    std::shared_ptr<ITexture> pTexture;
+//    CComPtr<ITexture> pTexture;
 //
 //    pDevice->CreateTexture(TexDesc, nullptr, &pTexture);
 //    Box UpdateBox;
@@ -456,6 +456,17 @@ void Model::LoadSkins(const tinygltf::Model& gltf_model)
 }
 
 
+ISampler* Model::GetSampler(ITexture* pTexture)
+{
+	for (int i = 0; i < Textures.size(); i++)
+	{
+		if (Textures[i].get() == pTexture)
+			return TextureSamplersIndex[i].get();
+	}
+	return NULL;
+}
+
+
 void Model::LoadTextures(IRenderDevice*         pDevice,
                          IDeviceContext*        pCtx,
                          const tinygltf::Model& gltf_model)
@@ -479,11 +490,11 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
 		texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		texDesc.Height = gltf_image.height;
-		texDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+		texDesc.MiscFlags = 0;
 		texDesc.SampleDesc = { 1,0 };
 		texDesc.Usage = D3D11_USAGE_DEFAULT;
 		pDevice->CreateTexture2D(&texDesc, NULL, &pTexuter2d);
-        Textures.push_back(std::shared_ptr<ID3D11Texture2D>(pTexuter2d,DeleteComPtr));
+        Textures.push_back(CComPtr<ID3D11Texture2D>(pTexuter2d,DeleteComPtr));
 		TextureSamplersIndex.push_back(TextureSamplers[index]);
     }
 
@@ -493,11 +504,11 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
 		D3D11_SHADER_RESOURCE_VIEW_DESC shaViewDesc;
 		shaViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		shaViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
-		shaViewDesc.Texture2D.MipLevels = 0;
+		shaViewDesc.Texture2D.MipLevels = 1;
 		shaViewDesc.Texture2D.MostDetailedMip = 0;
 		ID3D11ShaderResourceView* pSrv = NULL;
 		pDevice->CreateShaderResourceView(Tex.get(), &shaViewDesc, &pSrv);
-		ResoruceView.push_back(std::shared_ptr<ID3D11ShaderResourceView>(pSrv, DeleteComPtr));
+		ResoruceView.push_back(CComPtr<ID3D11ShaderResourceView>(pSrv, DeleteComPtr));
     }
 }
 
@@ -574,7 +585,7 @@ void Model::LoadTextureSamplers(IRenderDevice* pDevice, const tinygltf::Model& g
 		ID3D11SamplerState* pSampleState = NULL ;
 		HRESULT hr = pDevice->CreateSamplerState(&sampDesc, &pSampleState);
 		assert(SUCCEEDED(hr));
-		TextureSamplers.push_back(std::shared_ptr<std::remove_reference<decltype(*pSampleState)>::type>(pSampleState,DeleteComPtr));
+		TextureSamplers.push_back(CComPtr<std::remove_reference<decltype(*pSampleState)>::type>(pSampleState,DeleteComPtr));
     }
 	if (gltf_model.samplers.size() == 0)
 	{
@@ -590,7 +601,7 @@ void Model::LoadTextureSamplers(IRenderDevice* pDevice, const tinygltf::Model& g
 		ID3D11SamplerState* pSampleState = NULL;
 		HRESULT hr = pDevice->CreateSamplerState(&sampDesc, &pSampleState);
 		assert(SUCCEEDED(hr));
-		TextureSamplers.push_back(std::shared_ptr<std::remove_reference<decltype(*pSampleState)>::type>(pSampleState, DeleteComPtr));
+		TextureSamplers.push_back(CComPtr<std::remove_reference<decltype(*pSampleState)>::type>(pSampleState, DeleteComPtr));
 	}
 }
 

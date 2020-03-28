@@ -68,11 +68,11 @@ struct Material
     float4 BaseColorFactor = float4(1.0f, 1.0f, 1.0f, 1.0f);
     float4 EmissiveFactor  = float4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	std::shared_ptr<ID3D11Texture2D> pBaseColorTexture;
-	std::shared_ptr<ID3D11Texture2D> pMetallicRoughnessTexture;
-	std::shared_ptr<ID3D11Texture2D> pNormalTexture;
-	std::shared_ptr<ID3D11Texture2D> pOcclusionTexture;
-	std::shared_ptr<ID3D11Texture2D> pEmissiveTexture;
+	CComPtr<ID3D11Texture2D> pBaseColorTexture;
+	CComPtr<ID3D11Texture2D> pMetallicRoughnessTexture;
+	CComPtr<ID3D11Texture2D> pNormalTexture;
+	CComPtr<ID3D11Texture2D> pOcclusionTexture;
+	CComPtr<ID3D11Texture2D> pEmissiveTexture;
 
     struct TextureCoordinateSets
     {
@@ -87,8 +87,8 @@ struct Material
 
     struct Extension
     {
-		std::shared_ptr<ID3D11Texture2D> pSpecularGlossinessTexture;
-		std::shared_ptr<ID3D11Texture2D> pDiffuseTexture;
+		CComPtr<ID3D11Texture2D> pSpecularGlossinessTexture;
+		CComPtr<ID3D11Texture2D> pDiffuseTexture;
         float4                  DiffuseFactor  = float4(1.0f, 1.0f, 1.0f, 1.0f);
         float3                  SpecularFactor = float3(1.0f, 1.0f, 1.0f);
     };
@@ -249,8 +249,8 @@ struct Model
         float4 weight0;
     };
 
-    std::shared_ptr<IBuffer> pVertexBuffer;
-	std::shared_ptr<IBuffer> pIndexBuffer;
+    CComPtr<IBuffer> pVertexBuffer;
+	CComPtr<IBuffer> pIndexBuffer;
     UINT32                 IndexCount = 0;
 
     float4x4 aabb;
@@ -260,10 +260,10 @@ struct Model
 
     std::vector<std::unique_ptr<Skin>> Skins;
 
-    std::vector<std::shared_ptr<ITexture>> Textures;
-	std::vector<std::shared_ptr<ID3D11ShaderResourceView>> ResoruceView;
-    std::vector<std::shared_ptr<ISampler>> TextureSamplers;
-	std::vector<std::shared_ptr<ISampler>> TextureSamplersIndex;
+    std::vector<CComPtr<ITexture>> Textures;
+	std::vector<CComPtr<ID3D11ShaderResourceView>> ResoruceView;
+    std::vector<CComPtr<ISampler>> TextureSamplers;
+	std::vector<CComPtr<ISampler>> TextureSamplersIndex;
     std::vector<Material>                Materials;
     std::vector<Animation>               Animations;
     std::vector<std::string>             Extensions;
@@ -277,7 +277,7 @@ struct Model
     Model(IRenderDevice* pDevice, IDeviceContext* pContext, const std::string& filename);
 
     void UpdateAnimation(UINT32 index, float time);
-
+	ISampler* GetSampler(ITexture* pTexture);
 private:
     void LoadFromFile(IRenderDevice* pDevice, IDeviceContext* pContext, const std::string& filename);
     void LoadNode(IRenderDevice*         pDevice,

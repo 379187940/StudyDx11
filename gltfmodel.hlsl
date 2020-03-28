@@ -69,6 +69,8 @@
 //    colorResult.rgb *= diffuseTex.Sample(samLiner , psInput.texcoord , 0);
 //	return colorResult;
 //} 
+texture2D diffuseTex;
+SamplerState samLinear : register(s0);
 struct vs_input
 {
 	float4 postion:POSITION;

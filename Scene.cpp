@@ -52,9 +52,9 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	CGLTF* pNewGltf = new CGLTF(_T("GltfLoad"));
 	pNewGltf->Init(pd3d11Device, pContext);
 	pNewGltf->LoadFromObjFile(_T("cup2uv.gltf"));
-	RegisterObject(pNewTrianle);
-	RegisterObject(pNewCube);
-	RegisterObject(pNewCubeLight);
+	//RegisterObject(pNewTrianle);
+	//RegisterObject(pNewCube);
+	//RegisterObject(pNewCubeLight);
 	RegisterObject(pNewGltf);
 	BuildUi();
 	HRESULT hr = S_FALSE ;
