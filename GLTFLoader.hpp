@@ -278,6 +278,7 @@ struct Model
 
     void UpdateAnimation(UINT32 index, float time);
 	ISampler* GetSampler(ITexture* pTexture);
+	ID3D11ShaderResourceView* GetResourceView(ITexture* pTexture);
 private:
     void LoadFromFile(IRenderDevice* pDevice, IDeviceContext* pContext, const std::string& filename);
     void LoadNode(IRenderDevice*         pDevice,

@@ -38,9 +38,9 @@ bool CGLTF::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext )
 	m_pd3dDevice = pd3dDevice;
 	m_pContext	 = pContext;
 	
-	m_TransMatrixBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(globalmatrix), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0) , DeleteComPtr ) ;
-	m_LightInfoBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(lightinfo), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0) , DeleteComPtr );
-	m_MaterialBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(material), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0), DeleteComPtr);
+	m_TransMatrixBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(globalmatrix), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0) ) ;
+	m_LightInfoBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(lightinfo), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0) );
+	m_MaterialBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(material), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0));
 	ID3D10Blob* pVertexShader = NULL;
 	HRESULT hr = CompileShaderFromFile(_T("gltfmodel.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader);
 	assert(SUCCEEDED(hr));
@@ -76,24 +76,24 @@ bool CGLTF::Render(DWORD dwTimes)
 	UINT offset = 0;*/
 	/*m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);*/
-	ID3D11Buffer*pTemp =  m_TransMatrixBuffer.get();
+	ID3D11Buffer*pTemp =  m_TransMatrixBuffer;
 	m_pContext->VSSetConstantBuffers(0, 1, &pTemp);
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//m_pContext->DrawIndexed(36, 0, 0);
 	//Update
 	UINT stride = sizeof(Model::Vertex);
 	UINT offset = 0;
-	ID3D11Buffer* pTempBuffer = m_pGLTFModel->pVertexBuffer.get();
+	ID3D11Buffer* pTempBuffer = m_pGLTFModel->pVertexBuffer;
 	m_pContext->IASetVertexBuffers(0, 1,&pTempBuffer , &stride, &offset);//這個dg引擎是怎么传递这个指针的
-	pTempBuffer = m_pGLTFModel->pIndexBuffer.get();
-	m_pContext->IASetIndexBuffer(pTempBuffer, DXGI_FORMAT_R32_UINT, 0);
+	m_pContext->IASetIndexBuffer(m_pGLTFModel->pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	
 	for (auto& Node : m_pGLTFModel->Nodes)
 	{
 		for (auto& primitive : Node->_Mesh->Primitives)
 		{
 			m_pContext->DrawIndexed(primitive->IndexCount , primitive->FirstIndex, 0);
-			m_pContext->PSSetShaderResources(0, 0, primitive->material.pEmissiveTexture.get();)
+			ID3D11ShaderResourceView* pTextureResourceView = m_pGLTFModel->GetResourceView( primitive->material.pBaseColorTexture);
+			m_pContext->PSSetShaderResources(0, 0, &pTextureResourceView);
 		}
 	}
 	return false;
@@ -104,6 +104,6 @@ bool CGLTF::UpdateRenderParams(const RenderParams& renderParams)
 	glbMatrix.world = XMMatrixTranspose(renderParams.m_worldMatrix);
 	glbMatrix.view = XMMatrixTranspose(renderParams.m_viewMatrix);
 	glbMatrix.proj = XMMatrixTranspose(renderParams.m_projMatrix);
-	m_pContext->UpdateSubresource(m_TransMatrixBuffer.get(), 0, nullptr, &glbMatrix, 0, 0);
+	m_pContext->UpdateSubresource(m_TransMatrixBuffer, 0, nullptr, &glbMatrix, 0, 0);
 	return true;
 }

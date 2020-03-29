@@ -47,7 +47,7 @@ public:
 	virtual bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
 	bool LoadFromObjFile(WCHAR* fileName);
 private:
-	CComPtr<Diligent::GLTF::Model> m_pGLTFModel;
+	std::shared_ptr<Diligent::GLTF::Model> m_pGLTFModel;
 	//CMeshLoader11 m_ObjData;
 	CComPtr<ID3D11Buffer> m_TransMatrixBuffer;
 	CComPtr<ID3D11Buffer> m_LightInfoBuffer;
