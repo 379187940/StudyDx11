@@ -84,6 +84,7 @@ struct vs_out
 {
 	float4 postion:SV_POSITION;
 	float4 color:COLOR0;
+	float2 texcoord:TEXCOORD0;
 };
 cbuffer ConstantBuffer : register(b0)
 {
@@ -97,10 +98,11 @@ vs_out vs_main(vs_input input)
 	temp.postion = mul(input.postion, World);
 	temp.postion = mul(temp.postion, View);
 	temp.postion = mul(temp.postion, Projection);
+	temp.texcoord = input.texcoord;
 	return temp;
 }
 
 float4 ps_main(vs_out vsout) : SV_Target
 {
-	return float4(1,0,0,1);
+	return  diffuseTex.SampleLevel(samLinear, vsout.texcoord, 0);
 }

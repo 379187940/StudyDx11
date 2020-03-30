@@ -350,4 +350,7 @@
     <Text Include="Todo.txt" />
     <Text Include="Whatsnew.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Users\PWRD\Desktop\FreeImage3180\FreeImage3180\FreeImage3180Win32Win64\FreeImage\Dist\x32\FreeImage.dll" />
+  </ItemGroup>
 </Project>

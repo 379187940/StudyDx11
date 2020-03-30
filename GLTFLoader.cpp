@@ -463,14 +463,14 @@ ID3D11ShaderResourceView* Model::GetResourceView(ITexture* pTexture)
 			return ResoruceView[i];
 	}
 }
-ISampler* Model::GetSampler(ITexture* pTexture)
+CComPtr<ISampler>& Model::GetSampler(ITexture* pTexture)
 {
 	for (int i = 0; i < Textures.size(); i++)
 	{
 		if (Textures[i] == pTexture)
 			return TextureSamplersIndex[i];
 	}
-	return NULL;
+	return CComPtr<ISampler>(NULL);
 }
 
 
