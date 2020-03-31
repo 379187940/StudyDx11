@@ -52,5 +52,6 @@ private:
 	CComPtr<ID3D11Buffer> m_TransMatrixBuffer;
 	CComPtr<ID3D11Buffer> m_LightInfoBuffer;
 	CComPtr<ID3D11Buffer> m_MaterialBuffer;
+	CComPtr<ID3D11PixelShader> m_PixelShaderUseTex;
 };
 

@@ -69,8 +69,10 @@
 //    colorResult.rgb *= diffuseTex.Sample(samLiner , psInput.texcoord , 0);
 //	return colorResult;
 //} 
+#ifdef USE_TEX
 texture2D diffuseTex;
 SamplerState samLinear : register(s0);
+#endif
 struct vs_input
 {
 	float4 postion:POSITION;
@@ -91,7 +93,7 @@ cbuffer ConstantBuffer : register(b0)
 	matrix World;
 	matrix View;
 	matrix Projection;
-}
+};
 vs_out vs_main(vs_input input)
 {
 	vs_out temp;
@@ -104,5 +106,9 @@ vs_out vs_main(vs_input input)
 
 float4 ps_main(vs_out vsout) : SV_Target
 {
+#ifdef USE_TEX
 	return  diffuseTex.SampleLevel(samLinear, vsout.texcoord, 0);
+#else
+	return  float4(1,0,0,1);
+#endif
 }

@@ -64,6 +64,18 @@ bool CGLTF::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext )
 	//pixel shader
 	hr = m_pd3dDevice->CreatePixelShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_pPixelShader);
 	assert(SUCCEEDED(hr));
+	pPixelShader->Release();
+	pPixelShader = NULL;
+
+	D3D10_SHADER_MACRO macro[] = {
+		{"USE_TEX" , "1"},
+		{nullptr,nullptr}
+	};
+	hr = CompileShaderFromFile(_T("gltfmodel.hlsl"), macro, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader);
+	assert(SUCCEEDED(hr));
+	//pixel shader
+	hr = m_pd3dDevice->CreatePixelShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_PixelShaderUseTex);
+	assert(SUCCEEDED(hr));
 
 	return true;
 }
@@ -71,7 +83,7 @@ bool CGLTF::Render(DWORD dwTimes)
 {
 	m_pContext->IASetInputLayout(m_pLayoutInput);
 	m_pContext->VSSetShader(m_pVertexShader, NULL, 0);
-	m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
+	
 	/*UINT stride = sizeof(SimpleVertex);
 	UINT offset = 0;*/
 	/*m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
@@ -91,10 +103,17 @@ bool CGLTF::Render(DWORD dwTimes)
 	{
 		for (auto& primitive : Node->_Mesh->Primitives)
 		{
-			
-			ID3D11ShaderResourceView* pTextureResourceView = m_pGLTFModel->GetResourceView( primitive->material.pBaseColorTexture);
-			m_pContext->PSSetShaderResources(0, 0, &pTextureResourceView);
-			m_pContext->PSSetSamplers(0, 0, &m_pGLTFModel->GetSampler(primitive->material.pBaseColorTexture));
+			if (primitive->material.pBaseColorTexture == NULL)
+			{
+				m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
+			}
+			else
+			{
+				m_pContext->PSSetShader(m_PixelShaderUseTex, NULL, 0);
+				ID3D11ShaderResourceView* pTextureResourceView = m_pGLTFModel->GetResourceView(primitive->material.pBaseColorTexture);
+				m_pContext->PSSetShaderResources(0, 0, &pTextureResourceView);
+				m_pContext->PSSetSamplers(0, 0, &m_pGLTFModel->GetSampler(primitive->material.pBaseColorTexture));
+			}
 			m_pContext->DrawIndexed(primitive->IndexCount, primitive->FirstIndex, 0);
 		}
 	}
