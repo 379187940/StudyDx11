@@ -111,8 +111,9 @@ bool CGLTF::Render(DWORD dwTimes)
 			{
 				m_pContext->PSSetShader(m_PixelShaderUseTex, NULL, 0);
 				ID3D11ShaderResourceView* pTextureResourceView = m_pGLTFModel->GetResourceView(primitive->material.pBaseColorTexture);
-				m_pContext->PSSetShaderResources(0, 0, &pTextureResourceView);
-				m_pContext->PSSetSamplers(0, 0, &m_pGLTFModel->GetSampler(primitive->material.pBaseColorTexture));
+				m_pContext->PSSetShaderResources(0, 1, &pTextureResourceView);
+				ID3D11SamplerState* pSamplerState = m_pGLTFModel->GetSampler(primitive->material.pBaseColorTexture);
+				m_pContext->PSSetSamplers(0, 1, &pSamplerState);
 			}
 			m_pContext->DrawIndexed(primitive->IndexCount, primitive->FirstIndex, 0);
 		}
