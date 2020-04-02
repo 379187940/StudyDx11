@@ -23,10 +23,10 @@ to ascii char 255 (extended ASCII Latin1/CP1252):
  !"#$%&'()*+,-./0123456789:;<=>?
 @ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_
 `abcdefghijklmnopqrstuvwxyz{|}~
-€‚ƒ„…†‡‰‹‘’“”•–—™›
+€‚ƒ„…†‡‰‹‘’“”•–—™›?
  ΅Ά£¤¥¦§¨©ª«¬­®―°±²³΄µ¶·ΈΉΊ»Ό½ΎΏ
 ΐΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡÒΣΤΥΦΧΨΩΪΫάέήί
-ΰαβγδεζηθικλμνξοπρςστυφχψωϊϋόύώÿ
+ΰαβγδεζηθικλμνξοπρςστυφχψωϊϋόύ?
 
 First pixel column of a source bitmap is a delimiter with color=zero at the end of each line of characters.
 Last pixel row of a line of characters is a delimiter with color=zero at the last pixel of each character.

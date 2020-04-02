@@ -463,7 +463,7 @@ ID3D11ShaderResourceView* Model::GetResourceView(ITexture* pTexture)
 			return ResoruceView[i];
 	}
 }
-CComPtr<ISampler>& Model::GetSampler(ITexture* pTexture)
+CComPtr<ISampler> Model::GetSampler(ITexture* pTexture)
 {
 	for (int i = 0; i < Textures.size(); i++)
 	{
@@ -500,7 +500,12 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
 		texDesc.MiscFlags = 0;
 		texDesc.SampleDesc = { 1,0 };
 		texDesc.Usage = D3D11_USAGE_DEFAULT;
-		pDevice->CreateTexture2D(&texDesc, NULL, &pTexuter2d);
+		texDesc.MipLevels = 1;
+		D3D11_SUBRESOURCE_DATA data;
+		data.pSysMem = gltf_image.image.data();
+		data.SysMemPitch = gltf_image.width * gltf_image.bits * gltf_image.component/8;
+		data.SysMemSlicePitch = 0;
+		pDevice->CreateTexture2D(&texDesc, &data, &pTexuter2d);
         Textures.push_back(CComPtr<ID3D11Texture2D>(pTexuter2d));
 		TextureSamplersIndex.push_back(TextureSamplers[index]);
     }
@@ -967,7 +972,7 @@ bool LoadImageData(tinygltf::Image*     gltf_image,
 	const unsigned char* pSrcPixels = bits1;
 	//因为会按照32字节对齐 所以每一行字节数有可能和width*byte_per_pixel并不一致
 	unsigned int pitchByte = FreeImage_GetPitch(image);
-
+	FreeImage_Save(FREE_IMAGE_FORMAT::FIF_JPEG, image, "333.jpeg");
 	if ( byte_per_pixel  == 3)
 	{
 		for (UINT32 row = 0; row < gltf_image->height; ++row)

@@ -277,7 +277,7 @@ struct Model
     Model(IRenderDevice* pDevice, IDeviceContext* pContext, const std::string& filename);
 
     void UpdateAnimation(UINT32 index, float time);
-	CComPtr<ISampler>& GetSampler(ITexture* pTexture);
+	CComPtr<ISampler> GetSampler(ITexture* pTexture);
 	ID3D11ShaderResourceView* GetResourceView(ITexture* pTexture);
 private:
     void LoadFromFile(IRenderDevice* pDevice, IDeviceContext* pContext, const std::string& filename);
