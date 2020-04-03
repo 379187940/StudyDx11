@@ -405,8 +405,10 @@
     <ClCompile Include="CubeLight.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="GLTF.cpp" />
     <ClCompile Include="GLTFLoader.cpp" />
+    <ClCompile Include="InputControllerWin32.cpp" />
     <ClCompile Include="MeshLoader11.cpp" />
     <ClCompile Include="ObjModel.cpp" />
     <ClCompile Include="Quard.cpp" />
@@ -422,15 +424,18 @@
     <None Include="quard.hlsl" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\DligentEngine\DiligentEngine\DiligentSamples\SampleBase\include\Win32\InputControllerWin32.hpp" />
     <ClInclude Include="BaseRenderObject.h" />
     <ClInclude Include="BasicMath.hpp" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeLight.h" />
+    <ClInclude Include="FirstPersonCamera.hpp" />
     <ClInclude Include="GLTF.h" />
     <ClInclude Include="GLTFLoader.hpp" />
     <ClInclude Include="HashUtils.hpp" />
+    <ClInclude Include="InputController.hpp" />
     <ClInclude Include="IObject.h" />
     <ClInclude Include="IRenderObject.h" />
     <ClInclude Include="json.hpp" />

@@ -20,6 +20,9 @@
     <Filter Include="Common">
       <UniqueIdentifier>{d2432114-8581-4e07-a514-2077409b265d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Input">
+      <UniqueIdentifier>{848c10df-d494-4cb5-b15e-ed5870714f59}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderObject.h">
@@ -75,6 +78,15 @@
     <ClInclude Include="GLTF.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
+    <ClInclude Include="FirstPersonCamera.hpp">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="InputController.hpp">
+      <Filter>Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\DligentEngine\DiligentEngine\DiligentSamples\SampleBase\include\Win32\InputControllerWin32.hpp">
+      <Filter>Input</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -113,6 +125,12 @@
     </ClCompile>
     <ClCompile Include="GLTF.cpp">
       <Filter>RenderObject</Filter>
+    </ClCompile>
+    <ClCompile Include="FirstPersonCamera.cpp">
+      <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="InputControllerWin32.cpp">
+      <Filter>Input</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
