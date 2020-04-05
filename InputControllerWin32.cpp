@@ -128,7 +128,7 @@ bool InputControllerWin32::HandleNativeMessage(const void* MsgData)
             auto mappedKey = MapCameraKeyWnd((UINT)wParam);
             if (mappedKey != InputKeys::Unknown && mappedKey < InputKeys::TotalKeys)
             {
-                auto& Key = m_Keys[static_cast<Int32>(mappedKey)];
+                auto& Key = m_Keys[static_cast<unsigned int>(mappedKey)];
                 Key &= ~INPUT_KEY_STATE_FLAG_KEY_WAS_DOWN;
                 Key |= INPUT_KEY_STATE_FLAG_KEY_IS_DOWN;
             }
@@ -143,7 +143,7 @@ bool InputControllerWin32::HandleNativeMessage(const void* MsgData)
             auto mappedKey = MapCameraKeyWnd((UINT)wParam);
             if (mappedKey != InputKeys::Unknown && mappedKey < InputKeys::TotalKeys)
             {
-                auto& Key = m_Keys[static_cast<Int32>(mappedKey)];
+                auto& Key = m_Keys[static_cast<unsigned int>(mappedKey)];
                 Key &= ~INPUT_KEY_STATE_FLAG_KEY_IS_DOWN;
                 Key |= INPUT_KEY_STATE_FLAG_KEY_WAS_DOWN;
             }

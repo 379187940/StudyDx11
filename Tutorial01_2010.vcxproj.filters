@@ -50,7 +50,6 @@
     <ClInclude Include="Quard.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="ObjModel.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
@@ -84,7 +83,7 @@
     <ClInclude Include="InputController.hpp">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="..\DligentEngine\DiligentEngine\DiligentSamples\SampleBase\include\Win32\InputControllerWin32.hpp">
+    <ClInclude Include="InputControllerWin32.hpp">
       <Filter>Input</Filter>
     </ClInclude>
   </ItemGroup>
@@ -110,7 +109,6 @@
     <ClCompile Include="Quard.cpp">
       <Filter>RenderObject</Filter>
     </ClCompile>
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="ObjModel.cpp">
       <Filter>RenderObject</Filter>
     </ClCompile>

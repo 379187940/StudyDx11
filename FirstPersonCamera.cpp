@@ -127,7 +127,7 @@ void FirstPersonCamera::SetReferenceAxes(const float3& ReferenceRightAxis, const
     if (UpLen < Epsilon)
     {
         UpLen = Epsilon;
-        LOG_WARNING_MESSAGE("Right and Up axes are collinear");
+        //LOG_WARNING_MESSAGE("Right and Up axes are collinear");
     }
     m_ReferenceUpAxis /= UpLen;
 
@@ -137,7 +137,7 @@ void FirstPersonCamera::SetReferenceAxes(const float3& ReferenceRightAxis, const
     if (AheadLen < Epsilon)
     {
         AheadLen = Epsilon;
-        LOG_WARNING_MESSAGE("Ahead axis is not well defined");
+        //LOG_WARNING_MESSAGE("Ahead axis is not well defined");
     }
     m_ReferenceAheadAxis /= AheadLen;
 }
@@ -160,10 +160,10 @@ void FirstPersonCamera::SetRotation(float Yaw, float Pitch)
     m_fPitchAngle = Pitch;
 }
 
-void FirstPersonCamera::SetProjAttribs(Float32 NearClipPlane,
-                                       Float32 FarClipPlane,
-                                       Float32 AspectRatio,
-                                       Float32 FOV,
+void FirstPersonCamera::SetProjAttribs(float NearClipPlane,
+                                       float FarClipPlane,
+                                       float AspectRatio,
+                                       float FOV,
                                        bool    IsGL)
 {
     m_ProjAttribs.NearClipPlane = NearClipPlane;
@@ -175,7 +175,7 @@ void FirstPersonCamera::SetProjAttribs(Float32 NearClipPlane,
     m_ProjMatrix = float4x4::Projection(m_ProjAttribs.FOV, m_ProjAttribs.AspectRatio, m_ProjAttribs.NearClipPlane, m_ProjAttribs.FarClipPlane, IsGL);
 }
 
-void FirstPersonCamera::SetSpeedUpScales(Float32 SpeedUpScale, Float32 SuperSpeedUpScale)
+void FirstPersonCamera::SetSpeedUpScales(float SpeedUpScale, float SuperSpeedUpScale)
 {
     m_fSpeedUpScale      = SpeedUpScale;
     m_fSuperSpeedUpScale = SuperSpeedUpScale;

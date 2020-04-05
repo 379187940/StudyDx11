@@ -42,12 +42,12 @@ public:
     void SetMoveSpeed(float MoveSpeed) { m_fMoveSpeed = MoveSpeed; }
     void SetRotationSpeed(float RotationSpeed) { m_fRotationSpeed = RotationSpeed; }
     void SetPos(const float3& Pos) { m_Pos = Pos; }
-    void SetProjAttribs(Float32 NearClipPlane,
-                        Float32 FarClipPlane,
-                        Float32 AspectRatio,
-                        Float32 FOV,
+    void SetProjAttribs(float NearClipPlane,
+                        float FarClipPlane,
+                        float AspectRatio,
+                        float FOV,
                         bool    IsGL);
-    void SetSpeedUpScales(Float32 SpeedUpScale, Float32 SuperSpeedUpScale);
+    void SetSpeedUpScales(float SpeedUpScale, float SuperSpeedUpScale);
 
 
     // clang-format off
@@ -65,10 +65,10 @@ public:
 
     struct ProjectionAttribs
     {
-        Float32 NearClipPlane = 1.f;
-        Float32 FarClipPlane  = 1000.f;
-        Float32 AspectRatio   = 1.f;
-        Float32 FOV           = PI_F / 4.f;
+        float NearClipPlane = 1.f;
+        float FarClipPlane  = 1000.f;
+        float AspectRatio   = 1.f;
+        float FOV           = PI_F / 4.f;
         bool    IsGL          = false;
     };
     const ProjectionAttribs& GetProjAttribs() { return m_ProjAttribs; }

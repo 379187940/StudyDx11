@@ -27,15 +27,29 @@
 
 #pragma once
 
-#include "BasicTypes.h"
-#include "FlagEnum.h"
+//#include "BasicTypes.h"
+//#include "FlagEnum.h"
+#include <type_traits>
+template <typename EnumType>
+using _UNDERLYING_ENUM_T = typename std::underlying_type<EnumType>::type;
 
+#    define DEFINE_FLAG_ENUM_OPERATORS(ENUMTYPE)                                                                                                                                                                              \
+        extern "C++"                                                                                                                                                                                                          \
+        {                                                                                                                                                                                                                     \
+            inline ENUMTYPE&          operator|=(ENUMTYPE& a, ENUMTYPE b) throw() { return reinterpret_cast<ENUMTYPE&>(reinterpret_cast<_UNDERLYING_ENUM_T<ENUMTYPE>&>(a) |= static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(b)); } \
+            inline ENUMTYPE&          operator&=(ENUMTYPE& a, ENUMTYPE b) throw() { return reinterpret_cast<ENUMTYPE&>(reinterpret_cast<_UNDERLYING_ENUM_T<ENUMTYPE>&>(a) &= static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(b)); } \
+            inline ENUMTYPE&          operator^=(ENUMTYPE& a, ENUMTYPE b) throw() { return reinterpret_cast<ENUMTYPE&>(reinterpret_cast<_UNDERLYING_ENUM_T<ENUMTYPE>&>(a) ^= static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(b)); } \
+            inline constexpr ENUMTYPE operator|(ENUMTYPE a, ENUMTYPE b) throw() { return static_cast<ENUMTYPE>(static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(a) | static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(b)); }                \
+            inline constexpr ENUMTYPE operator&(ENUMTYPE a, ENUMTYPE b) throw() { return static_cast<ENUMTYPE>(static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(a) & static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(b)); }                \
+            inline constexpr ENUMTYPE operator^(ENUMTYPE a, ENUMTYPE b) throw() { return static_cast<ENUMTYPE>(static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(a) ^ static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(b)); }                \
+            inline constexpr ENUMTYPE operator~(ENUMTYPE a) throw() { return static_cast<ENUMTYPE>(~static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(a)); }                                                                          \
+        }
 namespace Diligent
 {
 
 struct MouseState
 {
-    enum BUTTON_FLAGS : Uint8
+    enum BUTTON_FLAGS : unsigned char
     {
         BUTTON_FLAG_NONE   = 0x00,
         BUTTON_FLAG_LEFT   = 0x01,
@@ -44,10 +58,10 @@ struct MouseState
         BUTTON_FLAG_WHEEL  = 0x08
     };
 
-    Float32      PosX        = -1;
-    Float32      PosY        = -1;
+    float      PosX        = -1;
+    float      PosY        = -1;
     BUTTON_FLAGS ButtonFlags = BUTTON_FLAG_NONE;
-    Float32      WheelDelta  = 0;
+    float      WheelDelta  = 0;
 };
 DEFINE_FLAG_ENUM_OPERATORS(MouseState::BUTTON_FLAGS)
 
@@ -70,7 +84,7 @@ enum class InputKeys
     TotalKeys
 };
 
-enum INPUT_KEY_STATE_FLAGS : Uint8
+enum INPUT_KEY_STATE_FLAGS : unsigned char
 {
     INPUT_KEY_STATE_FLAG_KEY_NONE     = 0x00,
     INPUT_KEY_STATE_FLAG_KEY_IS_DOWN  = 0x01,
@@ -100,7 +114,7 @@ public:
     {
         m_MouseState.WheelDelta = 0;
 
-        for (Uint32 i = 0; i < static_cast<Uint32>(InputKeys::TotalKeys); ++i)
+        for (unsigned int i = 0; i < static_cast<unsigned int>(InputKeys::TotalKeys); ++i)
         {
             auto& KeyState = m_Keys[i];
             if (KeyState & INPUT_KEY_STATE_FLAG_KEY_WAS_DOWN)
@@ -118,56 +132,9 @@ protected:
 } // namespace Diligent
 
 // clang-format off
-#if PLATFORM_WIN32
-    #include "Win32/InputControllerWin32.hpp"
+    #include "InputControllerWin32.hpp"
     namespace Diligent
     {
         using InputController = InputControllerWin32;
     }
-#elif PLATFORM_UNIVERSAL_WINDOWS
-    #include "UWP/InputControllerUWP.hpp"
-    namespace Diligent
-    {
-        using InputController = InputControllerUWP;
-    }
-#elif PLATFORM_MACOS
-    #include "MacOS/InputControllerMacOS.hpp"
-    namespace Diligent
-    {
-        using InputController = InputControllerMacOS;
-    }
-#elif PLATFORM_IOS
-    #include "iOS/InputControllerIOS.hpp"
-    namespace Diligent
-    {
-        using InputController = InputControllerIOS;
-    }
-#elif PLATFORM_LINUX
-    #include "Linux/InputControllerLinux.hpp"
-    namespace Diligent
-    {
-        using InputController = InputControllerLinux;
-    }
-#elif PLATFORM_ANDROID
-    #include "Android/InputControllerAndroid.hpp"
-    namespace Diligent
-    {
-        using InputController = InputControllerAndroid;
-    }
-#else
-    namespace Diligent
-    {
-        class DummyInputController
-        {
-        public:
-            const MouseState& GetMouseState()const{return m_MouseState;}
-
-            INPUT_KEY_STATE_FLAGS GetKeyState(InputKeys Key)const{return INPUT_KEY_STATE_FLAG_KEY_NONE;}
-
-        private:
-            MouseState m_MouseState;
-        };
-        using InputController = DummyInputController;
-    }
-#endif
 // clang-format on

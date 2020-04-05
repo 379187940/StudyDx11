@@ -399,7 +399,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BaseRenderObject.cpp" />
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="CubeLight.cpp">
@@ -424,10 +423,8 @@
     <None Include="quard.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\DligentEngine\DiligentEngine\DiligentSamples\SampleBase\include\Win32\InputControllerWin32.hpp" />
     <ClInclude Include="BaseRenderObject.h" />
     <ClInclude Include="BasicMath.hpp" />
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeLight.h" />
@@ -436,6 +433,7 @@
     <ClInclude Include="GLTFLoader.hpp" />
     <ClInclude Include="HashUtils.hpp" />
     <ClInclude Include="InputController.hpp" />
+    <ClInclude Include="InputControllerWin32.hpp" />
     <ClInclude Include="IObject.h" />
     <ClInclude Include="IRenderObject.h" />
     <ClInclude Include="json.hpp" />
