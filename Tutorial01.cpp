@@ -60,6 +60,8 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 
     // Main message loop
     MSG msg = {0};
+	Timer Timer;
+	auto   PrevTime = Timer.GetElapsedTime();
     while( WM_QUIT != msg.message )
     {
         if( PeekMessage( &msg, NULL, 0, 0, PM_REMOVE ) )
@@ -69,6 +71,10 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
         }
         else
         {
+			auto CurrTime = Timer.GetElapsedTime();
+			auto ElapsedTime = CurrTime - PrevTime;
+			PrevTime = CurrTime;
+			g_Scene.UpdateInput(g_inputController, ElapsedTime);
             Render();
         }
     }
@@ -298,7 +304,7 @@ void Render()
 	g_Scene.UpdateRenderParams(renderParams);
     g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, ClearColor );
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
-	static 
+	
 	g_Scene.Render(GetTickCount());
 	TwDraw();
     g_pSwapChain->Present( 0, 0 );

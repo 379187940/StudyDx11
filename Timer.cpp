@@ -51,11 +51,11 @@ T GetElapsedTime(high_resolution_clock::time_point StartTime)
 
 double Timer::GetElapsedTime() const
 {
-    return GetElapsedTime<double>(m_StartTime);
+    return ::GetElapsedTime<double>(m_StartTime);
 }
 
 float Timer::GetElapsedTimef() const
 {
 
-    return GetElapsedTime<float>(m_StartTime);
+    return ::GetElapsedTime<float>(m_StartTime);
 }

@@ -15,6 +15,6 @@ using namespace std;
 #include "InputController.hpp"
 #include "InputControllerWin32.hpp"
 #include "FirstPersonCamera.hpp"
-
+#include "Timer.hpp"
 //#include "xnamath.h"
 
