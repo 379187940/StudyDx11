@@ -24,12 +24,9 @@
  *  all other commercial damages or losses), even if such Contributor has been advised 
  *  of the possibility of such damages.
  */
-
+#include "unit.h"
 #include "FirstPersonCamera.hpp"
 #include <algorithm>
-
-namespace Diligent
-{
 
 void FirstPersonCamera::Update(InputController& Controller, float ElapsedTime)
 {
@@ -86,8 +83,8 @@ void FirstPersonCamera::Update(InputController& Controller, float ElapsedTime)
         {
             m_fYawAngle += fYawDelta * -m_fHandness;
             m_fPitchAngle += fPitchDelta * -m_fHandness;
-            m_fPitchAngle = std::max(m_fPitchAngle, -PI_F / 2.f);
-            m_fPitchAngle = std::min(m_fPitchAngle, +PI_F / 2.f);
+            m_fPitchAngle = (std::max)(m_fPitchAngle, -PI_F / 2.f);
+            m_fPitchAngle = (std::min)(m_fPitchAngle, +PI_F / 2.f);
         }
     }
 
@@ -180,5 +177,3 @@ void FirstPersonCamera::SetSpeedUpScales(float SpeedUpScale, float SuperSpeedUpS
     m_fSpeedUpScale      = SpeedUpScale;
     m_fSuperSpeedUpScale = SuperSpeedUpScale;
 }
-
-} // namespace Diligent

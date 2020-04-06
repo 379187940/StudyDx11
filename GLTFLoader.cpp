@@ -462,6 +462,7 @@ ID3D11ShaderResourceView* Model::GetResourceView(ITexture* pTexture)
 		if (Textures[i] == pTexture)
 			return ResoruceView[i];
 	}
+	return NULL;
 }
 CComPtr<ISampler> Model::GetSampler(ITexture* pTexture)
 {

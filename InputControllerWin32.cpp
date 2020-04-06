@@ -33,8 +33,6 @@
 #endif
 #include "Windows.h"
 
-namespace Diligent
-{
 
 InputKeys MapCameraKeyWnd(UINT nKey)
 {
@@ -265,5 +263,3 @@ void InputControllerWin32::UpdateMousePos()
         m_ptLastMousePosition = ptCenter;
     }*/
 }
-
-} // namespace Diligent

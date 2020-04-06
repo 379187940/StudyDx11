@@ -28,6 +28,7 @@ ID3D11Texture2D*        g_pDepthStencil = NULL;
 ID3D11DepthStencilView* g_pDepthStencilView = NULL;
 XMMATRIX g_World, g_View, g_Projection;
 LONG g_width = 640, g_height= 480;
+InputController g_inputController;
 //--------------------------------------------------------------------------------------
 // Forward declarations
 //--------------------------------------------------------------------------------------
@@ -127,6 +128,16 @@ LRESULT CALLBACK WndProc( HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam 
     HDC hdc;
 	if (TwEventWin(hWnd, message, wParam, lParam))
 		return 0; // Event has been handled by AntTweakBar
+	struct WindowsMessageData
+	{
+		HWND   hWnd;
+		UINT   message;
+		WPARAM wParam;
+		LPARAM lParam;
+	} MsgData = { hWnd, message, wParam, lParam };
+	if (g_inputController.HandleNativeMessage(&MsgData))
+		return 0;
+	
     switch( message )
     {
         case WM_PAINT:
@@ -287,6 +298,7 @@ void Render()
 	g_Scene.UpdateRenderParams(renderParams);
     g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, ClearColor );
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+	static 
 	g_Scene.Render(GetTickCount());
 	TwDraw();
     g_pSwapChain->Present( 0, 0 );

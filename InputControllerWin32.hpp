@@ -27,8 +27,6 @@
 
 #pragma once
 
-namespace Diligent
-{
 
 class InputControllerWin32 : public InputControllerBase
 {
@@ -42,5 +40,3 @@ public:
 private:
     void UpdateMousePos();
 };
-
-} // namespace Diligent

@@ -7,10 +7,14 @@
 #include <string>
 //#include <Windows.h>
 #include "atlstr.h"
+using namespace Diligent;
+using namespace std;
 #include "Common.h"
 #include "FreeImage.h"
 #include <map>
-using namespace Diligent;
-using namespace std;
+#include "InputController.hpp"
+#include "InputControllerWin32.hpp"
+#include "FirstPersonCamera.hpp"
+
 //#include "xnamath.h"
 

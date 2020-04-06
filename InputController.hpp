@@ -44,8 +44,7 @@ using _UNDERLYING_ENUM_T = typename std::underlying_type<EnumType>::type;
             inline constexpr ENUMTYPE operator^(ENUMTYPE a, ENUMTYPE b) throw() { return static_cast<ENUMTYPE>(static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(a) ^ static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(b)); }                \
             inline constexpr ENUMTYPE operator~(ENUMTYPE a) throw() { return static_cast<ENUMTYPE>(~static_cast<_UNDERLYING_ENUM_T<ENUMTYPE>>(a)); }                                                                          \
         }
-namespace Diligent
-{
+
 
 struct MouseState
 {
@@ -128,13 +127,5 @@ protected:
     MouseState            m_MouseState;
     INPUT_KEY_STATE_FLAGS m_Keys[static_cast<size_t>(InputKeys::TotalKeys)] = {};
 };
-
-} // namespace Diligent
-
-// clang-format off
-    #include "InputControllerWin32.hpp"
-    namespace Diligent
-    {
-        using InputController = InputControllerWin32;
-    }
-// clang-format on
+#include "InputControllerWin32.hpp"
+using InputController = InputControllerWin32;

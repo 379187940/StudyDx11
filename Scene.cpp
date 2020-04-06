@@ -74,7 +74,27 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	
 	pResource->Release();
 	m_quardDepth->SetDepthTexture(m_pDepthTextureSRV);
+
+	m_pCmaera = new FirstPersonCamera();
+	UpdateCamera(float3(0, 0, -10.0f),
+		float3(0.0f, 0.0f, 0.0f),
+		0.1f,
+		1000.0f
+	);
 	return true;
+}
+void CScene::UpdateInput(InputController& Controller, float ElapsedTime)
+{
+	m_pCmaera->Update(Controller, ElapsedTime);
+}
+void CScene::UpdateCamera(float3 cameraPos, float3 lookAt, float nearClipPlane, float farClipPlane)
+{
+	m_pCmaera->SetPos(cameraPos);
+	m_pCmaera->SetLookAt(lookAt);
+	static UINT numPort = 1;
+	D3D11_VIEWPORT viewPort;
+	m_pD3d11Context->RSGetViewports(&numPort, &viewPort);
+	m_pCmaera->SetProjAttribs(0.1f, 1000.0f, viewPort.Width / viewPort.Height, PI_F / 4.0f, false);
 }
 bool CScene::RegisterObject(IRenderObject* pRenderObject)
 {

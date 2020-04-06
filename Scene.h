@@ -5,6 +5,7 @@
 #include "AntTweakBar.h"
 struct RenderParam;
 class CQuard;
+class FirstPersonCamera;
 using namespace std;
 class CScene
 {
@@ -19,6 +20,7 @@ public:
 	//Tutoral Scene in general not use
 	bool LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext);
 	bool Release();
+	void UpdateInput(InputController& Controller, float ElapsedTime);
 protected:
 	static void TW_CALL SetObjectVisible(const void *value, void * /*clientData*/);
 	static void TW_CALL GetObjectVisible(void *value, void * /*clientData*/);
@@ -28,6 +30,7 @@ protected:
 
 protected:
 	void BuildUi();
+	void UpdateCamera(float3 cameraPos, float3 lookAt, float nearClipPlane , float farClipPlane );
 	void SetRenderDepth(bool bDrawDepth) { m_bDrawDepth = bDrawDepth; }
 	bool IsDrawDepth() { return m_bDrawDepth; }
 private:
@@ -37,7 +40,7 @@ private:
 	ID3D11DeviceContext* m_pD3d11Context = NULL;
 	ID3D11ShaderResourceView*    m_pDepthTextureSRV = NULL;
 	CQuard* m_quardDepth = NULL;
-	
+	FirstPersonCamera* m_pCmaera = NULL ;
 };
 extern CScene g_Scene;
 
