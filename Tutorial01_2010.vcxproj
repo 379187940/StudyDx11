@@ -412,6 +412,7 @@
     <ClCompile Include="ObjModel.cpp" />
     <ClCompile Include="Quard.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Tutorial01.cpp" />
   </ItemGroup>
@@ -442,6 +443,7 @@
     <ClInclude Include="Quard.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Timer.hpp" />
     <ClInclude Include="tiny_gltf.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="unit.h" />
