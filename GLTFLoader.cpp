@@ -496,7 +496,7 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
 		texDesc.Width = gltf_image.width;
 		texDesc.ArraySize = 1;
 		texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		texDesc.Height = gltf_image.height;
 		texDesc.MiscFlags = 0;
 		texDesc.SampleDesc = { 1,0 };
@@ -515,7 +515,7 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
     {
         //pCtx->GenerateMips( Tex->get);
 		D3D11_SHADER_RESOURCE_VIEW_DESC shaViewDesc;
-		shaViewDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		shaViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 		shaViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 		shaViewDesc.Texture2D.MipLevels = 1;
 		shaViewDesc.Texture2D.MostDetailedMip = 0;
@@ -604,7 +604,7 @@ void Model::LoadTextureSamplers(IRenderDevice* pDevice, const tinygltf::Model& g
 	{
 		D3D11_SAMPLER_DESC sampDesc;
 		ZeroMemory(&sampDesc, sizeof(sampDesc));
-		sampDesc.Filter = D3D11_FILTER_MIN_MAG_POINT_MIP_LINEAR;
+		sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 		sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 		sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 		sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -980,12 +980,13 @@ bool LoadImageData(tinygltf::Image*     gltf_image,
 		{
 			for (UINT32 col = 0; col < gltf_image->width; ++col)
 			{
-				unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * (gltf_image->height - row-1)+ col * gltf_image->component;
+				unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * row+ col * gltf_image->component;
 				const unsigned char* SrcPixel = pSrcPixels + pitchByte* row + col * byte_per_pixel;
-
-				DstPixel[0] = SrcPixel[0];
-				DstPixel[1] = SrcPixel[1];
-				DstPixel[2] = SrcPixel[2];
+				RGBQUAD rgb;
+				FreeImage_GetPixelColor(image, col, row, &rgb);
+				DstPixel[0] = rgb.rgbRed;
+				DstPixel[1] = rgb.rgbGreen;
+				DstPixel[2] = rgb.rgbBlue;
 				DstPixel[3] = 1;
 			}
 		}
