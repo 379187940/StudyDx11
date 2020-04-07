@@ -27,7 +27,7 @@ ID3D11RenderTargetView* g_pRenderTargetView = NULL;
 ID3D11Texture2D*        g_pDepthStencil = NULL;
 ID3D11DepthStencilView* g_pDepthStencilView = NULL;
 float4x4 g_World, g_View, g_Projection;
-LONG g_width = 640, g_height= 480;
+LONG g_width = 1024, g_height= 768;
 InputController g_inputController;
 //--------------------------------------------------------------------------------------
 // Forward declarations

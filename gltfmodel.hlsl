@@ -75,7 +75,7 @@ SamplerState samLinear : register(s0);
 #endif
 struct vs_input
 {
-	float4 postion:POSITION;
+	float3 postion:POSITION;
 	float3 normal:NORMAL;
 	float2 texcoord:TEXCOORD0;
 	float2 texcoord1:TEXCOORD1;
@@ -97,9 +97,10 @@ cbuffer ConstantBuffer : register(b0)
 vs_out vs_main(vs_input input)
 {
 	vs_out temp;
-	temp.postion = mul(input.postion, World);
-	temp.postion = mul(temp.postion, View);
-	temp.postion = mul(temp.postion, Projection);
+	
+	temp.postion = mul(float4(input.postion,1.0f), World);
+	//temp.postion = mul(temp.postion, View);
+	//temp.postion = mul(temp.postion, Projection);
 	temp.texcoord = input.texcoord;
 	return temp;
 }
@@ -107,7 +108,7 @@ vs_out vs_main(vs_input input)
 float4 ps_main(vs_out vsout) : SV_Target
 {
 #ifdef USE_TEX
-	return  diffuseTex.SampleLevel(samLinear, vsout.texcoord, 0);
+	return  diffuseTex.Sample(samLinear, vsout.texcoord);
 #else
 	return  float4(1,0,0,1);
 #endif

@@ -95,6 +95,7 @@ void CScene::UpdateCamera(float3 cameraPos, float3 lookAt, float nearClipPlane, 
 	D3D11_VIEWPORT viewPort;
 	m_pD3d11Context->RSGetViewports(&numPort, &viewPort);
 	m_pCmaera->SetProjAttribs(0.1f, 1000.0f, viewPort.Width / viewPort.Height, PI_F / 4.0f, false);
+	
 }
 bool CScene::RegisterObject(IRenderObject* pRenderObject)
 {
@@ -126,7 +127,9 @@ bool CScene::Render(DWORD dwTimes)
 bool CScene::UpdateRenderParams()
 {
 	RenderParams renderParams;
-	//renderParams.m_viewMatrix = m_pCmaera->GetViewMatrix();
+	renderParams.m_worldMatrix = Matrix4x4<float>::Identity();
+	renderParams.m_viewMatrix = m_pCmaera->GetViewMatrix();
+	renderParams.m_projMatrix = m_pCmaera->GetProjMatrix();
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
 		it->first->UpdateRenderParams(renderParams);

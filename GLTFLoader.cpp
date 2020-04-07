@@ -496,7 +496,7 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
 		texDesc.Width = gltf_image.width;
 		texDesc.ArraySize = 1;
 		texDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-		texDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		texDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		texDesc.Height = gltf_image.height;
 		texDesc.MiscFlags = 0;
 		texDesc.SampleDesc = { 1,0 };
@@ -515,7 +515,7 @@ void Model::LoadTextures(IRenderDevice*         pDevice,
     {
         //pCtx->GenerateMips( Tex->get);
 		D3D11_SHADER_RESOURCE_VIEW_DESC shaViewDesc;
-		shaViewDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+		shaViewDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 		shaViewDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 		shaViewDesc.Texture2D.MipLevels = 1;
 		shaViewDesc.Texture2D.MostDetailedMip = 0;
@@ -592,7 +592,7 @@ void Model::LoadTextureSamplers(IRenderDevice* pDevice, const tinygltf::Model& g
 		sampDesc.AddressU = GetWrapMode(smpl.wrapS);
 		sampDesc.AddressV = GetWrapMode(smpl.wrapT);
 		sampDesc.AddressW = sampDesc.AddressV;
-		sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		sampDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
 		sampDesc.MinLOD = 0;
 		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 		ID3D11SamplerState* pSampleState = NULL ;
@@ -608,7 +608,7 @@ void Model::LoadTextureSamplers(IRenderDevice* pDevice, const tinygltf::Model& g
 		sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
 		sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
 		sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
-		sampDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+		sampDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
 		sampDesc.MinLOD = 0;
 		sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 		ID3D11SamplerState* pSampleState = NULL;
@@ -980,7 +980,7 @@ bool LoadImageData(tinygltf::Image*     gltf_image,
 		{
 			for (UINT32 col = 0; col < gltf_image->width; ++col)
 			{
-				unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * row + col * gltf_image->component;
+				unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * (gltf_image->height - row-1)+ col * gltf_image->component;
 				const unsigned char* SrcPixel = pSrcPixels + pitchByte* row + col * byte_per_pixel;
 
 				DstPixel[0] = SrcPixel[0];
