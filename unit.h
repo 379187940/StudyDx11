@@ -7,6 +7,7 @@
 #include <string>
 //#include <Windows.h>
 #include "atlstr.h"
+#include <xnamath.h>
 using namespace Diligent;
 using namespace std;
 #include "Common.h"

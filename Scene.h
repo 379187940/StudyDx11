@@ -16,7 +16,7 @@ public:
 	bool RegisterObject(IRenderObject* pRenderObject);
 	void Tick(DWORD dwTimes);
 	bool Render(DWORD dwTimes);
-	bool UpdateRenderParams(const RenderParams& renderParams);
+	bool UpdateRenderParams();
 	//Tutoral Scene in general not use
 	bool LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext);
 	bool Release();

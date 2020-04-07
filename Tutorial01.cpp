@@ -26,7 +26,7 @@ IDXGISwapChain*         g_pSwapChain = NULL;
 ID3D11RenderTargetView* g_pRenderTargetView = NULL;
 ID3D11Texture2D*        g_pDepthStencil = NULL;
 ID3D11DepthStencilView* g_pDepthStencilView = NULL;
-XMMATRIX g_World, g_View, g_Projection;
+float4x4 g_World, g_View, g_Projection;
 LONG g_width = 640, g_height= 480;
 InputController g_inputController;
 //--------------------------------------------------------------------------------------
@@ -284,24 +284,24 @@ HRESULT InitDevice()
 //--------------------------------------------------------------------------------------
 void Render()
 {
-	//update matrix
-	g_World = XMMatrixIdentity();
+	////update matrix
+	//g_World = XMMatrixIdentity();
 
-	// Initialize the view matrix
-	XMVECTOR Eye = XMVectorSet(0.0f, 0.0f, -10.0f, 0.0f);
-	XMVECTOR At = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-	XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
-	g_View = XMMatrixLookAtLH(Eye, At, Up);
+	//// Initialize the view matrix
+	//XMVECTOR Eye = XMVectorSet(0.0f, 0.0f, -10.0f, 0.0f);
+	//XMVECTOR At = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	//XMVECTOR Up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+	//g_View = XMMatrixLookAtLH(Eye, At, Up);
 
-	// Initialize the projection matrix
-	g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, g_width / (FLOAT)g_height,0.0001f, 100.0f);
-	RenderParams renderParams;
-	renderParams.m_worldMatrix = g_World;
-	renderParams.m_viewMatrix = g_View;
-	renderParams.m_projMatrix = g_Projection;
+	//// Initialize the projection matrix
+	//g_Projection = XMMatrixPerspectiveFovLH(XM_PIDIV4, g_width / (FLOAT)g_height,0.0001f, 100.0f);
+	//RenderParams renderParams;
+	//renderParams.m_worldMatrix = g_World;
+	//renderParams.m_viewMatrix = g_View;
+	//renderParams.m_projMatrix = g_Projection;
     // Just clear the backbuffer
     float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; //red,green,blue,alpha
-	g_Scene.UpdateRenderParams(renderParams);
+	g_Scene.UpdateRenderParams();
     g_pImmediateContext->ClearRenderTargetView( g_pRenderTargetView, ClearColor );
 	g_pImmediateContext->ClearDepthStencilView(g_pDepthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
 	

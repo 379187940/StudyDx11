@@ -13,15 +13,15 @@ class CCube :
 	};
 	struct TestConstantBuffer
 	{
-		XMMATRIX mWorld;
+		float4x4 mWorld;
 	};
 	struct TestConstantBuffer1
 	{
-		XMMATRIX mView;
+		float4x4 mView;
 	};
 	struct ConstantBuffer
 	{
-		XMMATRIX mProjection;
+		float4x4 mProjection;
 	};
 public:
 	CCube(wstring strName);

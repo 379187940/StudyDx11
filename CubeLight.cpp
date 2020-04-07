@@ -158,10 +158,10 @@ bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 	static DWORD step = 0;
 	step = (step + 1) % 3600;
 	ConstantBuffer cb;
-	XMMATRIX temp = XMMatrixTranslation(-2.5f, 0.0f, 0.0f) *XMMatrixScaling(0.5f, 0.5f, 0.5f);
-	cb.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix*temp);
-	cb.mView = XMMatrixTranspose( renderParams.m_viewMatrix);
-	cb.mProjection = XMMatrixTranspose(renderParams.m_projMatrix);
+	float4x4 temp = Matrix4x4<float>::Translation(-2.5f, 0.0f, 0.0f) *Matrix4x4<float>::Scale(0.5f, 0.5f, 0.5f);
+	cb.mWorld = renderParams.m_worldMatrix*temp.Transpose();
+	cb.mView = renderParams.m_viewMatrix.Transpose();
+	cb.mProjection = renderParams.m_projMatrix.Transpose();
 	//cb.mProjection = renderParams.m_projMatrix;
 	XMFLOAT4 vLightDirs[2] =
 	{
@@ -173,9 +173,9 @@ bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 		XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),
 		XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f)
 	};
-	XMMATRIX mRotate = XMMatrixRotationY(step/3600.f*2*XM_PI);
+	float4x4 mRotate = Matrix4x4<float>::RotationY(step/3600.f*2*XM_PI);
 	XMVECTOR vLightDir = XMLoadFloat4(&vLightDirs[1]);
-	vLightDir = XMVector3Transform(vLightDir, mRotate);
+	vLightDir = vLightDir, mRotate;
 	XMStoreFloat4(&vLightDirs[1], vLightDir);
 	cb.vLightDir[0] = vLightDirs[0];
 	cb.vLightDir[1] = vLightDirs[1];

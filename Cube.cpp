@@ -138,9 +138,9 @@ bool CCube::UpdateRenderParams(const RenderParams& renderParams)
 	ConstantBuffer cb;
 	TestConstantBuffer cb1;
 	TestConstantBuffer1 cb2;
-	cb1.mWorld = XMMatrixTranspose(renderParams.m_worldMatrix);
-	cb2.mView = XMMatrixTranspose(renderParams.m_viewMatrix);
-	cb.mProjection = XMMatrixTranspose(renderParams.m_projMatrix);
+	cb1.mWorld = renderParams.m_worldMatrix.Transpose();
+	cb2.mView = renderParams.m_viewMatrix.Transpose();
+	cb.mProjection = renderParams.m_projMatrix.Transpose();
 	m_pContext->UpdateSubresource(m_pConstBuffer, 0, NULL, &cb, 0, 0);
 	D3D11_MAPPED_SUBRESOURCE mapSubResource;
 	m_pContext->Map(m_pConstBufferTest, 0, D3D11_MAP_WRITE_DISCARD, 0, &mapSubResource);

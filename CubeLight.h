@@ -13,9 +13,9 @@ class CCubeLight :
 	};
 	struct ConstantBuffer
 	{
-		XMMATRIX mWorld;
-		XMMATRIX mView;
-		XMMATRIX mProjection;
+		float4x4 mWorld;
+		float4x4 mView;
+		float4x4 mProjection;
 		XMFLOAT4 vLightDir[2];
 		XMFLOAT4 vLightColor[2];
 	};

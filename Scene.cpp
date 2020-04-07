@@ -123,8 +123,10 @@ bool CScene::Render(DWORD dwTimes)
 	}
 	return true;
 }
-bool CScene::UpdateRenderParams(const RenderParams& renderParams)
+bool CScene::UpdateRenderParams()
 {
+	RenderParams renderParams;
+	//renderParams.m_viewMatrix = m_pCmaera->GetViewMatrix();
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
 		it->first->UpdateRenderParams(renderParams);

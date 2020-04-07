@@ -124,10 +124,11 @@ bool CGLTF::UpdateRenderParams(const RenderParams& renderParams)
 {
 	globalmatrix glbMatrix;
 	
-	glbMatrix.world = XMMatrixTranspose(renderParams.m_worldMatrix);
-	glbMatrix.world = glbMatrix.world * XMMatrixRotationX(-PI / 2) *XMMatrixScaling(4.0,4.0,4.0);
-	glbMatrix.view = XMMatrixTranspose(renderParams.m_viewMatrix);
-	glbMatrix.proj = XMMatrixTranspose(renderParams.m_projMatrix);
+	glbMatrix.world = renderParams.m_worldMatrix.Transpose();
+	
+	glbMatrix.world = glbMatrix.world * Matrix4x4<float>::RotationY(-PI/2);
+	glbMatrix.view = renderParams.m_viewMatrix.Transpose();
+	glbMatrix.proj = renderParams.m_projMatrix.Transpose();
 	m_pContext->UpdateSubresource(m_TransMatrixBuffer, 0, nullptr, &glbMatrix, 0, 0);
 	return true;
 }

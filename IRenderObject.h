@@ -3,15 +3,13 @@
 #include <xnamath.h>
 struct RenderParams
 {
-	XMMATRIX m_worldMatrix;
-	XMMATRIX m_viewMatrix;
-	XMMATRIX m_projMatrix;
+	float4x4 m_worldMatrix;
+	float4x4 m_viewMatrix;
+	float4x4 m_projMatrix;
 
 	RenderParams()
 	{
-		m_worldMatrix = XMMatrixIdentity();
-		m_viewMatrix = XMMatrixIdentity();
-		m_projMatrix = XMMatrixIdentity();
+		
 	}
 };
 class IRenderObject :
