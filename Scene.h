@@ -21,6 +21,7 @@ public:
 	bool LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext);
 	bool Release();
 	void UpdateInput(InputController& Controller, float ElapsedTime);
+	FirstPersonCamera* GetCamera() { return m_pCmaera; }
 protected:
 	static void TW_CALL SetObjectVisible(const void *value, void * /*clientData*/);
 	static void TW_CALL GetObjectVisible(void *value, void * /*clientData*/);

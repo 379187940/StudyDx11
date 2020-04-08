@@ -11,6 +11,7 @@ public:
     void SetRotation(float Yaw, float Pitch);
     void SetLookAt(const float3& LookAt);
     void SetMoveSpeed(float MoveSpeed) { m_fMoveSpeed = MoveSpeed; }
+	float GetMoveSpeed() { return m_fMoveSpeed; }
     void SetRotationSpeed(float RotationSpeed) { m_fRotationSpeed = RotationSpeed; }
     void SetPos(const float3& Pos) { m_Pos = Pos; }
     void SetProjAttribs(float NearClipPlane,

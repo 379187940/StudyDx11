@@ -81,6 +81,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 		0.1f,
 		1000.0f
 	);
+	m_pCmaera->SetMoveSpeed(5.0f);
 	return true;
 }
 void CScene::UpdateInput(InputController& Controller, float ElapsedTime)
@@ -175,4 +176,14 @@ void CScene::BuildUi()
 	}
 	TwBar *debugPanel = TwNewBar("Debug Panel");
 	TwAddVarCB(debugPanel, "RenderDepth", TW_TYPE_BOOLCPP, SetRenderDepth, GetRenderDepth, this, "");
+	TwAddVarCB(debugPanel, "MoveSpeed", TW_TYPE_FLOAT, 
+		[](const void *value, void * clientData) {
+		float fSpeed = *static_cast<const float *>(value);
+		g_Scene.GetCamera()->SetMoveSpeed(fSpeed);
+	}
+		,
+		[](void *value, void * clientData) {
+		*static_cast<float *>(value) = g_Scene.GetCamera()->GetMoveSpeed();
+	}, 
+		this, "");
 }

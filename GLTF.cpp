@@ -123,13 +123,12 @@ bool CGLTF::Render(DWORD dwTimes)
 bool CGLTF::UpdateRenderParams(const RenderParams& renderParams)
 {
 	globalmatrix glbMatrix;
-	
-	glbMatrix.world = renderParams.m_worldMatrix;
-	
-	glbMatrix.world = glbMatrix.world * Matrix4x4<float>::RotationX(PI/2) * renderParams.m_viewMatrix * renderParams.m_projMatrix;
-	glbMatrix.world = glbMatrix.world.Transpose();
-	/*glbMatrix.view = renderParams.m_viewMatrix.Transpose();
-	glbMatrix.proj = renderParams.m_projMatrix.Transpose();*/
+
+	glbMatrix.world = renderParams.m_worldMatrix.Transpose();
+
+	glbMatrix.world = glbMatrix.world * Matrix4x4<float>::RotationY(-PI / 2);
+	glbMatrix.view = renderParams.m_viewMatrix.Transpose();
+	glbMatrix.proj = renderParams.m_projMatrix.Transpose();
 	m_pContext->UpdateSubresource(m_TransMatrixBuffer, 0, nullptr, &glbMatrix, 0, 0);
 	return true;
 }

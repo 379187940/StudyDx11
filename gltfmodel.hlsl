@@ -99,8 +99,8 @@ vs_out vs_main(vs_input input)
 	vs_out temp;
 	
 	temp.postion = mul(float4(input.postion,1.0f), World);
-	//temp.postion = mul(temp.postion, View);
-	//temp.postion = mul(temp.postion, Projection);
+	temp.postion = mul(temp.postion, View);
+	temp.postion = mul(temp.postion, Projection);
 	temp.texcoord = input.texcoord;
 	return temp;
 }
