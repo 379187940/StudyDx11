@@ -150,7 +150,14 @@ void FirstPersonCamera::SetLookAt(const float3& LookAt)
     float fXZLen  = sqrtf(ViewDir.z * ViewDir.z + ViewDir.x * ViewDir.x);
     m_fPitchAngle = -atan2f(ViewDir.y, fXZLen);
 }
-
+Quaternion FirstPersonCamera::GetRotation()
+{
+	float4x4 ReferenceRotation = GetReferenceRotiation();
+	float4x4 CameraRotation = float4x4::RotationArbitrary(m_ReferenceUpAxis, m_fYawAngle) *
+		float4x4::RotationArbitrary(m_ReferenceRightAxis, m_fPitchAngle) *
+		ReferenceRotation;
+	return Quaternion::MakeFromMatrix(CameraRotation);
+}
 void FirstPersonCamera::SetRotation(float Yaw, float Pitch)
 {
     m_fYawAngle   = Yaw;

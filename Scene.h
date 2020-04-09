@@ -42,6 +42,7 @@ private:
 	ID3D11ShaderResourceView*    m_pDepthTextureSRV = NULL;
 	CQuard* m_quardDepth = NULL;
 	FirstPersonCamera* m_pCmaera = NULL ;
+	Quaternion m_rotation;
 };
 extern CScene g_Scene;
 

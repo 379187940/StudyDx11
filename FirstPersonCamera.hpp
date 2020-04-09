@@ -9,6 +9,7 @@ class FirstPersonCamera
 public:
     void Update(InputController& Controller, float ElapsedTime);
     void SetRotation(float Yaw, float Pitch);
+	Quaternion GetRotation();
     void SetLookAt(const float3& LookAt);
     void SetMoveSpeed(float MoveSpeed) { m_fMoveSpeed = MoveSpeed; }
 	float GetMoveSpeed() { return m_fMoveSpeed; }

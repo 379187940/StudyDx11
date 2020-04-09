@@ -1747,7 +1747,69 @@ struct Quaternion
     {
         return Quaternion{float4::MakeVector(it)};
     }
+	static Quaternion MakeFromMatrix(const float4x4& matrix)
+	{
+		float m11=matrix.m11, m12 = matrix.m12, m13 = matrix.m13;
+		float m21 = matrix.m21, m22 = matrix.m22, m23 = matrix.m23;
+		float m31 = matrix.m31, m32 = matrix.m32, m33 = matrix.m33;
 
+		float w, x, y, z;
+
+
+		//探测四元数中最大的项 
+		float fourWSquaredMinusl = m11 + m22 + m33;
+		float fourXSquaredMinusl = m11 - m22 - m33;
+		float fourYSquaredMinusl = m22 - m11 - m33;
+		float fourZSquaredMinusl = m33 - m11 - m22;
+
+		int biggestIndex = 0;
+		float fourBiggestSqureMinus1 = fourWSquaredMinusl;
+		if (fourXSquaredMinusl>fourBiggestSqureMinus1) {
+			fourBiggestSqureMinus1 = fourXSquaredMinusl;
+			biggestIndex = 1;
+		}
+		if (fourYSquaredMinusl>fourBiggestSqureMinus1) {
+			fourBiggestSqureMinus1 = fourYSquaredMinusl;
+			biggestIndex = 2;
+		}
+		if (fourZSquaredMinusl>fourBiggestSqureMinus1) {
+			fourBiggestSqureMinus1 = fourZSquaredMinusl;
+			biggestIndex = 3;
+		}
+
+		//计算平方根和除法 
+		float biggestVal = sqrt(fourBiggestSqureMinus1 + 1.0f)*0.5f;
+		float mult = 0.25f / biggestVal;
+
+		//计算四元数的值
+		switch (biggestIndex) {
+		case 0:
+			w = biggestVal;
+			x = (m23 - m32)*mult;
+			y = (m31 - m13)*mult;
+			z = (m12 - m21)*mult;
+			break;
+		case 1:
+			x = biggestVal;
+			w = (m23 - m32)*mult;
+			y = (m12 + m21)*mult;
+			z = (m31 + m13)*mult;
+			break;
+		case 2:
+			y = biggestVal;
+			w = (m31 - m13)*mult;
+			x = (m12 + m21)*mult;
+			z = (m23 + m32)*mult;
+			break;
+		case 3:
+			z = biggestVal;
+			w = (m12 - m21)*mult;
+			x = (m31 + m13)*mult;
+			y = (m23 + m32)*mult;
+			break;
+		}
+		return Quaternion(w, x, y, z);
+	}
     static Quaternion RotationFromAxisAngle(const float3& axis, float angle)
     {
         Quaternion out{0, 0, 0, 1};

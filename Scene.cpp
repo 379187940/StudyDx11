@@ -56,7 +56,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	//RegisterObject(pNewCube);
 	//RegisterObject(pNewCubeLight);
 	RegisterObject(pNewGltf);
-	BuildUi();
+	
 	HRESULT hr = S_FALSE ;
 	ID3D11RenderTargetView* pRenderTargetView = NULL;
 	ID3D11DepthStencilView* pDepthView = NULL;
@@ -82,6 +82,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 		1000.0f
 	);
 	m_pCmaera->SetMoveSpeed(5.0f);
+	BuildUi();
 	return true;
 }
 void CScene::UpdateInput(InputController& Controller, float ElapsedTime)
@@ -135,6 +136,7 @@ bool CScene::UpdateRenderParams()
 	{
 		it->first->UpdateRenderParams(renderParams);
 	}
+	m_rotation = g_Scene.m_pCmaera->GetRotation();
 	return true;
 }
 void TW_CALL CScene::SetRenderDepth(const void *value, void * clientData)
@@ -190,17 +192,7 @@ void CScene::BuildUi()
 		*static_cast<float *>(value) = g_Scene.GetCamera()->GetMoveSpeed();
 	}, 
 		this, "");
-
-	/*TwAddVarCB(debugPanel, "Camera", TW_TYPE_QUAT4F,
-		[](const void *value, void * clientData) {
-		float4 fCamera = *static_cast<const float4 *>(value);
-		Quaternion quat(fCamera);
-		float4x4 matrix = quat.ToMatrix();
-		g_Scene.GetCamera()->;
-	}
-		,
-		[](void *value, void * clientData) {
-		*static_cast<float *>(value) = g_Scene.GetCamera()->GetMoveSpeed();
-	},
-		this, "");*/
+	//Quaternion
+	
+	TwAddVarRO(debugPanel, "Camera", TW_TYPE_QUAT4F, &m_rotation, "");
 }
