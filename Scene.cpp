@@ -172,10 +172,14 @@ void CScene::BuildUi()
 			continue;
 		wcstombs(temp, pRenderObject->GetName().data(), MAX_PATH);
 		sprintf_s(tempKey, MAX_PATH, "group=Sponge key=%d", it->second);
-		TwAddVarCB(showObjectBar, temp, TW_TYPE_BOOLCPP, SetObjectVisible, GetObjectVisible, it->first, tempKey);
+		TwAddVarCB(showObjectBar, temp, TW_TYPE_BOOLCPP, 
+			SetObjectVisible, 
+			GetObjectVisible, 
+			it->first, tempKey);
 	}
 	TwBar *debugPanel = TwNewBar("Debug Panel");
-	TwAddVarCB(debugPanel, "RenderDepth", TW_TYPE_BOOLCPP, SetRenderDepth, GetRenderDepth, this, "");
+	//TwAddVarCB(debugPanel, "RenderDepth", TW_TYPE_BOOLCPP, SetRenderDepth, GetRenderDepth, this, "");
+	TwAddVarRW(debugPanel, "RenderDepth", TW_TYPE_BOOLCPP, &m_bDrawDepth, "group=RenderParams key=a");
 	TwAddVarCB(debugPanel, "MoveSpeed", TW_TYPE_FLOAT, 
 		[](const void *value, void * clientData) {
 		float fSpeed = *static_cast<const float *>(value);
@@ -186,4 +190,17 @@ void CScene::BuildUi()
 		*static_cast<float *>(value) = g_Scene.GetCamera()->GetMoveSpeed();
 	}, 
 		this, "");
+
+	/*TwAddVarCB(debugPanel, "Camera", TW_TYPE_QUAT4F,
+		[](const void *value, void * clientData) {
+		float4 fCamera = *static_cast<const float4 *>(value);
+		Quaternion quat(fCamera);
+		float4x4 matrix = quat.ToMatrix();
+		g_Scene.GetCamera()->;
+	}
+		,
+		[](void *value, void * clientData) {
+		*static_cast<float *>(value) = g_Scene.GetCamera()->GetMoveSpeed();
+	},
+		this, "");*/
 }
