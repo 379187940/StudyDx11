@@ -408,6 +408,7 @@
     <ClCompile Include="GLTF.cpp" />
     <ClCompile Include="GLTFLoader.cpp" />
     <ClCompile Include="InputControllerWin32.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="MeshLoader11.cpp" />
     <ClCompile Include="ObjModel.cpp" />
     <ClCompile Include="Quard.cpp" />
@@ -438,6 +439,7 @@
     <ClInclude Include="IObject.h" />
     <ClInclude Include="IRenderObject.h" />
     <ClInclude Include="json.hpp" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="MeshLoader11.h" />
     <ClInclude Include="ObjModel.h" />
     <ClInclude Include="Quard.h" />

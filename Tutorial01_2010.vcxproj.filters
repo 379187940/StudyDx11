@@ -23,6 +23,9 @@
     <Filter Include="Input">
       <UniqueIdentifier>{848c10df-d494-4cb5-b15e-ed5870714f59}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{0106b244-e399-4876-b1d7-3170f4055679}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderObject.h">
@@ -39,9 +42,6 @@
     </ClInclude>
     <ClInclude Include="IObject.h">
       <Filter>RenderObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene.h">
-      <Filter>MainFile</Filter>
     </ClInclude>
     <ClInclude Include="unit.h" />
     <ClInclude Include="BaseRenderObject.h">
@@ -89,6 +89,12 @@
     <ClInclude Include="Timer.hpp">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Light.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -99,9 +105,6 @@
     </ClCompile>
     <ClCompile Include="CubeLight.cpp">
       <Filter>RenderObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene.cpp">
-      <Filter>MainFile</Filter>
     </ClCompile>
     <ClCompile Include="Tutorial01.cpp">
       <Filter>MainFile</Filter>
@@ -135,6 +138,12 @@
     </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Light.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

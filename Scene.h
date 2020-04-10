@@ -22,6 +22,7 @@ public:
 	bool Release();
 	void UpdateInput(InputController& Controller, float ElapsedTime);
 	FirstPersonCamera* GetCamera() { return m_pCmaera; }
+	const CDirLight* GetMainLight() { return m_pMainLight; }
 protected:
 	static void TW_CALL SetObjectVisible(const void *value, void * /*clientData*/);
 	static void TW_CALL GetObjectVisible(void *value, void * /*clientData*/);
@@ -43,6 +44,7 @@ private:
 	CQuard* m_quardDepth = NULL;
 	FirstPersonCamera* m_pCmaera = NULL ;
 	Quaternion m_rotation;
+	CDirLight* m_pMainLight;
 };
 extern CScene g_Scene;
 

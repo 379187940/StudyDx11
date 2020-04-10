@@ -12,6 +12,7 @@
 #include "tiny_gltf.h"
 #include "GLTFLoader.hpp"
 #include "GLTF.h"
+#include "light.h"
 CScene g_Scene;
 CScene::CScene()
 {
@@ -21,7 +22,8 @@ CScene::CScene()
 
 CScene::~CScene()
 {
-	
+	delete m_pCmaera;
+	delete m_pMainLight;
 }
 bool CScene::Release()
 {
@@ -83,6 +85,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	);
 	m_pCmaera->SetMoveSpeed(5.0f);
 	BuildUi();
+	m_pMainLight = new CDirLight(float3(1, -1, 1), float4(1.0f, 1.0f, 1.0f, 1.0f));
 	return true;
 }
 void CScene::UpdateInput(InputController& Controller, float ElapsedTime)

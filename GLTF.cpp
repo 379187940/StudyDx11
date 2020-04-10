@@ -4,6 +4,8 @@
 #include<tchar.h>
 #include "tiny_gltf.h"
 #include "GLTFLoader.hpp"
+#include "Scene.h"
+#include "light.h"
 using namespace Diligent::GLTF;
 //using namespace 
 CGLTF::CGLTF(wstring strName):
@@ -91,6 +93,7 @@ bool CGLTF::Render(DWORD dwTimes)
 	ID3D11Buffer*pTemp =  m_TransMatrixBuffer;
 	m_pContext->VSSetConstantBuffers(0, 1, &pTemp);
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pContext->VSSetConstantBuffers(1, 1, &m_LightInfoBuffer);
 	//m_pContext->DrawIndexed(36, 0, 0);
 	//Update
 	UINT stride = sizeof(Model::Vertex);
@@ -103,32 +106,50 @@ bool CGLTF::Render(DWORD dwTimes)
 	{
 		for (auto& primitive : Node->_Mesh->Primitives)
 		{
-			if (primitive->material.pBaseColorTexture == NULL)
-			{
-				m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
-			}
-			else
-			{
-				m_pContext->PSSetShader(m_PixelShaderUseTex, NULL, 0);
-				ID3D11ShaderResourceView* pTextureResourceView = m_pGLTFModel->GetResourceView(primitive->material.pBaseColorTexture);
-				m_pContext->PSSetShaderResources(0, 1, &pTextureResourceView);
-				ID3D11SamplerState* pSamplerState = m_pGLTFModel->GetSampler(primitive->material.pBaseColorTexture);
-				m_pContext->PSSetSamplers(0, 1, &pSamplerState);
-			}
-			m_pContext->DrawIndexed(primitive->IndexCount, primitive->FirstIndex, 0);
+			DrawPrimitive(primitive);
 		}
 	}
 	return false;
 }
+bool CGLTF::DrawPrimitive(std::unique_ptr<Primitive>& primitive) const
+{
+	if (primitive->material.pBaseColorTexture == NULL)
+	{
+		m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
+		const Diligent::GLTF::Material& materialSrc = primitive->material;
+		material materialDst;
+		materialDst.alpha = materialSrc.AlphaCutoff;
+		materialDst.ambient = float3(0.2f, 0.2f, 0.2f);
+		materialDst.bSpecular = true;
+		materialDst.diffuse = materialSrc.;
+		materialDst.shininess = materialSrc.MetallicFactor;
+		materialDst.specular
+	}
+	else
+	{
+		m_pContext->PSSetShader(m_PixelShaderUseTex, NULL, 0);
+		ID3D11ShaderResourceView* pTextureResourceView = m_pGLTFModel->GetResourceView(primitive->material.pBaseColorTexture);
+		m_pContext->PSSetShaderResources(0, 1, &pTextureResourceView);
+		ID3D11SamplerState* pSamplerState = m_pGLTFModel->GetSampler(primitive->material.pBaseColorTexture);
+		m_pContext->PSSetSamplers(0, 1, &pSamplerState);
+	}
+	m_pContext->DrawIndexed(primitive->IndexCount, primitive->FirstIndex, 0);
+}
 bool CGLTF::UpdateRenderParams(const RenderParams& renderParams)
 {
+	//update transform
 	globalmatrix glbMatrix;
-
 	glbMatrix.world = renderParams.m_worldMatrix.Transpose();
-
 	glbMatrix.world = glbMatrix.world * Matrix4x4<float>::RotationY(-PI / 2);
 	glbMatrix.view = renderParams.m_viewMatrix.Transpose();
 	glbMatrix.proj = renderParams.m_projMatrix.Transpose();
 	m_pContext->UpdateSubresource(m_TransMatrixBuffer, 0, nullptr, &glbMatrix, 0, 0);
+	//update light
+	lightinfo light;
+	light.lightDir = g_Scene.GetMainLight()->GetDir();
+	light.lightcolor = g_Scene.GetMainLight()->GetColor();
+	m_pContext->UpdateSubresource(m_LightInfoBuffer, 0, nullptr, &light, 0, 0);
+
+
 	return true;
 }

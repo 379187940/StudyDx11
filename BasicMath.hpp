@@ -1749,9 +1749,9 @@ struct Quaternion
     }
 	static Quaternion MakeFromMatrix(const float4x4& matrix)
 	{
-		float m11=matrix.m11, m12 = matrix.m12, m13 = matrix.m13;
-		float m21 = matrix.m21, m22 = matrix.m22, m23 = matrix.m23;
-		float m31 = matrix.m31, m32 = matrix.m32, m33 = matrix.m33;
+		float m11=matrix.m00, m12 = matrix.m01, m13 = matrix.m02;
+		float m21 = matrix.m10, m22 = matrix.m11, m23 = matrix.m12;
+		float m31 = matrix.m20, m32 = matrix.m21, m33 = matrix.m22;
 
 		float w, x, y, z;
 

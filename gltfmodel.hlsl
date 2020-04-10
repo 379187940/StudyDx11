@@ -94,6 +94,20 @@ cbuffer ConstantBuffer : register(b0)
 	matrix View;
 	matrix Projection;
 };
+cbuffer lightinfo
+{
+	float3 lightDir;
+	float4 lightcolor;
+};
+cbuffer material
+{
+	float3 ambient;
+	float3 diffuse;
+	float3 specular;
+	int    shininess;
+	float  alpha;
+	bool   bSpecular;
+};
 vs_out vs_main(vs_input input)
 {
 	vs_out temp;
