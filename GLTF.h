@@ -2,7 +2,7 @@
 #include "IRenderObject.h"
 #include <xnamath.h>
 #include "BaseRenderObject.h"
-#include "MeshLoader11.h"
+//#include "MeshLoader11.h"
 namespace Diligent
 {
 	namespace GLTF {
@@ -35,8 +35,6 @@ class CGLTF :
 		float3 diffuse;
 		float3 specular;
 		int    shininess;
-		float  alpha;
-		bool   bSpecular;
 	};
 public:
 	CGLTF(wstring strName);

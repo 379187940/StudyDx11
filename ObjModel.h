@@ -2,7 +2,7 @@
 #include "IRenderObject.h"
 #include <xnamath.h>
 #include "BaseRenderObject.h"
-#include "MeshLoader11.h"
+//#include "MeshLoader11.h"
 class CObjModel :
 	public CBaseRenderObject,public CCommonRenderData
 {

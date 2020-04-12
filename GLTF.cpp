@@ -1,12 +1,15 @@
 #include "unit.h"
+#include "light.h"
+#include "GLTFLoader.hpp"
+using namespace Diligent::GLTF;
 #include "gltf.h"
 #include <assert.h>
 #include<tchar.h>
 #include "tiny_gltf.h"
-#include "GLTFLoader.hpp"
+
 #include "Scene.h"
-#include "light.h"
-using namespace Diligent::GLTF;
+
+
 //using namespace 
 CGLTF::CGLTF(wstring strName):
 	CBaseRenderObject(strName)
@@ -118,12 +121,13 @@ bool CGLTF::DrawPrimitive(std::unique_ptr<Primitive>& primitive) const
 		m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
 		const Diligent::GLTF::Material& materialSrc = primitive->material;
 		material materialDst;
-		materialDst.alpha = materialSrc.AlphaCutoff;
-		materialDst.ambient = float3(0.2f, 0.2f, 0.2f);
-		materialDst.bSpecular = true;
-		materialDst.diffuse = materialSrc.;
-		materialDst.shininess = materialSrc.MetallicFactor;
-		materialDst.specular
+		materialDst.ambient = float3(1.0f, 0.5f, 0.31f);
+		materialDst.diffuse = float3(1.0f, 0.5f, 0.31f);
+		materialDst.specular = float3(0.50f, 0.50f, 0.50f);
+		materialDst.shininess = 32.0f;
+		m_pContext->UpdateSubresource(m_MaterialBuffer, 0, nullptr, &materialDst, 0, 0);
+		m_pContext->VSSetConstantBuffers(2, 1, &m_MaterialBuffer.p);
+		m_pContext->VSSetConstantBuffers(1, 1, &m_LightInfoBuffer.p);
 	}
 	else
 	{
@@ -134,6 +138,7 @@ bool CGLTF::DrawPrimitive(std::unique_ptr<Primitive>& primitive) const
 		m_pContext->PSSetSamplers(0, 1, &pSamplerState);
 	}
 	m_pContext->DrawIndexed(primitive->IndexCount, primitive->FirstIndex, 0);
+	return true;
 }
 bool CGLTF::UpdateRenderParams(const RenderParams& renderParams)
 {

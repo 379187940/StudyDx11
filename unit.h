@@ -8,7 +8,9 @@
 //#include <Windows.h>
 #include "atlstr.h"
 #include <xnamath.h>
+#include <vector>
 using namespace Diligent;
+//using namespace GLTF;
 using namespace std;
 #include "Common.h"
 #include "FreeImage.h"

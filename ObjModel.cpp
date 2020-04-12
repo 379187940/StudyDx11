@@ -2,7 +2,7 @@
 #include "ObjModel.h"
 #include <assert.h>
 #include<tchar.h>
-#include "MeshLoader11.h"
+//#include "MeshLoader11.h"
 CObjModel::CObjModel(wstring strName):
 	CBaseRenderObject(strName)
 {

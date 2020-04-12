@@ -105,8 +105,6 @@ cbuffer material
 	float3 diffuse;
 	float3 specular;
 	int    shininess;
-	float  alpha;
-	bool   bSpecular;
 };
 vs_out vs_main(vs_input input)
 {
