@@ -12,7 +12,11 @@
 #include "resource.h"
 #include "Triangle.h"
 #include "Cube.h"
-#include "Scene.h"
+#include "unit.h"
+#include "GLTFLoader.hpp"
+using namespace Diligent::GLTF;
+#include "light.h"
+#include "scene.h"
 //--------------------------------------------------------------------------------------
 // Global Variables
 //--------------------------------------------------------------------------------------

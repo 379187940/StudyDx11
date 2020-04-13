@@ -1,4 +1,7 @@
 #include "unit.h"
+#include "GLTFLoader.hpp"
+using namespace Diligent::GLTF;
+#include "light.h"
 #include "Scene.h"
 #include "assert.h"
 #include <Windows.h>
@@ -10,9 +13,8 @@
 #include <tchar.h>
 #include "ObjModel.h"
 #include "tiny_gltf.h"
-#include "GLTFLoader.hpp"
 #include "GLTF.h"
-#include "light.h"
+
 CScene g_Scene;
 CScene::CScene()
 {
@@ -85,7 +87,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	);
 	m_pCmaera->SetMoveSpeed(5.0f);
 	BuildUi();
-	m_pMainLight = new CDirLight(float3(1, -1, 1), float4(1.0f, 1.0f, 1.0f, 1.0f));
+	m_pMainLight = new CDirLight(float3(1, -1, 1), float3(1.0f, 1.0f, 1.0f));
 	return true;
 }
 void CScene::UpdateInput(InputController& Controller, float ElapsedTime)

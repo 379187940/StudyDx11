@@ -93,35 +93,58 @@ cbuffer ConstantBuffer : register(b0)
 	matrix World;
 	matrix View;
 	matrix Projection;
+	float3 cameraPos;
 };
 cbuffer lightinfo
 {
 	float3 lightDir;
-	float4 lightcolor;
+	float3 lightcolor;
 };
 cbuffer material
 {
 	float3 ambient;
 	float3 diffuse;
 	float3 specular;
-	int    shininess;
+	float    shininess;
 };
 vs_out vs_main(vs_input input)
 {
 	vs_out temp;
 	
-	temp.postion = mul(float4(input.postion,1.0f), World);
-	temp.postion = mul(temp.postion, View);
+	float4 worldPos = mul(float4(input.postion, 1.0f), World);
+	temp.postion = mul(worldPos, View);
 	temp.postion = mul(temp.postion, Projection);
 	temp.texcoord = input.texcoord;
+
+
+	// ambient
+	float3 ambientColor = lightcolor * ambient;
+
+	// diffuse 
+	float3 norm = mul(float4(input.normal, 0.0f), World);
+	norm = normalize(norm);
+	//vec3 lightDir = normalize(lightPos - FragPos);
+
+	float diff = max(dot(norm, lightDir), 0.0);
+	float3 diffuseColor = lightcolor * (diff * diffuse);
+
+	// specular
+	float3 viewDir = normalize(cameraPos - worldPos);
+	float3 halfDir = normalize(viewDir - lightDir);
+	float spec = pow(max(dot(norm, halfDir), 0.0), shininess);
+	float3 specularColor = lightcolor * (spec * specular);
+
+	float3 resultColor= ambientColor + diffuseColor + specularColor;
+	temp.color = float4(resultColor, 1.0f);
+
 	return temp;
 }
 
 float4 ps_main(vs_out vsout) : SV_Target
 {
 #ifdef USE_TEX
-	return  diffuseTex.Sample(samLinear, vsout.texcoord);
+	return  diffuseTex.Sample(samLinear, vsout.texcoord) * vsout.color;
 #else
-	return  float4(1,0,0,1);
+	return  vsout.color;
 #endif
 }

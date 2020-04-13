@@ -89,15 +89,7 @@ bool CGLTF::Render(DWORD dwTimes)
 	m_pContext->IASetInputLayout(m_pLayoutInput);
 	m_pContext->VSSetShader(m_pVertexShader, NULL, 0);
 	
-	/*UINT stride = sizeof(SimpleVertex);
-	UINT offset = 0;*/
-	/*m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);*/
-	ID3D11Buffer*pTemp =  m_TransMatrixBuffer;
-	m_pContext->VSSetConstantBuffers(0, 1, &pTemp);
 	m_pContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	m_pContext->VSSetConstantBuffers(1, 1, &m_LightInfoBuffer);
-	//m_pContext->DrawIndexed(36, 0, 0);
 	//Update
 	UINT stride = sizeof(Model::Vertex);
 	UINT offset = 0;
@@ -116,18 +108,20 @@ bool CGLTF::Render(DWORD dwTimes)
 }
 bool CGLTF::DrawPrimitive(std::unique_ptr<Primitive>& primitive) const
 {
+	material materialDst;
+	materialDst.ambient = float3(1.0f, 0.5f, 0.31f);
+	materialDst.diffuse = float3(1.0f, 0.5f, 0.31f);
+	materialDst.specular = float3(0.50f, 0.50f, 0.50f);
+	materialDst.shininess =2.0f;
+	m_pContext->UpdateSubresource(m_MaterialBuffer, 0, nullptr, &materialDst, 0, 0);
+	m_pContext->VSSetConstantBuffers(0, 1, &m_TransMatrixBuffer.p);
+	m_pContext->VSSetConstantBuffers(1, 1, &m_LightInfoBuffer.p);
+	m_pContext->VSSetConstantBuffers(2, 1, &m_MaterialBuffer.p);
 	if (primitive->material.pBaseColorTexture == NULL)
 	{
 		m_pContext->PSSetShader(m_pPixelShader, NULL, 0);
 		const Diligent::GLTF::Material& materialSrc = primitive->material;
-		material materialDst;
-		materialDst.ambient = float3(1.0f, 0.5f, 0.31f);
-		materialDst.diffuse = float3(1.0f, 0.5f, 0.31f);
-		materialDst.specular = float3(0.50f, 0.50f, 0.50f);
-		materialDst.shininess = 32.0f;
-		m_pContext->UpdateSubresource(m_MaterialBuffer, 0, nullptr, &materialDst, 0, 0);
-		m_pContext->VSSetConstantBuffers(2, 1, &m_MaterialBuffer.p);
-		m_pContext->VSSetConstantBuffers(1, 1, &m_LightInfoBuffer.p);
+		
 	}
 	else
 	{
@@ -148,6 +142,7 @@ bool CGLTF::UpdateRenderParams(const RenderParams& renderParams)
 	glbMatrix.world = glbMatrix.world * Matrix4x4<float>::RotationY(-PI / 2);
 	glbMatrix.view = renderParams.m_viewMatrix.Transpose();
 	glbMatrix.proj = renderParams.m_projMatrix.Transpose();
+	glbMatrix.cameraPos = g_Scene.GetCamera()->GetPos();
 	m_pContext->UpdateSubresource(m_TransMatrixBuffer, 0, nullptr, &glbMatrix, 0, 0);
 	//update light
 	lightinfo light;

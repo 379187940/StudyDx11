@@ -22,19 +22,20 @@ class CGLTF :
 		float4x4 world;
 		float4x4 view;
 		float4x4 proj;
+		float3 cameraPos;
 		//float4x4 matviewproj;
 	};
 	struct lightinfo
 	{
 		float3 lightDir;
-		float4 lightcolor;
+		float3 lightcolor;
 	};
 	struct material
 	{
 		float3 ambient;
 		float3 diffuse;
 		float3 specular;
-		int    shininess;
+		float shininess;
 	};
 public:
 	CGLTF(wstring strName);

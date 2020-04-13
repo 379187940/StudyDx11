@@ -40,7 +40,7 @@ public:
 	virtual bool UpdateRenderParams(const RenderParams& renderParams) { return true; }
 	virtual bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
 	bool LoadFromObjFile(WCHAR* fileName);
-	CMeshLoader11 m_ObjData;
+	//CMeshLoader11 m_ObjData;
 	CComPtr<ID3D11Buffer> m_TransMatrixBuffer;
 	CComPtr<ID3D11Buffer> m_LightInfoBuffer;
 	CComPtr<ID3D11Buffer> m_MaterialBuffer;
