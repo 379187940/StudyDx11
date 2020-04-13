@@ -95,16 +95,16 @@ cbuffer ConstantBuffer : register(b0)
 	matrix Projection;
 	float3 cameraPos;
 };
-cbuffer lightinfo
+cbuffer lightinfo : register(b1)
 {
-	float3 lightDir;
-	float3 lightcolor;
+	float4 lightDir;
+	float4 lightcolor;
 };
-cbuffer material
+cbuffer material : register(b2)
 {
-	float3 ambient;
-	float3 diffuse;
-	float3 specular;
+	float4 ambient;
+	float4 diffuse;
+	float4 specular;
 	float    shininess;
 };
 vs_out vs_main(vs_input input)
@@ -118,7 +118,7 @@ vs_out vs_main(vs_input input)
 
 
 	// ambient
-	float3 ambientColor = lightcolor * ambient;
+	float3 ambientColor = lightcolor * ambient.xyz;
 
 	// diffuse 
 	float3 norm = mul(float4(input.normal, 0.0f), World);
@@ -126,13 +126,13 @@ vs_out vs_main(vs_input input)
 	//vec3 lightDir = normalize(lightPos - FragPos);
 
 	float diff = max(dot(norm, lightDir), 0.0);
-	float3 diffuseColor = lightcolor * (diff * diffuse);
+	float3 diffuseColor = lightcolor * (diff * diffuse.xyz);
 
 	// specular
 	float3 viewDir = normalize(cameraPos - worldPos);
 	float3 halfDir = normalize(viewDir - lightDir);
 	float spec = pow(max(dot(norm, halfDir), 0.0), shininess);
-	float3 specularColor = lightcolor * (spec * specular);
+	float3 specularColor = lightcolor * (spec * specular.xyz);
 
 	float3 resultColor= ambientColor + diffuseColor + specularColor;
 	temp.color = float4(resultColor, 1.0f);

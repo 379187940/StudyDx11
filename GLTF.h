@@ -27,14 +27,14 @@ class CGLTF :
 	};
 	struct lightinfo
 	{
-		float3 lightDir;
-		float3 lightcolor;
+		float4 lightDir;
+		float4 lightcolor;
 	};
 	struct material
 	{
-		float3 ambient;
-		float3 diffuse;
-		float3 specular;
+		float4 ambient;
+		float4 diffuse;
+		float4 specular;
 		float shininess;
 	};
 public:
