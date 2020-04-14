@@ -178,7 +178,7 @@ void CScene::BuildUi()
 		if (!pRenderObject)
 			continue;
 		wcstombs(temp, pRenderObject->GetName().data(), MAX_PATH);
-		sprintf_s(tempKey, MAX_PATH, "group=Sponge key=%d", it->second);
+		sprintf_s(tempKey, MAX_PATH, "group=Sponge", it->second);
 		TwAddVarCB(showObjectBar, temp, TW_TYPE_BOOLCPP, 
 			SetObjectVisible, 
 			GetObjectVisible, 
@@ -186,7 +186,7 @@ void CScene::BuildUi()
 	}
 	TwBar *debugPanel = TwNewBar("Debug Panel");
 	//TwAddVarCB(debugPanel, "RenderDepth", TW_TYPE_BOOLCPP, SetRenderDepth, GetRenderDepth, this, "");
-	TwAddVarRW(debugPanel, "RenderDepth", TW_TYPE_BOOLCPP, &m_bDrawDepth, "group=RenderParams key=a");
+	TwAddVarRW(debugPanel, "RenderDepth", TW_TYPE_BOOLCPP, &m_bDrawDepth, "group=RenderParams");
 	TwAddVarCB(debugPanel, "MoveSpeed", TW_TYPE_FLOAT, 
 		[](const void *value, void * clientData) {
 		float fSpeed = *static_cast<const float *>(value);
