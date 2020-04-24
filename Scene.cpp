@@ -61,6 +61,16 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	//RegisterObject(pNewCubeLight);
 	RegisterObject(pNewGltf);
 	
+
+	CGLTF* pNewTerrain = new CGLTF(_T("terrain"));
+	pNewTerrain->Init(pd3d11Device, pContext);
+	pNewTerrain->LoadFromObjFile(_T("terrain.gltf"));
+	//RegisterObject(pNewTrianle);
+	//RegisterObject(pNewCube);
+	//RegisterObject(pNewCubeLight);
+	RegisterObject(pNewTerrain);
+
+
 	HRESULT hr = S_FALSE ;
 	ID3D11RenderTargetView* pRenderTargetView = NULL;
 	ID3D11DepthStencilView* pDepthView = NULL;

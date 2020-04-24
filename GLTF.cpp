@@ -109,9 +109,9 @@ bool CGLTF::Render(DWORD dwTimes)
 bool CGLTF::DrawPrimitive(std::unique_ptr<Primitive>& primitive) const
 {
 	material materialDst;
-	materialDst.ambient = float4(1.0f, 0.5f, 0.31f,1.0f);
-	materialDst.diffuse = float4(1.0f, 0.5f, 0.31f,1.0f);
-	materialDst.specular = float4(0.50f, 0.50f, 0.50f,1.0f);
+	materialDst.ambient = float4(0.2f, 0.2f, 0.2f,1.0f);
+	materialDst.diffuse = float4(0.80f, 0.80f, 0.80f,1.0f);
+	materialDst.specular = float4(1.0f, 1.0f, 1.0f,1.0f);
 	materialDst.shininess =2.0f;
 	m_pContext->UpdateSubresource(m_MaterialBuffer, 0, nullptr, &materialDst, 0, 0);
 	m_pContext->VSSetConstantBuffers(0, 1, &m_TransMatrixBuffer.p);
