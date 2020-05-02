@@ -1808,7 +1808,7 @@ struct Quaternion
 			y = (m23 + m32)*mult;
 			break;
 		}
-		return Quaternion(w, x, y, z);
+		return Quaternion( x, y, z ,w);
 	}
     static Quaternion RotationFromAxisAngle(const float3& axis, float angle)
     {

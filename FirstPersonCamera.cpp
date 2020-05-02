@@ -156,6 +156,8 @@ Quaternion FirstPersonCamera::GetRotation()
 	float4x4 CameraRotation = float4x4::RotationArbitrary(m_ReferenceUpAxis, m_fYawAngle) *
 		float4x4::RotationArbitrary(m_ReferenceRightAxis, m_fPitchAngle) *
 		ReferenceRotation;
+	//下面要求一个右手定则的旋转矩阵，所以进行一次转置
+	//CameraRotation.Transpose();
 	return Quaternion::MakeFromMatrix(CameraRotation);
 }
 void FirstPersonCamera::SetRotation(float Yaw, float Pitch)
