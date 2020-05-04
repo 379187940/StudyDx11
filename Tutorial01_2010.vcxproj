@@ -410,6 +410,7 @@
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Quard.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Tutorial01.cpp" />
@@ -440,6 +441,7 @@
     <ClInclude Include="Quard.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="Terrain.h" />
     <ClInclude Include="Timer.hpp" />
     <ClInclude Include="tiny_gltf.h" />
     <ClInclude Include="Triangle.h" />

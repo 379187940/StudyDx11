@@ -89,6 +89,7 @@
     <ClInclude Include="Light.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -133,6 +134,7 @@
     <ClCompile Include="Light.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
