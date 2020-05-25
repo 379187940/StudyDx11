@@ -3,8 +3,8 @@
 struct HeightData
 {
 	float* pheightData = NULL;
-	float height = 0;
-	float width =  0;
+	UINT32 row = 0;
+	UINT32 col =  0;
 };
 struct TerrainVer
 {
@@ -25,5 +25,6 @@ public:
 private:
 	HeightData m_HeightData;
 	std::vector<TerrainVer> m_verSrc;
+	float m_tileSize = 10.0f;
 };
 
