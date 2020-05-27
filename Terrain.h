@@ -24,7 +24,9 @@ public:
 	bool InitGeometry();
 private:
 	HeightData m_HeightData;
-	std::vector<TerrainVer> m_verSrc;
+	std::vector<float3> m_TerrainPos;
+	std::vector<float2> m_TerrainUv;
+	std::vector<float3> m_VertexColor;
 	float m_tileSize = 10.0f;
 };
 
