@@ -20,8 +20,10 @@ bool CTerrain::LoadHeightMap(char* name)
 }
 bool CTerrain::InitGeometry()
 {
-	for ( int i = 0 ; i < m_HeightData.row ; i++ )
-		for (int j = 0; j < m_HeightData.col; j++)
+	int row = m_HeightData.row;
+	int col = m_HeightData.col;
+	for ( int i = 0 ; i < row ; i++ )
+		for (int j = 0; j < col; j++)
 		{
 			TerrainVer ver;
 			ver.pos.x = 
