@@ -30,11 +30,33 @@ bool CTerrain::InitGeometry()
 			pos.x = j*m_tileSize;
 			pos.y = m_HeightData.pheightData[i*col + j];
 			pos.z = (row - i - 1)*m_tileSize;
-			m_TerrainPos.push_back(pos);
+			m_VertexBuffer.push_back(pos);
 			float3 color;
 			color.r = u(e);
 			color.g = u(e);
 			color.b = u(e);
-			m_VertexColor.push_back(color);
+			m_VertexColorBuffer.push_back(color);
 		}
+	/*
+		3|-----------|4
+		 |  \        |
+		 |    \      |
+		 |      \    |
+		 |         \ |
+		1|-----------|2
+		two triangle:
+		(1,3,2) £¨2,3,4£©
+	*/
+	//construct indexbuffer
+	for (int i = 0; i < row-1; i++)
+		for (int j = 0; j < col-1; j++)
+		{
+			int index1 = i*col + j;
+			int index2 = i*col + j + 1;
+			int index3 = (i + 1)*col + j;
+			int index4 = (i + 1)*col + j + 1;
+			m_indexBuffer.push_back(int3(index1, index3, index2));
+			m_indexBuffer.push_back(int3(index2, index3, index4));
+		}
+	m_pd3dDevice->CreateInputLayout()
 }

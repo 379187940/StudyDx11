@@ -138,3 +138,8 @@ char* CustomW2A(const WCHAR* wstr)
 	dwMinSize = WideCharToMultiByte(CP_ACP, 0, wstr, len, pBuf, dwMinSize, NULL, FALSE);
 	return pBuf;
 }
+void CreateInputLayout(ID3D11Device* pDevice£¬const std::vector<D3D11_INPUT_ELEMENT_DESC>& input )
+{
+
+	pDevice->CreateInputLayout()
+}
