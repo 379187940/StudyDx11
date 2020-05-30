@@ -1,6 +1,8 @@
 #include "unit.h"
 #include "Common.h"
 #include <assert.h>
+#include <vector>
+
 ID3D11Texture2D* CreateTexture2d(
 	ID3D11Device* pDevice,
 	DWORD width,
@@ -138,8 +140,10 @@ char* CustomW2A(const WCHAR* wstr)
 	dwMinSize = WideCharToMultiByte(CP_ACP, 0, wstr, len, pBuf, dwMinSize, NULL, FALSE);
 	return pBuf;
 }
-void CreateInputLayout(ID3D11Device* pDevice£¬const std::vector<D3D11_INPUT_ELEMENT_DESC>& input )
+ID3D11InputLayout* CreateInputLayout(ID3D11Device* pDevice , const std::vector<D3D11_INPUT_ELEMENT_DESC>& input, const void* pShaderBytecodeWithInputSignature,UINT sizeShaderBytecode)
 {
-
-	pDevice->CreateInputLayout()
+	ID3D11InputLayout* pResult;
+	pDevice->CreateInputLayout(input.data(), input.size(), pShaderBytecodeWithInputSignature, sizeShaderBytecode, &pResult);
+	assert(pResult);
+	return pResult;
 }

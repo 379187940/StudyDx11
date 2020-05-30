@@ -1,3 +1,9 @@
+cbuffer common_
+struct vs_input
+{
+	float3 postion;
+	float3 color;
+};
 float4 vs_main( float4 in_postion:POSITION ):SV_POSITION
 {
 	return in_postion;

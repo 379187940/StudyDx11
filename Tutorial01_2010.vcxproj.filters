@@ -170,5 +170,8 @@
       <Filter>shader</Filter>
     </None>
     <None Include="3rdsdk\FreeImage\FreeImage.2013.vcxproj" />
+    <None Include="common.hlsli">
+      <Filter>shader</Filter>
+    </None>
   </ItemGroup>
 </Project>
