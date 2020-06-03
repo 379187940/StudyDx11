@@ -46,3 +46,4 @@ char* CustomW2A(const WCHAR* wstr);
 #ifndef V_RETURN
 #define V_RETURN(p) (p)
 #endif
+ID3D11InputLayout* CreateInputLayout(ID3D11Device* pDevice, const std::vector<D3D11_INPUT_ELEMENT_DESC>& input, const void* pShaderBytecodeWithInputSignature, UINT sizeShaderBytecode);

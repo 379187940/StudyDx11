@@ -1,8 +1,11 @@
 #include <random>
 #include "unit.h"
 #include "Terrain.h"
-CTerrain::CTerrain()
+#include "Common.h"
+CTerrain::CTerrain(wstring strName) :
+	CBaseRenderObject(strName)
 {
+
 }
 
 
@@ -12,10 +15,11 @@ CTerrain::~CTerrain()
 bool CTerrain::Init(char* name)
 {
 	LoadHeightMap(name);
+	return true;
 }
 bool CTerrain::LoadHeightMap(char* name)
 {
-	
+	return true;
 }
 bool CTerrain::InitGeometry()
 {
@@ -58,5 +62,23 @@ bool CTerrain::InitGeometry()
 			m_indexBuffer.push_back(int3(index1, index3, index2));
 			m_indexBuffer.push_back(int3(index2, index3, index4));
 		}
-	m_pd3dDevice->CreateInputLayout()
-}
+	
+	m_pVertexBuffer = CreateBuffer(m_pd3dDevice, m_VertexBuffer.size() * 24, D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+	assert(m_pVertexBuffer);
+	m_pIndexBuffer  = CreateBuffer(m_pd3dDevice, m_indexBuffer.size() *  24, D3D11_USAGE_DYNAMIC, D3D11_BIND_INDEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+	assert(m_pIndexBuffer);
+	ID3D10Blob* pVertexShaderBlob = NULL;
+	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShaderBlob)));
+	vector<D3D11_INPUT_ELEMENT_DESC> allDesc;
+	allDesc.push_back({"POSITION",0,DXGI_FORMAT_R8G8B8A8_UINT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0});
+	allDesc.push_back({"COLOR",0,DXGI_FORMAT_R8G8B8A8_UINT,1,24,D3D11_INPUT_PER_VERTEX_DATA,0 });
+	CreateInputLayout(m_pd3dDevice, allDesc, pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize());
+	m_pd3dDevice->CreateVertexShader(pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize(), NULL, &m_pVertexShader);
+	pVertexShaderBlob->Release();
+
+	ID3D10Blob* pPixelShaderBlob = NULL;
+	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShaderBlob)));
+	m_pd3dDevice->CreatePixelShader(pPixelShaderBlob->GetBufferPointer(), pPixelShaderBlob->GetBufferSize(), NULL, &m_pPixelShader);
+	pPixelShaderBlob->Release();
+	return true;
+}	

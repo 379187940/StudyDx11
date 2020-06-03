@@ -16,7 +16,7 @@ class CTerrain :
 	public CBaseRenderObject, public CCommonRenderData
 {
 public:
-	CTerrain();
+	CTerrain(wstring strName);
 	~CTerrain();
 public:
 	bool Init(char* name);
