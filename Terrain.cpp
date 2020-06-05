@@ -12,9 +12,15 @@ CTerrain::CTerrain(wstring strName) :
 CTerrain::~CTerrain()
 {
 }
-bool CTerrain::Init(char* name)
+bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 {
-	LoadHeightMap(name);
+	m_pd3dDevice = pd3dDevice;
+	m_pContext = pContext;
+	//LoadHeightMap(name);
+	ID3D10Blob* pPixelShaderBlob = NULL;
+	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShaderBlob)));
+	m_pd3dDevice->CreatePixelShader(pPixelShaderBlob->GetBufferPointer(), pPixelShaderBlob->GetBufferSize(), NULL, &m_pPixelShader);
+	pPixelShaderBlob->Release();
 	return true;
 }
 bool CTerrain::LoadHeightMap(char* name)
@@ -82,3 +88,13 @@ bool CTerrain::InitGeometry()
 	pPixelShaderBlob->Release();
 	return true;
 }	
+
+void CTerrain::Tick(DWORD dwTimes)
+{
+}
+
+bool CTerrain::Render(DWORD dwTimes)
+{
+	
+	return false;
+}

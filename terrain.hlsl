@@ -11,13 +11,14 @@ struct vs_output
 };
 vs_output vs_main( vs_input input)
 {
-	vs_out output;
-	output.position = mul(float4(input.position, 1.0f), viewProj);
+	vs_output output;
+	output.position = mul(float4(input.position, 1.0f), viewproj);
 	output.color = input.color;
 	return output;
 }
 
-float4 ps_main( vs_output input):SV_Target
+void ps_main( vs_output input , out float4 color: SV_Target,out float fDepth: SV_Depth)
 {
-	return float4(input.color,1.0f);
+	color = float4(input.color,1.0f);
+	fDepth = 1.0f;
 }

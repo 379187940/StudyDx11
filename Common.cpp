@@ -149,5 +149,5 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pDevice , const std::vector<D
 }
 bool UpdateBufferData(ID3D11DeviceContext* pContext, const ID3D11Buffer* pBuffer, void* pdata, size_t dataSize)
 {
-	pContext->Map( pBuffer )
+	return true;
 }

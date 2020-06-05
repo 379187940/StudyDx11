@@ -19,9 +19,12 @@ public:
 	CTerrain(wstring strName);
 	~CTerrain();
 public:
-	bool Init(char* name);
+	bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
 	bool LoadHeightMap(char* name);
 	bool InitGeometry();
+	virtual void Tick(DWORD dwTimes) override;
+	virtual bool Render(DWORD dwTimes) override;
+	virtual bool UpdateRenderParams(const RenderParams& renderParams) { return true; }
 private:
 	HeightData m_HeightData;
 	std::vector<float3> m_VertexBuffer;
