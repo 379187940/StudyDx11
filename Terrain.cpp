@@ -17,10 +17,6 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	m_pd3dDevice = pd3dDevice;
 	m_pContext = pContext;
 	//LoadHeightMap(name);
-	ID3D10Blob* pPixelShaderBlob = NULL;
-	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShaderBlob)));
-	m_pd3dDevice->CreatePixelShader(pPixelShaderBlob->GetBufferPointer(), pPixelShaderBlob->GetBufferSize(), NULL, &m_pPixelShader);
-	pPixelShaderBlob->Release();
 	return true;
 }
 bool CTerrain::LoadHeightMap(char* name)

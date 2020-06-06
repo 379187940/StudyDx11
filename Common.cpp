@@ -147,7 +147,11 @@ ID3D11InputLayout* CreateInputLayout(ID3D11Device* pDevice , const std::vector<D
 	assert(pResult);
 	return pResult;
 }
-bool UpdateBufferData(ID3D11DeviceContext* pContext, const ID3D11Buffer* pBuffer, void* pdata, size_t dataSize)
+bool UpdateBufferData(ID3D11DeviceContext* pContext,ID3D11Buffer* pBuffer, void* pdata, size_t dataSize)
 {
+	D3D11_MAPPED_SUBRESOURCE mapBuffer;
+	pContext->Map(pBuffer, 0, D3D11_MAP_WRITE, 0, &mapBuffer);
+	memcpy(mapBuffer.pData, pdata, dataSize);
+	pContext->Unmap(pBuffer, 0);
 	return true;
 }
