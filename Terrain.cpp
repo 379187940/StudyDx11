@@ -2,6 +2,7 @@
 #include "unit.h"
 #include "Terrain.h"
 #include "Common.h"
+#include "Material.h"
 CTerrain::CTerrain(wstring strName) :
 	CBaseRenderObject(strName)
 {
@@ -17,6 +18,10 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	m_pd3dDevice = pd3dDevice;
 	m_pContext = pContext;
 	//LoadHeightMap(name);
+	m_pCameraAttBuffer = CreateBuffer(m_pd3dDevice, sizeof(CameraAtrribute), D3D11_USAGE_DYNAMIC, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
+	m_pVertexBuffer = CreateBuffer(m_pd3dDevice, m_VertexBuffer.size() * sizeof(float3), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
+	m_pVertexColorBuffer = CreateBuffer(m_pd3dDevice, m_VertexColorBuffer.size() * sizeof(float3), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
+	m_pIndexBuffer = CreateBuffer(m_pd3dDevice, m_indexBuffer.size() * sizeof(int3), D3D11_USAGE_DYNAMIC, D3D11_BIND_INDEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
 	return true;
 }
 bool CTerrain::LoadHeightMap(char* name)
@@ -38,9 +43,9 @@ bool CTerrain::InitGeometry()
 			pos.z = (row - i - 1)*m_tileSize;
 			m_VertexBuffer.push_back(pos);
 			float3 color;
-			color.r = u(e);
-			color.g = u(e);
-			color.b = u(e);
+			color.r = float(u(e))/255;
+			color.g = float(u(e)) / 255;
+			color.b = float(u(e)) / 255;
 			m_VertexColorBuffer.push_back(color);
 		}
 	/*
@@ -91,6 +96,21 @@ void CTerrain::Tick(DWORD dwTimes)
 
 bool CTerrain::Render(DWORD dwTimes)
 {
-	
+	UINT stride = sizeof(float3);
+	UINT offset = 0;
+	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	m_pContext->IASetVertexBuffers(1, 1, &m_pVertexColorBuffer, &stride, &offset);
+	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT,0);
 	return false;
+}
+bool CTerrain::UpdateRenderParams(const RenderParams& renderParams)
+{
+	
+	CameraAtrribute cameraAttribute;
+	cameraAttribute.worldviewproj = renderParams.m_worldMatrix * renderParams.m_viewMatrix * renderParams.m_projMatrix;
+	UpdateBufferData(m_pContext, m_pCameraAttBuffer, &cameraAttribute, sizeof(cameraAttribute));
+	UpdateBufferData(m_pContext, m_pVertexBuffer, m_VertexBuffer.data(), m_VertexBuffer.size() * sizeof(float3));
+	UpdateBufferData(m_pContext, m_pVertexColorBuffer, m_VertexColorBuffer.data(), m_VertexBuffer.size() * sizeof(float3));
+	UpdateBufferData(m_pContext, m_pIndexBuffer, m_indexBuffer.data(), m_indexBuffer.size() * sizeof(int3));
+	return true;
 }

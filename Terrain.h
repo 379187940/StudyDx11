@@ -24,7 +24,7 @@ public:
 	bool InitGeometry();
 	virtual void Tick(DWORD dwTimes) override;
 	virtual bool Render(DWORD dwTimes) override;
-	virtual bool UpdateRenderParams(const RenderParams& renderParams) { return true; }
+	virtual bool UpdateRenderParams(const RenderParams& renderParams);
 private:
 	HeightData m_HeightData;
 	std::vector<float3> m_VertexBuffer;
@@ -32,5 +32,9 @@ private:
 	std::vector<float3> m_VertexColorBuffer;
 	std::vector<int3>    m_indexBuffer;
 	float m_tileSize = 10.0f;
+	CComPtr<ID3D11Buffer> m_pCameraAttBuffer;
+	CComPtr<ID3D11Buffer> m_pVertexBuffer;
+	CComPtr<ID3D11Buffer> m_pVertexColorBuffer;
+	CComPtr<ID3D11Buffer> m_pIndexBuffer;
 };
 

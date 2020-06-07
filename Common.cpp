@@ -47,7 +47,8 @@ ID3D11Buffer* CreateBuffer(
 	ZeroMemory(&constBufferDesc, sizeof(constBufferDesc));
 	constBufferDesc.BindFlags = bindFlag;
 	constBufferDesc.CPUAccessFlags = cpuAccessFlag;
-	byteWidth = (byteWidth + 15)&~15;
+	if ( bindFlag == D3D11_BIND_CONSTANT_BUFFER )
+		byteWidth = (byteWidth + 15)&~15;
 	constBufferDesc.ByteWidth = byteWidth;
 	constBufferDesc.Usage = usage;
 	D3D11_SUBRESOURCE_DATA subSourceData;
