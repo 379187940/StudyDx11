@@ -79,7 +79,7 @@ bool CTerrain::InitGeometry()
 	vector<D3D11_INPUT_ELEMENT_DESC> allDesc;
 	allDesc.push_back({"POSITION",0,DXGI_FORMAT_R8G8B8A8_UINT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0});
 	allDesc.push_back({"COLOR",0,DXGI_FORMAT_R8G8B8A8_UINT,1,24,D3D11_INPUT_PER_VERTEX_DATA,0 });
-	CreateInputLayout(m_pd3dDevice, allDesc, pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize());
+	m_pLayoutInput = CreateInputLayout(m_pd3dDevice, allDesc, pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize());
 	m_pd3dDevice->CreateVertexShader(pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize(), NULL, &m_pVertexShader);
 	pVertexShaderBlob->Release();
 
@@ -87,6 +87,7 @@ bool CTerrain::InitGeometry()
 	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShaderBlob)));
 	m_pd3dDevice->CreatePixelShader(pPixelShaderBlob->GetBufferPointer(), pPixelShaderBlob->GetBufferSize(), NULL, &m_pPixelShader);
 	pPixelShaderBlob->Release();
+ 
 	return true;
 }	
 
@@ -101,6 +102,10 @@ bool CTerrain::Render(DWORD dwTimes)
 	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 	m_pContext->IASetVertexBuffers(1, 1, &m_pVertexColorBuffer, &stride, &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT,0);
+	m_pContext->VSSetShader(m_pVertexShader, nullptr, 0);
+	m_pContext->PSSetShader(m_pPixelShader, nullptr, 0);
+	m_pContext->VSSetConstantBuffers(0, 1, &m_pCameraAttBuffer);
+	m_pContext->IASetInputLayout()
 	return false;
 }
 bool CTerrain::UpdateRenderParams(const RenderParams& renderParams)
