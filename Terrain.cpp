@@ -2,7 +2,9 @@
 #include "unit.h"
 #include "Terrain.h"
 #include "Common.h"
+
 #include "Material.h"
+#include "FreeImage.h"
 CTerrain::CTerrain(wstring strName) :
 	CBaseRenderObject(strName)
 {
@@ -15,10 +17,59 @@ CTerrain::~CTerrain()
 }
 bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 {
+	Release();
 	m_pd3dDevice = pd3dDevice;
 	m_pContext = pContext;
+	
+	char* heightImageFilename = "HeightMap.tif";
 	//LoadHeightMap(name);
 	
+	//FREE_IMAGE_FORMAT type =  FreeImage_GetFileType("HeightMap.tif");
+	FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(heightImageFilename);
+	assert(fif != FIF_UNKNOWN);
+	FIBITMAP *image = FreeImage_Load(FREE_IMAGE_FORMAT::FIF_TIFF, heightImageFilename);
+	assert(image);
+
+	FREE_IMAGE_COLOR_TYPE type = FreeImage_GetColorType(image);
+	// 获取保存图片的字节数组
+	unsigned char *bits1 = FreeImage_GetBits(image);
+	uint width = FreeImage_GetWidth(image);
+	uint height = FreeImage_GetHeight(image);
+	
+	// 获取保存每个像素的字节数 这里为3,分别为RGB
+	unsigned int byte_per_pixel = FreeImage_GetLine(image) / width;
+
+	////gltf_image->bits = GetValueSize(ImgDesc.ComponentType) * 8;
+	//gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
+	//auto DstRowSize = gltf_image->width * gltf_image->component * (gltf_image->bits / 8);
+	//gltf_image->image.resize(static_cast<size_t>(gltf_image->height * DstRowSize));
+	//const unsigned char* pSrcPixels = bits1;
+	////因为会按照32字节对齐 所以每一行字节数有可能和width*byte_per_pixel并不一致
+	//unsigned int pitchByte = FreeImage_GetPitch(image);
+	//FreeImage_Save(FREE_IMAGE_FORMAT::FIF_JPEG, image, "333.jpeg");
+	//if (byte_per_pixel == 3)
+	//{
+	//	for (UINT32 row = 0; row < gltf_image->height; ++row)
+	//	{
+	//		for (UINT32 col = 0; col < gltf_image->width; ++col)
+	//		{
+	//			unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * row + col * gltf_image->component;
+	//			const unsigned char* SrcPixel = pSrcPixels + pitchByte* row + col * byte_per_pixel;
+	//			RGBQUAD rgb;
+	//			FreeImage_GetPixelColor(image, col, row, &rgb);
+	//			DstPixel[0] = rgb.rgbRed;
+	//			DstPixel[1] = rgb.rgbGreen;
+	//			DstPixel[2] = rgb.rgbBlue;
+	//			DstPixel[3] = 1;
+	//		}
+	//	}
+	//}
+	return true;
+}
+bool CTerrain::Release()
+{
+	delete[]m_HeightData.pheightData;
+	m_HeightData.pheightData = NULL;
 	return true;
 }
 bool CTerrain::LoadHeightMap(char* name)

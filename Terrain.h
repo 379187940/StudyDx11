@@ -22,6 +22,7 @@ public:
 	bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
 	bool LoadHeightMap(char* name);
 	bool InitGeometry();
+	bool Release();
 	virtual void Tick(DWORD dwTimes) override;
 	virtual bool Render(DWORD dwTimes) override;
 	virtual bool UpdateRenderParams(const RenderParams& renderParams);
