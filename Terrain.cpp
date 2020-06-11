@@ -39,9 +39,19 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	// 获取保存每个像素的字节数 这里为3,分别为RGB
 	unsigned int byte_per_pixel = FreeImage_GetLine(image) / width;
 
-	////gltf_image->bits = GetValueSize(ImgDesc.ComponentType) * 8;
-	//gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
-	//auto DstRowSize = gltf_image->width * gltf_image->component * (gltf_image->bits / 8);
+	//uint dstSize = sizeof(uint) * width * height;
+	m_HeightData.row = height;
+	m_HeightData.col = width;
+	m_HeightData.heightData.resize(width*height);
+	unsigned int srcPitchByte = FreeImage_GetPitch(image);
+	//unsigned int dstPitchByte = width * byte_per_pixel;
+	for (UINT32 row = 0; row < height; ++row)
+	{
+		for (UINT32 col = 0; col < width; ++col)//gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
+		{
+			m_HeightData.heightData[row*width + col] = *((uint*)(bits1 + row*srcPitchByte + col*byte_per_pixel));
+		}
+	}
 	//gltf_image->image.resize(static_cast<size_t>(gltf_image->height * DstRowSize));
 	//const unsigned char* pSrcPixels = bits1;
 	////因为会按照32字节对齐 所以每一行字节数有可能和width*byte_per_pixel并不一致
@@ -68,8 +78,7 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 }
 bool CTerrain::Release()
 {
-	delete[]m_HeightData.pheightData;
-	m_HeightData.pheightData = NULL;
+	m_HeightData.heightData.clear();
 	return true;
 }
 bool CTerrain::LoadHeightMap(char* name)
@@ -87,7 +96,7 @@ bool CTerrain::InitGeometry()
 		{
 			float3 pos;
 			pos.x = j*m_tileSize;
-			pos.y = m_HeightData.pheightData[i*col + j];
+			pos.y = m_HeightData.heightData[i*col + j];
 			pos.z = (row - i - 1)*m_tileSize;
 			m_VertexBuffer.push_back(pos);
 			float3 color;

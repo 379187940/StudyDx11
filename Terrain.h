@@ -2,7 +2,7 @@
 #include "BaseRenderObject.h"
 struct HeightData
 {
-	float* pheightData = NULL;
+	vector<uint> heightData;
 	UINT32 row = 0;
 	UINT32 col =  0;
 };
