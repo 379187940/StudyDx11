@@ -18,10 +18,7 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	m_pd3dDevice = pd3dDevice;
 	m_pContext = pContext;
 	//LoadHeightMap(name);
-	m_pCameraAttBuffer = CreateBuffer(m_pd3dDevice, sizeof(CameraAtrribute), D3D11_USAGE_DYNAMIC, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
-	m_pVertexBuffer = CreateBuffer(m_pd3dDevice, m_VertexBuffer.size() * sizeof(float3), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
-	m_pVertexColorBuffer = CreateBuffer(m_pd3dDevice, m_VertexColorBuffer.size() * sizeof(float3), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
-	m_pIndexBuffer = CreateBuffer(m_pd3dDevice, m_indexBuffer.size() * sizeof(int3), D3D11_USAGE_DYNAMIC, D3D11_BIND_INDEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
+	
 	return true;
 }
 bool CTerrain::LoadHeightMap(char* name)
@@ -66,14 +63,22 @@ bool CTerrain::InitGeometry()
 			int index2 = i*col + j + 1;
 			int index3 = (i + 1)*col + j;
 			int index4 = (i + 1)*col + j + 1;
-			m_indexBuffer.push_back(int3(index1, index3, index2));
-			m_indexBuffer.push_back(int3(index2, index3, index4));
+			m_indexBuffer.push_back(index1);
+			m_indexBuffer.push_back(index3);
+			m_indexBuffer.push_back(index2);
+			m_indexBuffer.push_back(index2);
+			m_indexBuffer.push_back(index3);
+			m_indexBuffer.push_back(index4);
 		}
-	
-	m_pVertexBuffer = CreateBuffer(m_pd3dDevice, m_VertexBuffer.size() * 24, D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+	m_pCameraAttBuffer = CreateBuffer(m_pd3dDevice, sizeof(CameraAtrribute), D3D11_USAGE_DYNAMIC, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
+	assert(m_pCameraAttBuffer);
+	m_pVertexBuffer = CreateBuffer(m_pd3dDevice, m_VertexBuffer.size() * sizeof(float3), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
 	assert(m_pVertexBuffer);
-	m_pIndexBuffer  = CreateBuffer(m_pd3dDevice, m_indexBuffer.size() *  24, D3D11_USAGE_DYNAMIC, D3D11_BIND_INDEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, 0);
+	m_pVertexColorBuffer = CreateBuffer(m_pd3dDevice, m_VertexColorBuffer.size() * sizeof(float3), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
+	assert(m_pVertexColorBuffer);
+	m_pIndexBuffer = CreateBuffer(m_pd3dDevice, m_indexBuffer.size() * sizeof(int), D3D11_USAGE_DYNAMIC, D3D11_BIND_INDEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
 	assert(m_pIndexBuffer);
+
 	ID3D10Blob* pVertexShaderBlob = NULL;
 	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShaderBlob)));
 	vector<D3D11_INPUT_ELEMENT_DESC> allDesc;
@@ -105,7 +110,9 @@ bool CTerrain::Render(DWORD dwTimes)
 	m_pContext->VSSetShader(m_pVertexShader, nullptr, 0);
 	m_pContext->PSSetShader(m_pPixelShader, nullptr, 0);
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pCameraAttBuffer);
-	m_pContext->IASetInputLayout()
+	m_pContext->IASetInputLayout(m_pLayoutInput);
+	m_pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	m_pContext->DrawIndexed(m_indexBuffer.size(), 0, 0);
 	return false;
 }
 bool CTerrain::UpdateRenderParams(const RenderParams& renderParams)

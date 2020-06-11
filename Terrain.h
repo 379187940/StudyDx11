@@ -30,7 +30,7 @@ private:
 	std::vector<float3> m_VertexBuffer;
 	std::vector<float2> m_TerrainUv;
 	std::vector<float3> m_VertexColorBuffer;
-	std::vector<int3>    m_indexBuffer;
+	std::vector<int>    m_indexBuffer;
 	float m_tileSize = 10.0f;
 	CComPtr<ID3D11Buffer> m_pCameraAttBuffer;
 	CComPtr<ID3D11Buffer> m_pVertexBuffer;
