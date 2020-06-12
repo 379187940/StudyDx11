@@ -49,31 +49,9 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	{
 		for (UINT32 col = 0; col < width; ++col)//gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
 		{
-			m_HeightData.heightData[row*width + col] = *((uint*)(bits1 + row*srcPitchByte + col*byte_per_pixel));
+			m_HeightData.heightData[row*width + col] = *((unsigned short*)(bits1 + row*srcPitchByte + col*byte_per_pixel));
 		}
 	}
-	//gltf_image->image.resize(static_cast<size_t>(gltf_image->height * DstRowSize));
-	//const unsigned char* pSrcPixels = bits1;
-	////因为会按照32字节对齐 所以每一行字节数有可能和width*byte_per_pixel并不一致
-	//unsigned int pitchByte = FreeImage_GetPitch(image);
-	//FreeImage_Save(FREE_IMAGE_FORMAT::FIF_JPEG, image, "333.jpeg");
-	//if (byte_per_pixel == 3)
-	//{
-	//	for (UINT32 row = 0; row < gltf_image->height; ++row)
-	//	{
-	//		for (UINT32 col = 0; col < gltf_image->width; ++col)
-	//		{
-	//			unsigned char*       DstPixel = gltf_image->image.data() + DstRowSize * row + col * gltf_image->component;
-	//			const unsigned char* SrcPixel = pSrcPixels + pitchByte* row + col * byte_per_pixel;
-	//			RGBQUAD rgb;
-	//			FreeImage_GetPixelColor(image, col, row, &rgb);
-	//			DstPixel[0] = rgb.rgbRed;
-	//			DstPixel[1] = rgb.rgbGreen;
-	//			DstPixel[2] = rgb.rgbBlue;
-	//			DstPixel[3] = 1;
-	//		}
-	//	}
-	//}
 	return true;
 }
 bool CTerrain::Release()
