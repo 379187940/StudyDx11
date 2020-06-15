@@ -6,15 +6,15 @@ struct vs_input
 };
 struct vs_output
 {
-	float4 position:POSITION;
+	float4 position:SV_POSITION;
 	float3 color:COLOR;
 };
 vs_output vs_main( vs_input input)
 {
 	vs_output output;
-	output.Pos = mul(float4(input.Pos,1.0), World);
-	output.Pos = mul(output.Pos, View);
-	output.Pos = mul(output.Pos, Projection);
+	output.position = mul(float4(input.position,1.0), viewproj);
+	//output.position = mul(output.position, View);
+	//output.position = mul(output.position, Projection);
 	output.color = input.color;
 	return output;
 }

@@ -79,7 +79,7 @@ bool CTerrain::InitGeometry()
 			float3 pos;
 			pos.x = j*m_tileSize;
 			pos.y = (float)m_HeightData.heightData[i*col + j]/65536*m_tileSize;
-			pos.z = (row - i - 1)*m_tileSize;
+			pos.z = i*m_tileSize;
 			m_VertexBuffer.push_back(pos);
 			float3 color;
 			color.r = float(u(e))/255;
@@ -161,9 +161,10 @@ bool CTerrain::UpdateRenderParams(const RenderParams& renderParams)
 {
 	
 	CameraAtrribute cameraAttribute;
-	cameraAttribute.mWorld = renderParams.m_worldMatrix.Transpose();
-	cameraAttribute.mView = renderParams.m_viewMatrix.Transpose();
-	cameraAttribute.mProjection = renderParams.m_projMatrix.Transpose();
+	cameraAttribute.viewproj = renderParams.m_worldMatrix * renderParams.m_viewMatrix * renderParams.m_projMatrix;
+	cameraAttribute.viewproj = cameraAttribute.viewproj.Transpose();
+	//cameraAttribute.mView = renderParams.m_viewMatrix.Transpose();
+	//cameraAttribute.mProjection = renderParams.m_projMatrix.Transpose();
 	UpdateBufferData(m_pContext, m_pCameraAttBuffer, &cameraAttribute, sizeof(cameraAttribute));
 	UpdateBufferData(m_pContext, m_pVertexBuffer, m_VertexBuffer.data(), m_VertexBuffer.size() * sizeof(float3));
 	UpdateBufferData(m_pContext, m_pVertexColorBuffer, m_VertexColorBuffer.data(), m_VertexColorBuffer.size() * sizeof(float3));
