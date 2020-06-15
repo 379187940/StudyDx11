@@ -52,6 +52,10 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 			m_HeightData.heightData[row*width + col] = *((unsigned short*)(bits1 + row*srcPitchByte + col*byte_per_pixel));
 		}
 	}
+	FreeImage_Unload(image);
+	m_HeightData.row = 10;
+	m_HeightData.col = 10;
+	InitGeometry();
 	return true;
 }
 bool CTerrain::Release()
@@ -74,7 +78,7 @@ bool CTerrain::InitGeometry()
 		{
 			float3 pos;
 			pos.x = j*m_tileSize;
-			pos.y = m_HeightData.heightData[i*col + j];
+			pos.y = (float)m_HeightData.heightData[i*col + j]/65536*m_tileSize;
 			pos.z = (row - i - 1)*m_tileSize;
 			m_VertexBuffer.push_back(pos);
 			float3 color;
@@ -120,8 +124,8 @@ bool CTerrain::InitGeometry()
 	ID3D10Blob* pVertexShaderBlob = NULL;
 	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShaderBlob)));
 	vector<D3D11_INPUT_ELEMENT_DESC> allDesc;
-	allDesc.push_back({"POSITION",0,DXGI_FORMAT_R8G8B8A8_UINT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0});
-	allDesc.push_back({"COLOR",0,DXGI_FORMAT_R8G8B8A8_UINT,1,24,D3D11_INPUT_PER_VERTEX_DATA,0 });
+	allDesc.push_back({"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0});
+	allDesc.push_back({"COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,1,0,D3D11_INPUT_PER_VERTEX_DATA,0 });
 	m_pLayoutInput = CreateInputLayout(m_pd3dDevice, allDesc, pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize());
 	m_pd3dDevice->CreateVertexShader(pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize(), NULL, &m_pVertexShader);
 	pVertexShaderBlob->Release();
@@ -142,12 +146,13 @@ bool CTerrain::Render(DWORD dwTimes)
 {
 	UINT stride = sizeof(float3);
 	UINT offset = 0;
-	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
-	m_pContext->IASetVertexBuffers(1, 1, &m_pVertexColorBuffer, &stride, &offset);
+	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer.p, &stride, &offset);
+	stride = sizeof(int);
+	m_pContext->IASetVertexBuffers(1, 1, &m_pVertexColorBuffer.p, &stride, &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT,0);
 	m_pContext->VSSetShader(m_pVertexShader, nullptr, 0);
 	m_pContext->PSSetShader(m_pPixelShader, nullptr, 0);
-	m_pContext->VSSetConstantBuffers(0, 1, &m_pCameraAttBuffer);
+	m_pContext->VSSetConstantBuffers(0, 1, &m_pCameraAttBuffer.p);
 	m_pContext->IASetInputLayout(m_pLayoutInput);
 	m_pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pContext->DrawIndexed(m_indexBuffer.size(), 0, 0);
@@ -157,10 +162,11 @@ bool CTerrain::UpdateRenderParams(const RenderParams& renderParams)
 {
 	
 	CameraAtrribute cameraAttribute;
-	cameraAttribute.worldviewproj = renderParams.m_worldMatrix * renderParams.m_viewMatrix * renderParams.m_projMatrix;
+	cameraAttribute.worldviewproj =  renderParams.m_projMatrix* renderParams.m_viewMatrix *renderParams.m_worldMatrix;
+	cameraAttribute.worldviewproj = cameraAttribute.worldviewproj.Transpose();
 	UpdateBufferData(m_pContext, m_pCameraAttBuffer, &cameraAttribute, sizeof(cameraAttribute));
 	UpdateBufferData(m_pContext, m_pVertexBuffer, m_VertexBuffer.data(), m_VertexBuffer.size() * sizeof(float3));
-	UpdateBufferData(m_pContext, m_pVertexColorBuffer, m_VertexColorBuffer.data(), m_VertexBuffer.size() * sizeof(float3));
-	UpdateBufferData(m_pContext, m_pIndexBuffer, m_indexBuffer.data(), m_indexBuffer.size() * sizeof(int3));
+	UpdateBufferData(m_pContext, m_pVertexColorBuffer, m_VertexColorBuffer.data(), m_VertexColorBuffer.size() * sizeof(float3));
+	UpdateBufferData(m_pContext, m_pIndexBuffer, m_indexBuffer.data(), m_indexBuffer.size() * sizeof(int));
 	return true;
 }
