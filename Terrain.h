@@ -18,6 +18,13 @@ class CTerrain :
 public:
 	CTerrain(wstring strName);
 	~CTerrain();
+
+	struct ConstantBuffer
+	{
+		float4x4 mWorld;
+		float4x4 mView;
+		float4x4 mProjection;
+	};
 public:
 	bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
 	bool LoadHeightMap(char* name);

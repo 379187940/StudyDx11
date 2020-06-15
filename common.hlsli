@@ -1,4 +1,6 @@
 cbuffer CameraAttributeBuffer:register(b0)
 {
-	float4x4 viewproj;
+	matrix World;
+	matrix View;
+	matrix Projection;
 };

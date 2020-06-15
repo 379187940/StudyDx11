@@ -12,7 +12,9 @@ struct vs_output
 vs_output vs_main( vs_input input)
 {
 	vs_output output;
-	output.position = mul(float4(input.position, 1.0f), viewproj);
+	output.Pos = mul(float4(input.Pos,1.0), World);
+	output.Pos = mul(output.Pos, View);
+	output.Pos = mul(output.Pos, Projection);
 	output.color = input.color;
 	return output;
 }
