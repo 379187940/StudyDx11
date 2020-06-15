@@ -147,7 +147,6 @@ bool CTerrain::Render(DWORD dwTimes)
 	UINT stride = sizeof(float3);
 	UINT offset = 0;
 	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer.p, &stride, &offset);
-	stride = sizeof(int);
 	m_pContext->IASetVertexBuffers(1, 1, &m_pVertexColorBuffer.p, &stride, &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT,0);
 	m_pContext->VSSetShader(m_pVertexShader, nullptr, 0);
