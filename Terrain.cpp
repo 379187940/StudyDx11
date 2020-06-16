@@ -53,8 +53,6 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 		}
 	}
 	FreeImage_Unload(image);
-	m_HeightData.row = 10;
-	m_HeightData.col = 10;
 	InitGeometry();
 	return true;
 }
@@ -73,6 +71,8 @@ bool CTerrain::InitGeometry()
 	int col = m_HeightData.col;
 	std::default_random_engine e;
 	std::uniform_int_distribution<unsigned> u(0, 255); //生成随机颜色
+	m_VertexBuffer.resize(row*col);
+	m_VertexColorBuffer.resize(row*col);
 	for ( int i = 0 ; i < row ; i++ )
 		for (int j = 0; j < col; j++)
 		{
@@ -98,6 +98,7 @@ bool CTerrain::InitGeometry()
 		(1,3,2) （2,3,4）
 	*/
 	//construct indexbuffer
+	m_indexBuffer.resize((row - 1)*(col - 1) * 6);
 	for (int i = 0; i < row-1; i++)
 		for (int j = 0; j < col-1; j++)
 		{
