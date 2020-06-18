@@ -49,12 +49,11 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	{
 		for (UINT32 col = 0; col < width; ++col)//gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
 		{
-			m_HeightData.heightData[row*width + col] = *((unsigned short*)(bits1 + row*srcPitchByte + col*byte_per_pixel));
+			m_HeightData.heightData[row*width + col] = *((short*)(bits1 + row*srcPitchByte + col*byte_per_pixel));
 		}
 	}
 	FreeImage_Unload(image);
-	m_HeightData.row = 10;
-	m_HeightData.col = 10;
+	
 	InitGeometry();
 	return true;
 }
@@ -78,7 +77,7 @@ bool CTerrain::InitGeometry()
 		{
 			float3 pos;
 			pos.x = j*m_tileSize;
-			pos.y = (float)m_HeightData.heightData[i*col + j]/65536*m_tileSize;
+			pos.y = m_HeightData.heightData[i*col + j]/32768.0*m_tileSize*2.0f;
 			pos.z = i*m_tileSize;
 			m_VertexBuffer.push_back(pos);
 			float3 color;

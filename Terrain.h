@@ -2,7 +2,7 @@
 #include "BaseRenderObject.h"
 struct HeightData
 {
-	vector<uint> heightData;
+	vector<int> heightData;
 	UINT32 row = 0;
 	UINT32 col =  0;
 };
@@ -39,7 +39,7 @@ private:
 	std::vector<float2> m_TerrainUv;
 	std::vector<float3> m_VertexColorBuffer;
 	std::vector<int>    m_indexBuffer;
-	float m_tileSize = 10.0f;
+	float m_tileSize = 2.0f;
 	CComPtr<ID3D11Buffer> m_pCameraAttBuffer;
 	CComPtr<ID3D11Buffer> m_pVertexBuffer;
 	CComPtr<ID3D11Buffer> m_pVertexColorBuffer;
