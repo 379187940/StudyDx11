@@ -38,6 +38,7 @@ protected:
 private:
 	map<IRenderObject*, int> m_allObject;
 	bool m_bDrawDepth = false ;
+	bool m_bWireFrame = false;
 	ID3D11Device*    m_pD3d11Device = NULL;
 	ID3D11DeviceContext* m_pD3d11Context = NULL;
 	ID3D11ShaderResourceView*    m_pDepthTextureSRV = NULL;
@@ -45,6 +46,8 @@ private:
 	FirstPersonCamera* m_pCmaera = NULL ;
 	Quaternion m_rotation;
 	CDirLight* m_pMainLight;
+	CComPtr<ID3D11RasterizerState> m_pFillSolidState;
+	CComPtr<ID3D11RasterizerState> m_pFillFrameState;
 };
 extern CScene g_Scene;
 

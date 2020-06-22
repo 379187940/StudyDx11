@@ -42,7 +42,14 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 {
 	m_pD3d11Device = pd3d11Device;
 	m_pD3d11Context = pContext;
-	
+	D3D11_RASTERIZER_DESC desc;
+	ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
+	desc.FillMode = D3D11_FILL_WIREFRAME;
+	desc.DepthBias = TRUE;
+	m_pD3d11Device->CreateRasterizerState(&desc, &m_pFillFrameState);
+	desc.FillMode = D3D11_FILL_SOLID;
+	desc.DepthBias = TRUE;
+	m_pD3d11Device->CreateRasterizerState(&desc, &m_pFillSolidState);
 	CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
 	pNewTrianle->Init(pd3d11Device, pContext);
 	CCube* pNewCube = new CCube(_T("Cube"));
@@ -132,6 +139,7 @@ void CScene::Tick(DWORD dwTimes)
 }
 bool CScene::Render(DWORD dwTimes)
 {
+	if
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
 		if ( it->first->IsVisible() )
@@ -199,6 +207,7 @@ void CScene::BuildUi()
 	TwBar *debugPanel = TwNewBar("Debug Panel");
 	//TwAddVarCB(debugPanel, "RenderDepth", TW_TYPE_BOOLCPP, SetRenderDepth, GetRenderDepth, this, "");
 	TwAddVarRW(debugPanel, "RenderDepth", TW_TYPE_BOOLCPP, &m_bDrawDepth, "group=RenderParams");
+	TwAddVarRW(debugPanel, "line", TW_TYPE_BOOLCPP, &m_bWireFrame, "group=RenderParams");
 	TwAddVarCB(debugPanel, "MoveSpeed", TW_TYPE_FLOAT, 
 		[](const void *value, void * clientData) {
 		float fSpeed = *static_cast<const float *>(value);
