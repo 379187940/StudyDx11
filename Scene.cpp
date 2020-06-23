@@ -45,10 +45,10 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	D3D11_RASTERIZER_DESC desc;
 	ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
 	desc.FillMode = D3D11_FILL_WIREFRAME;
+	desc.CullMode = D3D11_CULL_BACK;
 	desc.DepthBias = TRUE;
 	m_pD3d11Device->CreateRasterizerState(&desc, &m_pFillFrameState);
 	desc.FillMode = D3D11_FILL_SOLID;
-	desc.DepthBias = TRUE;
 	m_pD3d11Device->CreateRasterizerState(&desc, &m_pFillSolidState);
 	CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
 	pNewTrianle->Init(pd3d11Device, pContext);
@@ -139,7 +139,10 @@ void CScene::Tick(DWORD dwTimes)
 }
 bool CScene::Render(DWORD dwTimes)
 {
-	if
+	if (m_bWireFrame)
+		m_pD3d11Context->RSSetState(m_pFillFrameState);
+	else
+		m_pD3d11Context->RSSetState(m_pFillSolidState);
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
 		if ( it->first->IsVisible() )

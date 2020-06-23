@@ -77,7 +77,7 @@ bool CTerrain::InitGeometry()
 		{
 			float3 pos;
 			pos.x = j*m_tileSize;
-			pos.y = m_HeightData.heightData[i*col + j]/32768.0*m_tileSize*2.0f;
+			pos.y = m_HeightData.heightData[(row - i -1 )*col + j]/32768.0*m_tileSize*2.0f;
 			pos.z = i*m_tileSize;
 			m_VertexBuffer.push_back(pos);
 			float3 color;
