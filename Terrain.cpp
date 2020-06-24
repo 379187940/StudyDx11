@@ -20,11 +20,17 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	Release();
 	m_pd3dDevice = pd3dDevice;
 	m_pContext = pContext;
-	
-	char* heightImageFilename = "HeightMap.tif";
-	//LoadHeightMap(name);
-	
-	//FREE_IMAGE_FORMAT type =  FreeImage_GetFileType("HeightMap.tif");
+	LoadHeightMap("heightmap.bmp");
+	InitGeometry();
+	return true;
+}
+bool CTerrain::Release()
+{
+	m_HeightData.heightData.clear();
+	return true;
+}
+bool CTerrain::LoadHeightMap(char* heightImageFilename)
+{
 	FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(heightImageFilename);
 	assert(fif != FIF_UNKNOWN);
 	FIBITMAP *image = FreeImage_Load(FREE_IMAGE_FORMAT::FIF_TIFF, heightImageFilename);
@@ -35,7 +41,7 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	unsigned char *bits1 = FreeImage_GetBits(image);
 	uint width = FreeImage_GetWidth(image);
 	uint height = FreeImage_GetHeight(image);
-	
+
 	// 获取保存每个像素的字节数 这里为3,分别为RGB
 	unsigned int byte_per_pixel = FreeImage_GetLine(image) / width;
 
@@ -49,21 +55,19 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	{
 		for (UINT32 col = 0; col < width; ++col)//gltf_image->pixel_type = TINYGLTF_COMPONENT_TYPE_UNSIGNED_BYTE;
 		{
-			m_HeightData.heightData[row*width + col] = *((short*)(bits1 + row*srcPitchByte + col*byte_per_pixel));
+			switch (type)
+			{
+			case FIC_RGB:
+				int index = (height - row - 1)*srcPitchByte + col*byte_per_pixel;
+				m_HeightData.heightData[row*width + col] = *(bits1 +index);
+				break;
+			default:
+				assert(0);
+				break;
+			}
 		}
 	}
 	FreeImage_Unload(image);
-	
-	InitGeometry();
-	return true;
-}
-bool CTerrain::Release()
-{
-	m_HeightData.heightData.clear();
-	return true;
-}
-bool CTerrain::LoadHeightMap(char* name)
-{
 	return true;
 }
 bool CTerrain::InitGeometry()
