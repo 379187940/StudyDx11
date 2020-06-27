@@ -33,7 +33,7 @@ bool CTerrain::LoadHeightMap(char* heightImageFilename)
 {
 	FREE_IMAGE_FORMAT fif = FreeImage_GetFileType(heightImageFilename);
 	assert(fif != FIF_UNKNOWN);
-	FIBITMAP *image = FreeImage_Load(FREE_IMAGE_FORMAT::FIF_TIFF, heightImageFilename);
+	FIBITMAP *image = FreeImage_Load(fif, heightImageFilename);
 	assert(image);
 
 	FREE_IMAGE_COLOR_TYPE type = FreeImage_GetColorType(image);
@@ -58,9 +58,11 @@ bool CTerrain::LoadHeightMap(char* heightImageFilename)
 			switch (type)
 			{
 			case FIC_RGB:
+			{
 				int index = (height - row - 1)*srcPitchByte + col*byte_per_pixel;
-				m_HeightData.heightData[row*width + col] = *(bits1 +index);
+				m_HeightData.heightData[row*width + col] = *(bits1 + index);
 				break;
+			}
 			default:
 				assert(0);
 				break;
@@ -74,15 +76,17 @@ bool CTerrain::InitGeometry()
 {
 	int row = m_HeightData.row;
 	int col = m_HeightData.col;
+	int xTranslation = col / 2 + 1;
+	int zTranslation = row / 2 + 1;
 	std::default_random_engine e;
 	std::uniform_int_distribution<unsigned> u(0, 255); //生成随机颜色
 	for ( int i = 0 ; i < row ; i++ )
 		for (int j = 0; j < col; j++)
 		{
 			float3 pos;
-			pos.x = j*m_tileSize;
-			pos.y = m_HeightData.heightData[(row - i -1 )*col + j]/32768.0*m_tileSize*2.0f;
-			pos.z = i*m_tileSize;
+			pos.x = j- xTranslation ;
+			pos.y = m_HeightData.heightData[i*col + j]* m_heightScale;
+			pos.z = i - zTranslation ;
 			m_VertexBuffer.push_back(pos);
 			float3 color;
 			color.r = float(u(e))/255;

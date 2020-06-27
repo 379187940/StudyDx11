@@ -99,7 +99,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	m_quardDepth->SetDepthTexture(m_pDepthTextureSRV);
 
 	m_pCmaera = new FirstPersonCamera();
-	UpdateCamera(float3(1024, 0, 1024),
+	UpdateCamera(float3(0, 0, 0),
 		float3(0.0f, 0.0f, 0.0f),
 		0.1f,
 		100000.0f

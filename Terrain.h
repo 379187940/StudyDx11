@@ -40,6 +40,7 @@ private:
 	std::vector<float3> m_VertexColorBuffer;
 	std::vector<int>    m_indexBuffer;
 	float m_tileSize = 2.0f;
+	float m_heightScale = 0.20f;
 	CComPtr<ID3D11Buffer> m_pCameraAttBuffer;
 	CComPtr<ID3D11Buffer> m_pVertexBuffer;
 	CComPtr<ID3D11Buffer> m_pVertexColorBuffer;
