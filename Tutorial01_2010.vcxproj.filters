@@ -26,6 +26,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{0106b244-e399-4876-b1d7-3170f4055679}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Font">
+      <UniqueIdentifier>{aff120de-6da9-46ad-b6ce-ba3bef6fec1d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderObject.h">
@@ -93,6 +96,15 @@
       <Filter>RenderObject</Filter>
     </ClInclude>
     <ClInclude Include="Material.h" />
+    <ClInclude Include="fontclass.h">
+      <Filter>Font</Filter>
+    </ClInclude>
+    <ClInclude Include="fontshaderclass.h">
+      <Filter>Font</Filter>
+    </ClInclude>
+    <ClInclude Include="textureclass.h">
+      <Filter>Font</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -141,6 +153,15 @@
       <Filter>RenderObject</Filter>
     </ClCompile>
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="fontclass.cpp">
+      <Filter>Font</Filter>
+    </ClCompile>
+    <ClCompile Include="fontshaderclass.cpp">
+      <Filter>Font</Filter>
+    </ClCompile>
+    <ClCompile Include="textureclass.cpp">
+      <Filter>Font</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">

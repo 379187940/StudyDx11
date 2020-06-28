@@ -407,6 +407,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="FirstPersonCamera.cpp" />
+    <ClCompile Include="fontclass.cpp" />
+    <ClCompile Include="fontshaderclass.cpp" />
     <ClCompile Include="GLTF.cpp" />
     <ClCompile Include="GLTFLoader.cpp" />
     <ClCompile Include="InputControllerWin32.cpp" />
@@ -415,6 +417,7 @@
     <ClCompile Include="Quard.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Terrain.cpp" />
+    <ClCompile Include="textureclass.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Tutorial01.cpp" />
@@ -438,6 +441,8 @@
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeLight.h" />
     <ClInclude Include="FirstPersonCamera.hpp" />
+    <ClInclude Include="fontclass.h" />
+    <ClInclude Include="fontshaderclass.h" />
     <ClInclude Include="GLTF.h" />
     <ClInclude Include="GLTFLoader.hpp" />
     <ClInclude Include="HashUtils.hpp" />
@@ -452,6 +457,7 @@
     <CLInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Terrain.h" />
+    <ClInclude Include="textureclass.h" />
     <ClInclude Include="Timer.hpp" />
     <ClInclude Include="tiny_gltf.h" />
     <ClInclude Include="Triangle.h" />
