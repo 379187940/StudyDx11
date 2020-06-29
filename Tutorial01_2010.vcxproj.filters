@@ -46,7 +46,6 @@
     <ClInclude Include="IObject.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
-    <ClInclude Include="unit.h" />
     <ClInclude Include="BaseRenderObject.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
@@ -105,6 +104,12 @@
     <ClInclude Include="textureclass.h">
       <Filter>Font</Filter>
     </ClInclude>
+    <ClInclude Include="MnagerClass.h">
+      <Filter>MainFile</Filter>
+    </ClInclude>
+    <ClInclude Include="unit.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -162,6 +167,9 @@
     <ClCompile Include="textureclass.cpp">
       <Filter>Font</Filter>
     </ClCompile>
+    <ClCompile Include="MnagerClass.cpp">
+      <Filter>MainFile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
@@ -194,6 +202,12 @@
     </None>
     <None Include="3rdsdk\FreeImage\FreeImage.2013.vcxproj" />
     <None Include="common.hlsli">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="font.vs">
+      <Filter>shader</Filter>
+    </None>
+    <None Include="font.ps">
       <Filter>shader</Filter>
     </None>
   </ItemGroup>

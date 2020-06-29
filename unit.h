@@ -19,5 +19,7 @@ using namespace std;
 #include "InputControllerWin32.hpp"
 #include "FirstPersonCamera.hpp"
 #include "Timer.hpp"
+#include "fontclass.h"
+#include "textureclass.h"
 //#include "xnamath.h"
 
