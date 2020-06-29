@@ -1,6 +1,5 @@
 #pragma once
 #include "IRenderObject.h"
-#include <xnamath.h>
 #include "BaseRenderObject.h"
 class CCubeLight :
 	public CBaseRenderObject,public CCommonRenderData
@@ -8,16 +7,16 @@ class CCubeLight :
 
 	struct SimpleVertex
 	{
-		XMFLOAT3 postion;
-		XMFLOAT3 Normal;
+		float3 postion;
+		float3 Normal;
 	};
 	struct ConstantBuffer
 	{
 		float4x4 mWorld;
 		float4x4 mView;
 		float4x4 mProjection;
-		XMFLOAT4 vLightDir[2];
-		XMFLOAT4 vLightColor[2];
+		float4 vLightDir[2];
+		float4 vLightColor[2];
 	};
 	
 public:

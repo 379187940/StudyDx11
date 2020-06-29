@@ -110,6 +110,9 @@
     <ClInclude Include="unit.h">
       <Filter>Common</Filter>
     </ClInclude>
+    <ClInclude Include="textclass.h">
+      <Filter>Font</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -169,6 +172,9 @@
     </ClCompile>
     <ClCompile Include="MnagerClass.cpp">
       <Filter>MainFile</Filter>
+    </ClCompile>
+    <ClCompile Include="textclass.cpp">
+      <Filter>Font</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

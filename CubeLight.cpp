@@ -43,35 +43,35 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 	HRESULT hr;
 	SimpleVertex vertices[] =
 	{
-		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 1.0f, 0.0f) },
+		{ float3(-1.0f, 1.0f, -1.0f), float3(0.0f, 1.0f, 0.0f) },
+		{ float3(1.0f, 1.0f, -1.0f), float3(0.0f, 1.0f, 0.0f) },
+		{ float3(1.0f, 1.0f, 1.0f), float3(0.0f, 1.0f, 0.0f) },
+		{ float3(-1.0f, 1.0f, 1.0f), float3(0.0f, 1.0f, 0.0f) },
 
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, -1.0f, 0.0f) },
+		{ float3(-1.0f, -1.0f, -1.0f), float3(0.0f, -1.0f, 0.0f) },
+		{ float3(1.0f, -1.0f, -1.0f), float3(0.0f, -1.0f, 0.0f) },
+		{ float3(1.0f, -1.0f, 1.0f), float3(0.0f, -1.0f, 0.0f) },
+		{ float3(-1.0f, -1.0f, 1.0f), float3(0.0f, -1.0f, 0.0f) },
 
-		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(-1.0f, 0.0f, 0.0f) },
+		{ float3(-1.0f, -1.0f, 1.0f), float3(-1.0f, 0.0f, 0.0f) },
+		{ float3(-1.0f, -1.0f, -1.0f), float3(-1.0f, 0.0f, 0.0f) },
+		{ float3(-1.0f, 1.0f, -1.0f), float3(-1.0f, 0.0f, 0.0f) },
+		{ float3(-1.0f, 1.0f, 1.0f), float3(-1.0f, 0.0f, 0.0f) },
 
-		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(1.0f, 0.0f, 0.0f) },
+		{ float3(1.0f, -1.0f, 1.0f), float3(1.0f, 0.0f, 0.0f) },
+		{ float3(1.0f, -1.0f, -1.0f), float3(1.0f, 0.0f, 0.0f) },
+		{ float3(1.0f, 1.0f, -1.0f), float3(1.0f, 0.0f, 0.0f) },
+		{ float3(1.0f, 1.0f, 1.0f), float3(1.0f, 0.0f, 0.0f) },
 
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, -1.0f), XMFLOAT3(0.0f, 0.0f, -1.0f) },
+		{ float3(-1.0f, -1.0f, -1.0f), float3(0.0f, 0.0f, -1.0f) },
+		{ float3(1.0f, -1.0f, -1.0f), float3(0.0f, 0.0f, -1.0f) },
+		{ float3(1.0f, 1.0f, -1.0f), float3(0.0f, 0.0f, -1.0f) },
+		{ float3(-1.0f, 1.0f, -1.0f), float3(0.0f, 0.0f, -1.0f) },
 
-		{ XMFLOAT3(-1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, 1.0f, 1.0f), XMFLOAT3(0.0f, 0.0f, 1.0f) },
+		{ float3(-1.0f, -1.0f, 1.0f), float3(0.0f, 0.0f, 1.0f) },
+		{ float3(1.0f, -1.0f, 1.0f), float3(0.0f, 0.0f, 1.0f) },
+		{ float3(1.0f, 1.0f, 1.0f), float3(0.0f, 0.0f, 1.0f) },
+		{ float3(-1.0f, 1.0f, 1.0f), float3(0.0f, 0.0f, 1.0f) },
 	};
 	D3D11_BUFFER_DESC vertexBufferDesc;
 	memset(&vertexBufferDesc, 0 , sizeof(D3D11_BUFFER_DESC));
@@ -163,20 +163,19 @@ bool CCubeLight ::UpdateRenderParams(const RenderParams& renderParams)
 	cb.mView = renderParams.m_viewMatrix.Transpose();
 	cb.mProjection = renderParams.m_projMatrix.Transpose();
 	//cb.mProjection = renderParams.m_projMatrix;
-	XMFLOAT4 vLightDirs[2] =
+	float4 vLightDirs[2] =
 	{
-		XMFLOAT4(-0.577f, 0.577f, -0.577f, 1.0f),
-		XMFLOAT4(0.0f, 0.0f, -1.0f, 1.0f),
+		float4(-0.577f, 0.577f, -0.577f, 1.0f),
+		float4(0.0f, 0.0f, -1.0f, 1.0f),
 	};
-	XMFLOAT4 vLightColors[2] =
+	float4 vLightColors[2] =
 	{
-		XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),
-		XMFLOAT4(0.5f, 0.0f, 0.0f, 1.0f)
+		float4(0.5f, 0.5f, 0.5f, 1.0f),
+		float4(0.5f, 0.0f, 0.0f, 1.0f)
 	};
 	float4x4 mRotate = Matrix4x4<float>::RotationY(step/3600.f*2*XM_PI);
-	XMVECTOR vLightDir = XMLoadFloat4(&vLightDirs[1]);
-	vLightDir = vLightDir, mRotate;
-	XMStoreFloat4(&vLightDirs[1], vLightDir);
+	float4 vLightDir = float4(vLightDirs[1],0.0);
+	
 	cb.vLightDir[0] = vLightDirs[0];
 	cb.vLightDir[1] = vLightDirs[1];
 

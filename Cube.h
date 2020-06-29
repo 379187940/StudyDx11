@@ -1,6 +1,5 @@
 #pragma once
 #include "IRenderObject.h"
-#include <xnamath.h>
 #include "BaseRenderObject.h"
 class CCube :
 	public CBaseRenderObject,public CCommonRenderData
@@ -8,8 +7,8 @@ class CCube :
 
 	struct SimpleVertex
 	{
-		XMFLOAT3 postion;
-		XMFLOAT4 color;
+		float3 postion;
+		float4 color;
 	};
 	struct TestConstantBuffer
 	{

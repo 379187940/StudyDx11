@@ -1,13 +1,12 @@
 #pragma once
 #include "IRenderObject.h"
-#include <xnamath.h>
 #include "BaseRenderObject.h"
 class CTriangle :
 	public CBaseRenderObject,public CCommonRenderData
 {
 	struct SimpleVertex
 	{
-		XMFLOAT3 pos;
+		float3 pos;
 		//float r, g, b;
 	};
 public:

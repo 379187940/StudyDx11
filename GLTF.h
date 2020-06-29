@@ -1,6 +1,5 @@
 #pragma once
 #include "IRenderObject.h"
-#include <xnamath.h>
 #include "BaseRenderObject.h"
 //#include "MeshLoader11.h"
 namespace Diligent

@@ -1,14 +1,13 @@
 #pragma once
 #include "IRenderObject.h"
-#include <xnamath.h>
 #include "BaseRenderObject.h"
 class CQuard :
 	public CBaseRenderObject, public CCommonRenderData
 {
 	struct SpriteVertex
 	{
-		XMFLOAT3 v3Pos;
-		XMFLOAT2 v2TexCoord;
+		float3 v3Pos;
+		float2 v2TexCoord;
 	};
 	struct CBufferConvertToWorld
 	{

@@ -1,6 +1,5 @@
 #pragma once
 #include "IObject.h"
-#include <xnamath.h>
 struct RenderParams
 {
 	float4x4 m_worldMatrix;

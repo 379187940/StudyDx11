@@ -7,7 +7,6 @@
 #include <string>
 //#include <Windows.h>
 #include "atlstr.h"
-#include <xnamath.h>
 #include <vector>
 using namespace Diligent;
 //using namespace GLTF;
@@ -21,5 +20,6 @@ using namespace std;
 #include "Timer.hpp"
 #include "fontclass.h"
 #include "textureclass.h"
+#include "textclass.h"
 //#include "xnamath.h"
 

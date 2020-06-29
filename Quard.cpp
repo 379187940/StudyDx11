@@ -44,18 +44,18 @@ bool CQuard::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	m_pd3dDevice->CreateInputLayout(desc, ARRAYSIZE(desc), pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), &m_pLayoutInput);
 	assert(m_pLayoutInput);
 	SpriteVertex QuadVertices[6];
-	QuadVertices[0].v3Pos = XMFLOAT3(-1.0f, -1.0f, 0.5f);
-	QuadVertices[0].v2TexCoord = XMFLOAT2(0.0f, 1.0f);
-	QuadVertices[1].v3Pos = XMFLOAT3(-1.0f, 1.0f, 0.5f);
-	QuadVertices[1].v2TexCoord = XMFLOAT2(0.0f, 0.0f);
-	QuadVertices[2].v3Pos = XMFLOAT3(1.0f, -1.0f, 0.5f);
-	QuadVertices[2].v2TexCoord = XMFLOAT2(1.0f, 1.0f);
-	QuadVertices[3].v3Pos = XMFLOAT3(-1.0f, 1.0f, 0.5f);
-	QuadVertices[3].v2TexCoord = XMFLOAT2(0.0f, 0.0f);
-	QuadVertices[4].v3Pos = XMFLOAT3(1.0f, 1.0f, 0.5f);
-	QuadVertices[4].v2TexCoord = XMFLOAT2(1.0f, 0.0f);
-	QuadVertices[5].v3Pos = XMFLOAT3(1.0f, -1.0f, 0.5f);
-	QuadVertices[5].v2TexCoord = XMFLOAT2(1.0f, 1.0f);
+	QuadVertices[0].v3Pos = float3(-1.0f, -1.0f, 0.5f);
+	QuadVertices[0].v2TexCoord = float2(0.0f, 1.0f);
+	QuadVertices[1].v3Pos = float3(-1.0f, 1.0f, 0.5f);
+	QuadVertices[1].v2TexCoord = float2(0.0f, 0.0f);
+	QuadVertices[2].v3Pos = float3(1.0f, -1.0f, 0.5f);
+	QuadVertices[2].v2TexCoord = float2(1.0f, 1.0f);
+	QuadVertices[3].v3Pos = float3(-1.0f, 1.0f, 0.5f);
+	QuadVertices[3].v2TexCoord = float2(0.0f, 0.0f);
+	QuadVertices[4].v3Pos = float3(1.0f, 1.0f, 0.5f);
+	QuadVertices[4].v2TexCoord = float2(1.0f, 0.0f);
+	QuadVertices[5].v3Pos = float3(1.0f, -1.0f, 0.5f);
+	QuadVertices[5].v2TexCoord = float2(1.0f, 1.0f);
 
 	// Create the vertex buffer
 	D3D11_BUFFER_DESC BD;

@@ -1,6 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 // Filename: fontshaderclass.cpp
 ////////////////////////////////////////////////////////////////////////////////
+#include "unit.h"
 #include "fontshaderclass.h"
 
 
@@ -50,8 +51,8 @@ void FontShaderClass::Shutdown()
 }
 
 
-bool FontShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, XMMATRIX worldMatrix, XMMATRIX viewMatrix, 
-							 XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, XMFLOAT4 pixelColor)
+bool FontShaderClass::Render(ID3D11DeviceContext* deviceContext, int indexCount, float4x4 worldMatrix, float4x4 viewMatrix, 
+							 float4x4 projectionMatrix, ID3D11ShaderResourceView* texture, float4 pixelColor)
 {
 	bool result;
 
@@ -315,8 +316,8 @@ void FontShaderClass::OutputShaderErrorMessage(ID3D10Blob* errorMessage, HWND hw
 }
 
 
-bool FontShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, XMMATRIX worldMatrix, XMMATRIX viewMatrix, 
-										  XMMATRIX projectionMatrix, ID3D11ShaderResourceView* texture, XMFLOAT4 pixelColor)
+bool FontShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, float4x4 worldMatrix, float4x4 viewMatrix, 
+										  float4x4 projectionMatrix, ID3D11ShaderResourceView* texture, float4 pixelColor)
 {
 	HRESULT result;
     D3D11_MAPPED_SUBRESOURCE mappedResource;

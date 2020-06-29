@@ -11,7 +11,6 @@ using namespace Diligent::GLTF;
 #include "CubeLight.h"
 #include "Quard.h"
 #include <tchar.h>
-#include "ObjModel.h"
 #include "tiny_gltf.h"
 #include "GLTF.h"
 #include "terrain.h"
@@ -42,6 +41,8 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 {
 	m_pD3d11Device = pd3d11Device;
 	m_pD3d11Context = pContext;
+	m_font.Initialize(m_pD3d11Device, m_pD3d11Context, "font01.txt", "font01.tga", 32, 1);
+	//m_fpsString.Initialize( m_pD3d11Device , m_pD3d11Context , )
 	D3D11_RASTERIZER_DESC desc;
 	ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
 	desc.FillMode = D3D11_FILL_WIREFRAME;

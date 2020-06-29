@@ -48,14 +48,14 @@ bool CCube::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext)
 	HRESULT hr;
 	SimpleVertex vertices[] =
 	{
-		{ XMFLOAT3(-1.0f,  1.0f, -1.0f), XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(1.0f,  1.0f, -1.0f), XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f,  1.0f,  1.0f), XMFLOAT4(0.0f, 1.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f,  1.0f,  1.0f), XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 0.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f, -1.0f), XMFLOAT4(1.0f, 1.0f, 0.0f, 1.0f) },
-		{ XMFLOAT3(1.0f, -1.0f,  1.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f) },
-		{ XMFLOAT3(-1.0f, -1.0f,  1.0f), XMFLOAT4(0.0f, 0.0f, 0.0f, 1.0f) },
+		{ float3(-1.0f,  1.0f, -1.0f), float4(0.0f, 0.0f, 1.0f, 1.0f) },
+		{ float3(1.0f,  1.0f, -1.0f), float4(0.0f, 1.0f, 0.0f, 1.0f) },
+		{ float3(1.0f,  1.0f,  1.0f), float4(0.0f, 1.0f, 1.0f, 1.0f) },
+		{ float3(-1.0f,  1.0f,  1.0f), float4(1.0f, 0.0f, 0.0f, 1.0f) },
+		{ float3(-1.0f, -1.0f, -1.0f), float4(1.0f, 0.0f, 1.0f, 1.0f) },
+		{ float3(1.0f, -1.0f, -1.0f), float4(1.0f, 1.0f, 0.0f, 1.0f) },
+		{ float3(1.0f, -1.0f,  1.0f), float4(1.0f, 1.0f, 1.0f, 1.0f) },
+		{ float3(-1.0f, -1.0f,  1.0f), float4(0.0f, 0.0f, 0.0f, 1.0f) },
 	};
 	
 	D3D11_BUFFER_DESC vertexBufferDesc;

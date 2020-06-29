@@ -34,8 +34,8 @@ private:
 
 	struct VertexType
 	{
-		XMFLOAT3 position;
-		XMFLOAT2 texture;
+		float3 position;
+		float2 texture;
 	};
 
 public:

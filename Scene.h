@@ -48,6 +48,8 @@ private:
 	CDirLight* m_pMainLight;
 	CComPtr<ID3D11RasterizerState> m_pFillSolidState;
 	CComPtr<ID3D11RasterizerState> m_pFillFrameState;
+	FontClass m_font;
+	TextClass m_fpsString;
 };
 extern CScene g_Scene;
 
