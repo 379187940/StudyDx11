@@ -1,5 +1,6 @@
 #pragma once
 #include "BasicMath.hpp"
+#include <d3dcommon.h>
 #include "d3dx11core.h"
 #include <memory>
 #include <algorithm>
@@ -21,5 +22,7 @@ using namespace std;
 #include "fontclass.h"
 #include "textureclass.h"
 #include "textclass.h"
+#include <d3dcompiler.h>
+
 //#include "xnamath.h"
 

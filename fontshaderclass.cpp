@@ -327,9 +327,9 @@ bool FontShaderClass::SetShaderParameters(ID3D11DeviceContext* deviceContext, fl
 
 
 	// Transpose the matrices to prepare them for the shader.
-	worldMatrix = XMMatrixTranspose(worldMatrix);
-	viewMatrix = XMMatrixTranspose(viewMatrix);
-	projectionMatrix = XMMatrixTranspose(projectionMatrix);
+	worldMatrix = worldMatrix.Transpose();
+	viewMatrix = viewMatrix.Transpose();
+	projectionMatrix = projectionMatrix.Transpose();
 
 	// Lock the matrix constant buffer so it can be written to.
 	result = deviceContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource);

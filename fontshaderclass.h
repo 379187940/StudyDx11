@@ -8,11 +8,11 @@
 //////////////
 // INCLUDES //
 //////////////
-#include <d3d11.h>
-#include <d3dcompiler.h>
-#include <directxmath.h>
-#include <fstream>
-using namespace DirectX;
+//#include <d3d11.h>
+//#include <d3dcompiler.h>
+//#include <directxmath.h>
+//#include <fstream>
+//using namespace DirectX;
 using namespace std;
 
 
