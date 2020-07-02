@@ -8,6 +8,7 @@
       <Command>xcopy *.hlsl $(outdir) /Y
 xcopy *.hlsli $(outdir) /Y
 xcopy *.vs $(outdir) /Y
+xcopy *.ps $(outdir) /Y
 xcopy *.ps $(outdir) /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
