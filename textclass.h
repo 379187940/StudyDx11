@@ -10,7 +10,7 @@
 //////////////
 #include "fontclass.h"
 
-
+class ShaderManagerClass;
 ////////////////////////////////////////////////////////////////////////////////
 // Class name: TextClass
 ////////////////////////////////////////////////////////////////////////////////
@@ -30,13 +30,13 @@ public:
 
 	bool Initialize(ID3D11Device*, ID3D11DeviceContext*, int, int, int, bool, FontClass*, char*, int, int, float, float, float);
 	void Shutdown();
-	void Render(ID3D11DeviceContext*, float4x4, float4x4, float4x4, ID3D11ShaderResourceView*);
+	void Render(ID3D11DeviceContext*, ShaderManagerClass* , float4x4, float4x4, float4x4, ID3D11ShaderResourceView*);
 
 	bool UpdateSentence(ID3D11DeviceContext*, FontClass*, char*, int, int, float, float, float);
 
 private:
 	bool InitializeSentence(ID3D11Device*, ID3D11DeviceContext*, FontClass*, char*, int, int, float, float, float);
-	void RenderSentence(ID3D11DeviceContext*, float4x4, float4x4, float4x4, ID3D11ShaderResourceView*);
+	void RenderSentence(ID3D11DeviceContext*, ShaderManagerClass*  , float4x4, float4x4, float4x4, ID3D11ShaderResourceView*);
 
 private:
 	ID3D11Buffer *m_vertexBuffer, *m_indexBuffer, *m_vertexBuffer2, *m_indexBuffer2;

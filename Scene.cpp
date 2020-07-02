@@ -14,11 +14,12 @@ using namespace Diligent::GLTF;
 #include "tiny_gltf.h"
 #include "GLTF.h"
 #include "terrain.h"
-
+#include "shadermanagerclass.h"
 CScene g_Scene;
 CScene::CScene()
 {
 	m_bDrawDepth = false;
+	m_pShaderManagerClass = new ShaderManagerClass();
 }
 
 
@@ -26,6 +27,9 @@ CScene::~CScene()
 {
 	delete m_pCmaera;
 	delete m_pMainLight;
+	if (m_pShaderManagerClass )
+		m_pShaderManagerClass->Shutdown();
+	delete m_pShaderManagerClass;
 }
 bool CScene::Release()
 {
@@ -37,20 +41,84 @@ bool CScene::Release()
 	m_pDepthTextureSRV->Release();
 	return true;
 }
-bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext)
+void CScene::CreateOfenUseState()
 {
-	m_pD3d11Device = pd3d11Device;
-	m_pD3d11Context = pContext;
-	m_font.Initialize(m_pD3d11Device, m_pD3d11Context, "font01.txt", "font01.tga", 32, 1);
-	//m_fpsString.Initialize( m_pD3d11Device , m_pD3d11Context , )
+	HRESULT hr;
+	//raster state
 	D3D11_RASTERIZER_DESC desc;
 	ZeroMemory(&desc, sizeof(D3D11_RASTERIZER_DESC));
 	desc.FillMode = D3D11_FILL_WIREFRAME;
 	desc.CullMode = D3D11_CULL_BACK;
 	desc.DepthBias = TRUE;
-	m_pD3d11Device->CreateRasterizerState(&desc, &m_pFillFrameState);
+	hr = m_pD3d11Device->CreateRasterizerState(&desc, &m_pFillFrameState);
+	assert(hr);
 	desc.FillMode = D3D11_FILL_SOLID;
-	m_pD3d11Device->CreateRasterizerState(&desc, &m_pFillSolidState);
+	hr = m_pD3d11Device->CreateRasterizerState(&desc, &m_pFillSolidState);
+	assert(hr);
+
+	//depthstenci state
+	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
+	ZeroMemory(&depthStencilDesc, sizeof(depthStencilDesc));
+
+	// Set up the description of the stencil state.
+	depthStencilDesc.DepthEnable = true;
+	depthStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+
+	depthStencilDesc.StencilEnable = true;
+	depthStencilDesc.StencilReadMask = 0xFF;
+	depthStencilDesc.StencilWriteMask = 0xFF;
+
+	// Stencil operations if pixel is front-facing.
+	depthStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Stencil operations if pixel is back-facing.
+	depthStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	depthStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Create the depth stencil state.
+	hr = m_pD3d11Device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
+	assert(hr);
+
+	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
+	depthDisabledStencilDesc.DepthEnable = false;
+	depthDisabledStencilDesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	depthDisabledStencilDesc.DepthFunc = D3D11_COMPARISON_LESS;
+	depthDisabledStencilDesc.StencilEnable = true;
+	depthDisabledStencilDesc.StencilReadMask = 0xFF;
+	depthDisabledStencilDesc.StencilWriteMask = 0xFF;
+	depthDisabledStencilDesc.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_INCR;
+	depthDisabledStencilDesc.FrontFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	depthDisabledStencilDesc.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_DECR;
+	depthDisabledStencilDesc.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	depthDisabledStencilDesc.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+
+	// Create the state using the device.
+	hr = m_pD3d11Device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_depthDisabledStencilState);
+	assert(hr);
+
+}
+bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext)
+{
+	m_pD3d11Device = pd3d11Device;
+	m_pD3d11Context = pContext;
+	m_pShaderManagerClass->Initialize(pd3d11Device, AfxGetMainWnd());
+	m_font.Initialize(m_pD3d11Device, m_pD3d11Context, "font01.txt", "font01.tga", 32, 1);
+	int2 windowSize;
+	windowSize = AfxGetWindowSize();
+	m_fpsString.Initialize(m_pD3d11Device, m_pD3d11Context, windowSize.x, windowSize.y , 20 , false,&m_font ,"fps: NULL"  ,  10 ,10 ,  1.0f , 0 , 0);
+
+	//创建经常使用的raster state和depthstencil state
+	CreateOfenUseState();
+	
 	CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
 	pNewTrianle->Init(pd3d11Device, pContext);
 	CCube* pNewCube = new CCube(_T("Cube"));
@@ -138,8 +206,28 @@ void CScene::Tick(DWORD dwTimes)
 		it->first->Tick(dwTimes);
 	}
 }
+void CScene::RenderFps(DWORD dwTimes)
+{
+	static DWORD dwTimeTick = 0;
+	static DWORD  renderTime = 0;
+	dwTimeTick += dwTimes;
+	renderTime += 1;
+	if (dwTimeTick > 1000)
+	{
+		char a[20];
+		sprintf(a, "fps: %d", renderTime);
+		m_fpsString.UpdateSentence(m_pD3d11Context, &m_font, a, 10, 10, 1.0f, 0.0f, 0.0f);
+	}
+	else
+	{
+		dwTimeTick = 0;
+		renderTime = 0;
+	}
+	m_fpsString.Render(m_pD3d11Context, m_pShaderManagerClass, float4x4::Identity(), float4x4::Identity(), float4x4::Ortho(AfxGetWindowSize().x, AfxGetWindowSize().y, 0.0f, 1.0f, false) , m_font.GetTexture());
+}
 bool CScene::Render(DWORD dwTimes)
 {
+	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	if (m_bWireFrame)
 		m_pD3d11Context->RSSetState(m_pFillFrameState);
 	else
@@ -153,6 +241,11 @@ bool CScene::Render(DWORD dwTimes)
 	{
 		m_quardDepth->Render(dwTimes);
 	}
+	if (m_bWireFrame)
+		m_pD3d11Context->RSSetState(m_pFillSolidState);
+	m_pD3d11Context->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
+	RenderFps( dwTimes);
+	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	return true;
 }
 bool CScene::UpdateRenderParams()

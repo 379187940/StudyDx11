@@ -6,6 +6,7 @@
 struct RenderParam;
 class CQuard;
 class FirstPersonCamera;
+class ShaderManagerClass;
 using namespace std;
 class CScene
 {
@@ -23,7 +24,9 @@ public:
 	void UpdateInput(InputController& Controller, float ElapsedTime);
 	FirstPersonCamera* GetCamera() { return m_pCmaera; }
 	const CDirLight* GetMainLight() { return m_pMainLight; }
+	
 protected:
+	//ui
 	static void TW_CALL SetObjectVisible(const void *value, void * /*clientData*/);
 	static void TW_CALL GetObjectVisible(void *value, void * /*clientData*/);
 	static void TW_CALL SetRenderDepth(const void *value, void * /*clientData*/);
@@ -35,6 +38,8 @@ protected:
 	void UpdateCamera(float3 cameraPos, float3 lookAt, float nearClipPlane , float farClipPlane );
 	void SetRenderDepth(bool bDrawDepth) { m_bDrawDepth = bDrawDepth; }
 	bool IsDrawDepth() { return m_bDrawDepth; }
+	void RenderFps(DWORD dwTimes);
+	void CreateOfenUseState();
 private:
 	map<IRenderObject*, int> m_allObject;
 	bool m_bDrawDepth = false ;
@@ -48,8 +53,11 @@ private:
 	CDirLight* m_pMainLight;
 	CComPtr<ID3D11RasterizerState> m_pFillSolidState;
 	CComPtr<ID3D11RasterizerState> m_pFillFrameState;
+	CComPtr<ID3D11DepthStencilState> m_depthDisabledStencilState;
+	CComPtr<ID3D11DepthStencilState> m_depthStencilState;
 	FontClass m_font;
 	TextClass m_fpsString;
+	ShaderManagerClass* m_pShaderManagerClass;
 };
 extern CScene g_Scene;
 

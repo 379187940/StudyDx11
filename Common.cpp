@@ -2,7 +2,17 @@
 #include "Common.h"
 #include <assert.h>
 #include <vector>
-
+extern HWND g_hWnd;
+HWND AfxGetMainWnd()
+{
+	return g_hWnd;
+}
+int2 AfxGetWindowSize()
+{
+	RECT rc;
+	GetWindowRect(g_hWnd, &rc);
+	return int2(rc.right - rc.left, rc.bottom - rc.top);
+}
 ID3D11Texture2D* CreateTexture2d(
 	ID3D11Device* pDevice,
 	DWORD width,

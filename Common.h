@@ -48,3 +48,6 @@ char* CustomW2A(const WCHAR* wstr);
 #endif
 ID3D11InputLayout* CreateInputLayout(ID3D11Device* pDevice, const std::vector<D3D11_INPUT_ELEMENT_DESC>& input, const void* pShaderBytecodeWithInputSignature, UINT sizeShaderBytecode);
 bool UpdateBufferData(ID3D11DeviceContext* pContext, ID3D11Buffer* pBuffer, void* pdata, size_t dataSize);
+
+HWND AfxGetMainWnd();
+int2 AfxGetWindowSize();

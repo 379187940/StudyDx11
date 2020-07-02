@@ -29,6 +29,9 @@
     <Filter Include="Font">
       <UniqueIdentifier>{aff120de-6da9-46ad-b6ce-ba3bef6fec1d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Manager">
+      <UniqueIdentifier>{a3fc10e3-e4d0-41e7-b36d-72a7a80357dd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderObject.h">
@@ -113,6 +116,9 @@
     <ClInclude Include="textclass.h">
       <Filter>Font</Filter>
     </ClInclude>
+    <ClInclude Include="shadermanagerclass.h">
+      <Filter>Manager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -175,6 +181,9 @@
     </ClCompile>
     <ClCompile Include="textclass.cpp">
       <Filter>Font</Filter>
+    </ClCompile>
+    <ClCompile Include="shadermanagerclass.cpp">
+      <Filter>Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 #include "unit.h"
 #include "textclass.h"
-
+#include "shadermanagerclass.h"
 
 TextClass::TextClass()
 {
@@ -82,11 +82,11 @@ void TextClass::Shutdown()
 }
 
 
-void TextClass::Render(ID3D11DeviceContext* deviceContext, float4x4 worldMatrix, float4x4 viewMatrix, 
+void TextClass::Render(ID3D11DeviceContext* deviceContext, ShaderManagerClass* ShaderManager,float4x4 worldMatrix, float4x4 viewMatrix,
 					   float4x4 orthoMatrix, ID3D11ShaderResourceView* fontTexture)
 {
 	// Draw the sentence.
-	RenderSentence(deviceContext/*, ShaderManager*/, worldMatrix, viewMatrix, orthoMatrix, fontTexture);
+	RenderSentence(deviceContext, ShaderManager, worldMatrix, viewMatrix, orthoMatrix, fontTexture);
 
 	return;
 }
@@ -288,7 +288,7 @@ bool TextClass::UpdateSentence(ID3D11DeviceContext* deviceContext, FontClass* Fo
 }
 
 
-void TextClass::RenderSentence(ID3D11DeviceContext* deviceContext, float4x4 worldMatrix, float4x4 viewMatrix,
+void TextClass::RenderSentence(ID3D11DeviceContext* deviceContext,ShaderManagerClass* ShaderManager , float4x4 worldMatrix, float4x4 viewMatrix,
 							   float4x4 orthoMatrix, ID3D11ShaderResourceView* fontTexture)
 {
 	unsigned int stride, offset;
@@ -308,7 +308,7 @@ void TextClass::RenderSentence(ID3D11DeviceContext* deviceContext, float4x4 worl
 		deviceContext->IASetIndexBuffer(m_indexBuffer2, DXGI_FORMAT_R32_UINT, 0);
 		deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-		//ShaderManager->RenderFontShader(deviceContext, m_indexCount, worldMatrix, viewMatrix, orthoMatrix, fontTexture, shadowColor);
+		ShaderManager->RenderFontShader(deviceContext, m_indexCount, worldMatrix, viewMatrix, orthoMatrix, fontTexture, shadowColor);
 	}
 
 	// Render the text buffers.
@@ -316,7 +316,7 @@ void TextClass::RenderSentence(ID3D11DeviceContext* deviceContext, float4x4 worl
 	deviceContext->IASetIndexBuffer(m_indexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	//ShaderManager->RenderFontShader(deviceContext, m_indexCount, worldMatrix, viewMatrix, orthoMatrix, fontTexture, m_pixelColor);
+	ShaderManager->RenderFontShader(deviceContext, m_indexCount, worldMatrix, viewMatrix, orthoMatrix, fontTexture, m_pixelColor);
 
 	return;
 }

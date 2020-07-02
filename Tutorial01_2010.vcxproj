@@ -419,6 +419,7 @@
     <ClCompile Include="MnagerClass.cpp" />
     <ClCompile Include="Quard.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="shadermanagerclass.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="textclass.cpp" />
     <ClCompile Include="textureclass.cpp" />
@@ -467,6 +468,7 @@
     <ClInclude Include="Quard.h" />
     <CLInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="shadermanagerclass.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="textclass.h" />
     <ClInclude Include="textureclass.h" />
