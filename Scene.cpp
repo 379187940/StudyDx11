@@ -51,10 +51,10 @@ void CScene::CreateOfenUseState()
 	desc.CullMode = D3D11_CULL_BACK;
 	desc.DepthBias = TRUE;
 	hr = m_pD3d11Device->CreateRasterizerState(&desc, &m_pFillFrameState);
-	assert(hr);
+	assert(SUCCEEDED(hr));
 	desc.FillMode = D3D11_FILL_SOLID;
 	hr = m_pD3d11Device->CreateRasterizerState(&desc, &m_pFillSolidState);
-	assert(hr);
+	assert(SUCCEEDED(hr));
 
 	//depthstenci state
 	D3D11_DEPTH_STENCIL_DESC depthStencilDesc;
@@ -83,7 +83,7 @@ void CScene::CreateOfenUseState()
 
 	// Create the depth stencil state.
 	hr = m_pD3d11Device->CreateDepthStencilState(&depthStencilDesc, &m_depthStencilState);
-	assert(hr);
+	assert(SUCCEEDED(hr));
 
 	D3D11_DEPTH_STENCIL_DESC depthDisabledStencilDesc;
 	depthDisabledStencilDesc.DepthEnable = false;
@@ -103,7 +103,7 @@ void CScene::CreateOfenUseState()
 
 	// Create the state using the device.
 	hr = m_pD3d11Device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_depthDisabledStencilState);
-	assert(hr);
+	assert(SUCCEEDED(hr));
 
 }
 bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext)

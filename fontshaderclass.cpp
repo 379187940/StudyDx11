@@ -32,7 +32,11 @@ bool FontShaderClass::Initialize(ID3D11Device* device, HWND hwnd)
 
 
 	// Initialize the vertex and pixel shaders.
-	result = InitializeShader(device, hwnd, L"font.vs", L"font.ps");
+	CString vsFile; 
+	GetFullPath(L"font.vs",vsFile);
+	CString psFile; 
+	GetFullPath(L"font.ps",psFile);
+	result = InitializeShader(device, hwnd, vsFile.GetBuffer() , psFile.GetBuffer());
 	if(!result)
 	{
 		return false;
