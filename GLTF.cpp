@@ -72,7 +72,7 @@ bool CGLTF::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext )
 	pPixelShader->Release();
 	pPixelShader = NULL;
 
-	D3D10_SHADER_MACRO macro[] = {
+	D3D_SHADER_MACRO macro[] = {
 		{"USE_TEX" , "1"},
 		{nullptr,nullptr}
 	};

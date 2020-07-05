@@ -70,7 +70,7 @@
 //	return colorResult;
 //} 
 #ifdef USE_TEX
-texture2D diffuseTex;
+Texture2D diffuseTex;
 SamplerState samLinear : register(s0);
 #endif
 struct vs_input
