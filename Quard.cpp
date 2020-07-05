@@ -30,10 +30,9 @@ bool CQuard::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	assert(pContext);
 	m_pd3dDevice = pd3dDevice;
 	m_pContext = pContext;
-	ID3D10Blob* pVertexShader = NULL;
-	ID3D10Blob* pErrorMsg = NULL;
+	ID3DBlob* pVertexShader = NULL;
 	HRESULT hr;
-	hr = CompileShaderFromFile(_T("quard.hlsl"), NULL, NULL, "VS_RenderQuad", "vs_4_0", 0, 0, NULL, &pVertexShader);
+	hr = CompileShaderFromFile(_T("quard.hlsl"), NULL, NULL, "VS_RenderQuad", "vs_4_0", 0, 0, &pVertexShader);
 	if (FAILED(hr))
 		assert(false);
 	D3D11_INPUT_ELEMENT_DESC desc[] = {
@@ -73,16 +72,9 @@ bool CQuard::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 		pVertexShader->Release();
 		assert(false); return false;
 	}
-	ID3D10Blob* pPixelShader = NULL;
-	ID3D10Blob*	pBlob_Errors = NULL;
+	ID3DBlob* pPixelShader = NULL;
 
-	hr = CompileShaderFromFile(_T("quard.hlsl"), NULL, NULL, "PS_RenderCameraZ", "ps_4_0", 0, 0, NULL, &pPixelShader);
-	LPVOID l_pError = NULL;
-	if (FAILED(hr))
-	{
-		l_pError = pBlob_Errors->GetBufferPointer();
-		assert(false); return false;
-	}
+	hr = CompileShaderFromFile(_T("quard.hlsl"), NULL, NULL, "PS_RenderCameraZ", "ps_4_0", 0, 0, &pPixelShader);
 	if (FAILED(m_pd3dDevice->CreatePixelShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_pPixelShader)))
 	{
 		assert(false);

@@ -128,8 +128,8 @@ bool CTerrain::InitGeometry()
 	m_pIndexBuffer = CreateBuffer(m_pd3dDevice, m_indexBuffer.size() * sizeof(int), D3D11_USAGE_DYNAMIC, D3D11_BIND_INDEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
 	assert(m_pIndexBuffer);
 
-	ID3D10Blob* pVertexShaderBlob = NULL;
-	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShaderBlob)));
+	ID3DBlob* pVertexShaderBlob = NULL;
+	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "vs_main", "vs_4_0", 0, 0, &pVertexShaderBlob)));
 	vector<D3D11_INPUT_ELEMENT_DESC> allDesc;
 	allDesc.push_back({"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0});
 	allDesc.push_back({"COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,1,0,D3D11_INPUT_PER_VERTEX_DATA,0 });
@@ -137,8 +137,8 @@ bool CTerrain::InitGeometry()
 	m_pd3dDevice->CreateVertexShader(pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize(), NULL, &m_pVertexShader);
 	pVertexShaderBlob->Release();
 
-	ID3D10Blob* pPixelShaderBlob = NULL;
-	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShaderBlob)));
+	ID3DBlob* pPixelShaderBlob = NULL;
+	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "ps_main", "ps_4_0", 0, 0, &pPixelShaderBlob)));
 	m_pd3dDevice->CreatePixelShader(pPixelShaderBlob->GetBufferPointer(), pPixelShaderBlob->GetBufferSize(), NULL, &m_pPixelShader);
 	pPixelShaderBlob->Release();
  

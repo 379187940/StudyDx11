@@ -32,8 +32,7 @@ HRESULT CompileShaderFromFile(
 	char* proFile,
 	UINT flag1,
 	UINT flag2,
-	ID3DX11ThreadPump* pPump,
-	ID3D10Blob** pShader 
+	ID3DBlob** pShader 
 );
 void DeleteComPtr(IUnknown* comPtr);
 //会在exe目录或者工作目录查找

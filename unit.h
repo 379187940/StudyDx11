@@ -1,7 +1,8 @@
 #pragma once
 #include "BasicMath.hpp"
 #include <d3dcommon.h>
-#include "d3dx11core.h"
+#include "d3d11.h"
+//#include "d3dx11core.h"
 #include <memory>
 #include <algorithm>
 #include <xstring>

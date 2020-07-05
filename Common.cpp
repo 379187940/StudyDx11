@@ -116,16 +116,17 @@ HRESULT CompileShaderFromFile(
 	char* proFile,
 	UINT flag1,
 	UINT flag2,
-	ID3DX11ThreadPump* pPump,
-	ID3D10Blob** pShader
+	ID3DBlob** pShader
 )
 {
 	CString fullFilePath;
 	if (!GetFullPath(fileName, fullFilePath))
 		return S_FALSE;
 	HRESULT hr;
-	ID3D10Blob*	pBlob_Errors = NULL;
-	D3DX11CompileFromFile(fullFilePath, pMacro, pInclude, functionName, proFile, flag1, flag2, pPump, pShader,&pBlob_Errors , &hr);
+	ID3DBlob*	pBlob_Errors = NULL;
+	D3DCompileFromFile(fullFilePath, NULL, NULL, "FontVertexShader", "vs_5_0", 0, 0, pShader,
+		&pBlob_Errors);
+	//D3DX11CompileFromFile(fullFilePath, pMacro, pInclude, functionName, proFile, flag1, flag2, pPump, pShader,&pBlob_Errors , &hr);
 	if (FAILED(hr))
 	{
 		if (pBlob_Errors)

@@ -46,8 +46,8 @@ bool CGLTF::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext )
 	m_TransMatrixBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(globalmatrix), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0) ) ;
 	m_LightInfoBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(lightinfo), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0) );
 	m_MaterialBuffer = CComPtr<ID3D11Buffer>(CreateBuffer(m_pd3dDevice, sizeof(material), D3D11_USAGE_DEFAULT, D3D11_BIND_CONSTANT_BUFFER, 0, 0));
-	ID3D10Blob* pVertexShader = NULL;
-	HRESULT hr = CompileShaderFromFile(_T("gltfmodel.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader);
+	ID3DBlob* pVertexShader = NULL;
+	HRESULT hr = CompileShaderFromFile(_T("gltfmodel.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, &pVertexShader);
 	assert(SUCCEEDED(hr));
 	D3D11_INPUT_ELEMENT_DESC elements[]=
 	{
@@ -63,8 +63,8 @@ bool CGLTF::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext )
 	hr = m_pd3dDevice->CreateVertexShader(pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), NULL, &m_pVertexShader);
 	assert(SUCCEEDED(hr));
 
-	ID3D10Blob* pPixelShader = NULL;
-	hr = CompileShaderFromFile(_T("gltfmodel.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader);
+	ID3DBlob* pPixelShader = NULL;
+	hr = CompileShaderFromFile(_T("gltfmodel.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, &pPixelShader);
 	assert(SUCCEEDED(hr));
 	//pixel shader
 	hr = m_pd3dDevice->CreatePixelShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_pPixelShader);
@@ -76,7 +76,7 @@ bool CGLTF::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext )
 		{"USE_TEX" , "1"},
 		{nullptr,nullptr}
 	};
-	hr = CompileShaderFromFile(_T("gltfmodel.hlsl"), macro, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader);
+	hr = CompileShaderFromFile(_T("gltfmodel.hlsl"), macro, NULL, "ps_main", "ps_4_0", 0, 0, &pPixelShader);
 	assert(SUCCEEDED(hr));
 	//pixel shader
 	hr = m_pd3dDevice->CreatePixelShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_PixelShaderUseTex);

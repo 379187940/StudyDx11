@@ -124,15 +124,9 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 		{ "POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA ,0 },
 		{ "NORMAL",0,DXGI_FORMAT_R32G32B32_FLOAT,0,12,D3D11_INPUT_PER_VERTEX_DATA ,0 },
 	};
-	ID3D10Blob* pVertexShader = NULL;
-	ID3D10Blob* pErrorMsg = NULL;
+	ID3DBlob* pVertexShader = NULL;
 	//pErrorMsg->GetBufferPointer();
-	hr = CompileShaderFromFile(_T("cubelight.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, NULL, &pVertexShader);
-	if (pErrorMsg)
-	{
-		OutputDebugStringA((char*)pErrorMsg->GetBufferPointer());
-		pErrorMsg->Release();
-	}
+	hr = CompileShaderFromFile(_T("cubelight.hlsl"), NULL, NULL, "vs_main", "vs_4_0", 0, 0, &pVertexShader);
 		
 	assert(SUCCEEDED(hr));
 
@@ -142,11 +136,9 @@ bool CCubeLight ::Init(ID3D11Device * pd3dDevice, ID3D11DeviceContext * pContext
 	hr = m_pd3dDevice->CreateVertexShader(pVertexShader->GetBufferPointer(), pVertexShader->GetBufferSize(), NULL, &m_pVertexShader);
 	assert(SUCCEEDED(hr));
 	
-	ID3D10Blob* pPixelShader = NULL;
-	hr = CompileShaderFromFile(_T("cubelight.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, NULL, &pPixelShader);
+	ID3DBlob* pPixelShader = NULL;
+	hr = CompileShaderFromFile(_T("cubelight.hlsl"), NULL, NULL, "ps_main", "ps_4_0", 0, 0, &pPixelShader);
 	assert(SUCCEEDED(hr));
-	if (pErrorMsg)
-		pErrorMsg->Release();
 	//pixel shader
 	hr = m_pd3dDevice->CreatePixelShader(pPixelShader->GetBufferPointer(), pPixelShader->GetBufferSize(), NULL, &m_pPixelShader);
 	assert(SUCCEEDED(hr));

@@ -8,7 +8,6 @@
 #include "unit.h"
 #include <windows.h>
 #include <d3d11.h>
-#include <D3DX11.h>
 #include "resource.h"
 #include "Triangle.h"
 #include "Cube.h"
