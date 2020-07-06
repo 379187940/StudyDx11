@@ -105,6 +105,34 @@ void CScene::CreateOfenUseState()
 	hr = m_pD3d11Device->CreateDepthStencilState(&depthDisabledStencilDesc, &m_depthDisabledStencilState);
 	assert(SUCCEEDED(hr));
 
+	D3D11_BLEND_DESC blendStateDescription;
+	ZeroMemory(&blendStateDescription, sizeof(D3D11_BLEND_DESC));
+
+	// Create an alpha enabled blend state description.
+	blendStateDescription.AlphaToCoverageEnable = FALSE;
+	blendStateDescription.IndependentBlendEnable = false;
+	blendStateDescription.RenderTarget[0].BlendEnable = true;
+	blendStateDescription.RenderTarget[0].BlendOp = D3D11_BLEND_OP_ADD;
+	blendStateDescription.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP_ADD;
+	blendStateDescription.RenderTarget[0].SrcBlend = D3D11_BLEND_ONE;
+	blendStateDescription.RenderTarget[0].DestBlend = D3D11_BLEND_ONE;
+	blendStateDescription.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND_ONE;
+	blendStateDescription.RenderTarget[0].DestBlendAlpha = D3D11_BLEND_ZERO;
+	blendStateDescription.RenderTarget[0].RenderTargetWriteMask = 0x0f;
+
+	// Create the blend state using the description.
+	hr = m_pD3d11Device->CreateBlendState(&blendStateDescription, &m_alphaEnableBlendingState);
+	assert(SUCCEEDED(hr));
+
+	// Modify the description to create an alpha disabled blend state description.
+	blendStateDescription.RenderTarget[0].BlendEnable = false;
+	blendStateDescription.AlphaToCoverageEnable = false;
+
+	// Create the blend state using the description.
+	hr = m_pD3d11Device->CreateBlendState(&blendStateDescription, &m_alphaDisableBlendingState);
+	assert(SUCCEEDED(hr));
+
+
 }
 bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pContext)
 {
@@ -134,11 +162,11 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	//RegisterObject(pNewTrianle);
 	//RegisterObject(pNewCube);
 	//RegisterObject(pNewCubeLight);
-	RegisterObject(pNewGltf);
+	//RegisterObject(pNewGltf);
 	
-	CTerrain* pTerrain = new CTerrain(_T("Terrain"));
-	pTerrain->Init(pd3d11Device, pContext);
-	RegisterObject(pTerrain);
+	//CTerrain* pTerrain = new CTerrain(_T("Terrain"));
+	//pTerrain->Init(pd3d11Device, pContext);
+	//RegisterObject(pTerrain);
 	
 	//CGLTF* pNewTerrain = new CGLTF(_T("terrain"));
 	//pNewTerrain->Init(pd3d11Device, pContext);
@@ -210,23 +238,32 @@ void CScene::RenderFps(DWORD dwTimes)
 {
 	static DWORD dwTimeTick = 0;
 	static DWORD  renderTime = 0;
-	dwTimeTick += dwTimes;
-	renderTime += 1;
+	static DWORD dOldTick = 0;
+	if (dOldTick == 0)
+	{
+		dOldTick = dwTimes;
+		return;
+	}
+	dwTimeTick += dwTimes - dOldTick ;
+	dOldTick = dwTimes;
+	renderTime += 1;////////
 	if (dwTimeTick > 1000)
 	{
 		char a[20];
 		sprintf(a, "fps: %d", renderTime);
 		m_fpsString.UpdateSentence(m_pD3d11Context, &m_font, a, 10, 10, 1.0f, 0.0f, 0.0f);
+		dwTimeTick = 0;
+		renderTime = 0;
 	}
 	else
 	{
-		dwTimeTick = 0;
-		renderTime = 0;
+	
 	}
 	m_fpsString.Render(m_pD3d11Context, m_pShaderManagerClass, float4x4::Identity(), float4x4::Identity(), float4x4::Ortho(AfxGetWindowSize().x, AfxGetWindowSize().y, 0.0f, 1.0f, false) , m_font.GetTexture());
 }
 bool CScene::Render(DWORD dwTimes)
 {
+	EnableAlphaBlending();
 	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	if (m_bWireFrame)
 		m_pD3d11Context->RSSetState(m_pFillFrameState);
@@ -244,9 +281,44 @@ bool CScene::Render(DWORD dwTimes)
 	if (m_bWireFrame)
 		m_pD3d11Context->RSSetState(m_pFillSolidState);
 	m_pD3d11Context->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
+	
 	RenderFps( dwTimes);
 	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	return true;
+}
+void CScene::EnableAlphaBlending()
+{
+	float blendFactor[4];
+
+
+	// Setup the blend factor.
+	blendFactor[0] = 0.0f;
+	blendFactor[1] = 0.0f;
+	blendFactor[2] = 0.0f;
+	blendFactor[3] = 0.0f;
+
+	// Turn on the alpha blending.
+	m_pD3d11Context->OMSetBlendState(m_alphaEnableBlendingState, blendFactor, 0xffffffff);
+
+	return;
+}
+
+
+void CScene::DisableAlphaBlending()
+{
+	float blendFactor[4];
+
+
+	// Setup the blend factor.
+	blendFactor[0] = 0.0f;
+	blendFactor[1] = 0.0f;
+	blendFactor[2] = 0.0f;
+	blendFactor[3] = 0.0f;
+
+	// Turn off the alpha blending.
+	m_pD3d11Context->OMSetBlendState(m_alphaDisableBlendingState, blendFactor, 0xffffffff);
+
+	return;
 }
 bool CScene::UpdateRenderParams()
 {

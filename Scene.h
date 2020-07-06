@@ -40,6 +40,8 @@ protected:
 	bool IsDrawDepth() { return m_bDrawDepth; }
 	void RenderFps(DWORD dwTimes);
 	void CreateOfenUseState();
+	void EnableAlphaBlending();
+	void DisableAlphaBlending();
 private:
 	map<IRenderObject*, int> m_allObject;
 	bool m_bDrawDepth = false ;
@@ -55,6 +57,8 @@ private:
 	CComPtr<ID3D11RasterizerState> m_pFillFrameState;
 	CComPtr<ID3D11DepthStencilState> m_depthDisabledStencilState;
 	CComPtr<ID3D11DepthStencilState> m_depthStencilState;
+	CComPtr<ID3D11BlendState> m_alphaEnableBlendingState;
+	CComPtr<ID3D11BlendState> m_alphaDisableBlendingState;
 	FontClass m_font;
 	TextClass m_fpsString;
 	ShaderManagerClass* m_pShaderManagerClass;
