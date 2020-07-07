@@ -226,4 +226,7 @@
       <Filter>shader</Filter>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="工作记录.txt" />
+  </ItemGroup>
 </Project>

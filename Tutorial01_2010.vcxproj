@@ -476,6 +476,7 @@
     <ResourceCompile Include="Tutorial01.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="工作记录.txt" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
