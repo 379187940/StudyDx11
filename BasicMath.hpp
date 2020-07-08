@@ -1390,7 +1390,22 @@ template <class T> struct Matrix4x4
         }
         return mOut;
     }
-
+	Matrix4x4 operator + (const Matrix4x4& matrix)
+	{
+		Matrix4x4 mOut;
+		for (int i = 0; i < 4; i++)
+		{
+			for (int j = 0; j < 4; j++)
+			{
+				for (int k = 0; k < 4; k++)
+				{
+					mOut.m[i][j] += m[i][k];
+					mOut.m[i][j] += matrix.m[k][j];
+				}
+			}
+		}
+		return mOut;
+	}
 
     T Determinant() const
     {
