@@ -22,7 +22,7 @@
 class cScene
 {
 public:
-
+	friend bool LoadCharacter();
 	class cMesh
 	{
 	public:
@@ -96,6 +96,7 @@ public:
 		unsigned int numberOfIndices;
 
 	private:
+		friend bool LoadCharacter();
 		friend class cSceneManager;
 		friend class cScene;
 
