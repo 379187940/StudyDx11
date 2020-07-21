@@ -399,6 +399,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationCModel.cpp" />
     <ClCompile Include="BaseRenderObject.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="cScene.cpp" />
@@ -444,6 +445,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationCModel.h" />
     <ClInclude Include="BaseRenderObject.h" />
     <ClInclude Include="BasicMath.hpp" />
     <ClInclude Include="Common.h" />
