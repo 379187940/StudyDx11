@@ -80,7 +80,7 @@ public:
 		friend bool LoadCharacter();
 		friend class cSceneManager;
 		friend class cScene;
-
+		friend class CAnimationCModel;
 		// ** Bones **
 		unsigned int mNumBones;
 		std::vector<cBone*> mBones; // master list 
