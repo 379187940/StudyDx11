@@ -125,6 +125,9 @@
     <ClInclude Include="cScene.h">
       <Filter>Character</Filter>
     </ClInclude>
+    <ClInclude Include="AnimationCModel.h">
+      <Filter>Character</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -192,6 +195,9 @@
       <Filter>Manager</Filter>
     </ClCompile>
     <ClCompile Include="cScene.cpp">
+      <Filter>Character</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationCModel.cpp">
       <Filter>Character</Filter>
     </ClCompile>
   </ItemGroup>
