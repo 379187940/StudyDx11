@@ -159,7 +159,7 @@ public:
 private:
 	friend bool mProcessChildNodes(CAnimationCModel* pModel, CAnimationCModel::cNode* parentnode, aiNode* parentainode);
 	vector<cMesh*> m_Skin;
-	vector<cAnimation> m_Actons;
+	vector<cAnimation*> m_Actons;
 	cNode* m_RootNode;
 	unsigned int m_NumNodes;
 	std::vector<cNode*> m_Nodes; // master list

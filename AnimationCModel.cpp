@@ -64,9 +64,8 @@ static bool mProcessChildNodes(CAnimationCModel* pModel, CAnimationCModel::cNode
 bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& action)
 {
 	Assimp::Importer* mImporter = new Assimp::Importer;
-	std::string fileAndPath = "media/models/RPG-Character.fbx";
 
-	const aiScene* pAiScene = mImporter->ReadFile(fileAndPath.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+	const aiScene* pAiScene = mImporter->ReadFile(strSkin.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 	std::string assimpError = mImporter->GetErrorString();
 	assert(pAiScene);
 	cScene* pScene = new cScene();
@@ -256,66 +255,69 @@ bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& a
 	// ****************
 	std::string animFileName = "media\\models\\rpg-character\\RPG-Character@Unarmed-Idle.fbx";
 
-	Assimp::Importer animImp;
-	const aiScene* pAiAnimScene = animImp.ReadFile(animFileName.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
-
-	cAnimation* pAnim = new cAnimation();
-
-	pAnim->name = "idle_animation";
-	pAnim->durationInTicks = 50;
-	pAnim->numBoneChannels = 55;
-	pAnim->ticksPerSecond = 30;
-
-	for (int channelIndex = 0; channelIndex < pAnim->numBoneChannels; channelIndex++)
+	
+	for (int i = 0; i < action.size(); i++)
 	{
-		aiNodeAnim* aiAnimChannel = pAiAnimScene->mAnimations[0]->mChannels[channelIndex];
-		cAnimation::cBoneAnimation* pBoneAnim = new cAnimation::cBoneAnimation();
+		Assimp::Importer animImp;
+		const aiScene* pAiAnimScene = animImp.ReadFile(action[i].c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
+		cAnimation* pAnim = new cAnimation();
 
-		pBoneAnim->nodeName = aiAnimChannel->mNodeName.C_Str();
-		pBoneAnim->numPositions = aiAnimChannel->mNumPositionKeys;
-		pBoneAnim->numScales = aiAnimChannel->mNumScalingKeys;
-		pBoneAnim->numRotations = aiAnimChannel->mNumRotationKeys;
-		// ** Position keys **
-		for (size_t posIndex = 0; posIndex < aiAnimChannel->mNumPositionKeys; posIndex++)
+		pAnim->name = "idle_animation";
+		pAnim->durationInTicks = 50;
+		pAnim->numBoneChannels = 55;
+		pAnim->ticksPerSecond = 30;
+
+		for (int channelIndex = 0; channelIndex < pAnim->numBoneChannels; channelIndex++)
 		{
-			aiVectorKey aiPosData = aiAnimChannel->mPositionKeys[posIndex];
-			cAnimation::cBoneAnimation::sV3Data* posData = new cAnimation::cBoneAnimation::sV3Data();
-			posData->time = aiPosData.mTime;
-			posData->data.x = (false && pBoneAnim->nodeName == "B_Pelvis" ? 0.0f : aiPosData.mValue.x);
-			posData->data.y = aiPosData.mValue.y;
-			posData->data.z = aiPosData.mValue.z;
+			aiNodeAnim* aiAnimChannel = pAiAnimScene->mAnimations[0]->mChannels[channelIndex];
+			cAnimation::cBoneAnimation* pBoneAnim = new cAnimation::cBoneAnimation();
 
-			pBoneAnim->positionKeys.push_back(posData);
+			pBoneAnim->nodeName = aiAnimChannel->mNodeName.C_Str();
+			pBoneAnim->numPositions = aiAnimChannel->mNumPositionKeys;
+			pBoneAnim->numScales = aiAnimChannel->mNumScalingKeys;
+			pBoneAnim->numRotations = aiAnimChannel->mNumRotationKeys;
+			// ** Position keys **
+			for (size_t posIndex = 0; posIndex < aiAnimChannel->mNumPositionKeys; posIndex++)
+			{
+				aiVectorKey aiPosData = aiAnimChannel->mPositionKeys[posIndex];
+				cAnimation::cBoneAnimation::sV3Data* posData = new cAnimation::cBoneAnimation::sV3Data();
+				posData->time = aiPosData.mTime;
+				posData->data.x = (false && pBoneAnim->nodeName == "B_Pelvis" ? 0.0f : aiPosData.mValue.x);
+				posData->data.y = aiPosData.mValue.y;
+				posData->data.z = aiPosData.mValue.z;
+
+				pBoneAnim->positionKeys.push_back(posData);
+			}
+
+			// ** Scaling keys **
+			for (size_t scaleIndex = 0; scaleIndex < aiAnimChannel->mNumScalingKeys; scaleIndex++)
+			{
+				aiVectorKey aiScaleData = aiAnimChannel->mScalingKeys[scaleIndex];
+				cAnimation::cBoneAnimation::sV3Data* scaleData = new cAnimation::cBoneAnimation::sV3Data();
+				scaleData->time = aiScaleData.mTime;
+				scaleData->data.x = aiScaleData.mValue.x;
+				scaleData->data.y = aiScaleData.mValue.y;
+				scaleData->data.z = aiScaleData.mValue.z;
+
+				pBoneAnim->scalingKeys.push_back(scaleData);
+			}
+
+			// ** Rotation keys **
+			for (size_t rotIndex = 0; rotIndex < aiAnimChannel->mNumRotationKeys; rotIndex++)
+			{
+				aiQuatKey aiRotData = aiAnimChannel->mRotationKeys[rotIndex];
+				cAnimation::cBoneAnimation::sQData* rotData = new cAnimation::cBoneAnimation::sQData();
+				rotData->time = aiRotData.mTime;
+				rotData->data.q.x = aiRotData.mValue.x;
+				rotData->data.q.y = aiRotData.mValue.y;
+				rotData->data.q.z = aiRotData.mValue.z;
+				rotData->data.q.w = aiRotData.mValue.w;
+
+				pBoneAnim->rotationKeys.push_back(rotData);
+			}
+			pAnim->boneAnimations.push_back(pBoneAnim);
+			pAnim->mapBoneAnimations[pBoneAnim->nodeName] = pBoneAnim;
 		}
-
-		// ** Scaling keys **
-		for (size_t scaleIndex = 0; scaleIndex < aiAnimChannel->mNumScalingKeys; scaleIndex++)
-		{
-			aiVectorKey aiScaleData = aiAnimChannel->mScalingKeys[scaleIndex];
-			cAnimation::cBoneAnimation::sV3Data* scaleData = new cAnimation::cBoneAnimation::sV3Data();
-			scaleData->time = aiScaleData.mTime;
-			scaleData->data.x = aiScaleData.mValue.x;
-			scaleData->data.y = aiScaleData.mValue.y;
-			scaleData->data.z = aiScaleData.mValue.z;
-
-			pBoneAnim->scalingKeys.push_back(scaleData);
-		}
-
-		// ** Rotation keys **
-		for (size_t rotIndex = 0; rotIndex < aiAnimChannel->mNumRotationKeys; rotIndex++)
-		{
-			aiQuatKey aiRotData = aiAnimChannel->mRotationKeys[rotIndex];
-			cAnimation::cBoneAnimation::sQData* rotData = new cAnimation::cBoneAnimation::sQData();
-			rotData->time = aiRotData.mTime;
-			rotData->data.q.x = aiRotData.mValue.x;
-			rotData->data.q.y = aiRotData.mValue.y;
-			rotData->data.q.z = aiRotData.mValue.z;
-			rotData->data.q.w = aiRotData.mValue.w;
-
-			pBoneAnim->rotationKeys.push_back(rotData);
-		}
-		pAnim->boneAnimations.push_back(pBoneAnim);
-		pAnim->mapBoneAnimations[pBoneAnim->nodeName] = pBoneAnim;
 	}
 	return true;
 }
