@@ -88,6 +88,25 @@ public:
 		std::vector<cBone*> mRootBones;
 		std::map<std::string /* Bone name */, cBone*> mNameToBone;
 	};
+	class cNode
+	{
+	public:
+		cNode() :
+			name(""),
+			parent(NULL),
+			numChildren(0),
+			transform(float4x4::Identity())
+		{
+		}
+
+		std::string name;
+		float4x4 transform;
+
+		cNode* parent;
+		unsigned int numChildren;
+		std::vector<cNode*> children;
+
+	};
 	class cAnimation
 	{
 	public:
@@ -138,8 +157,13 @@ public:
 public:
 	bool LoadCharacter(std::string strSkin , vector<std::string>& action);
 private:
-	vector<cMesh> m_Skin;
+	friend bool mProcessChildNodes(CAnimationCModel* pModel, CAnimationCModel::cNode* parentnode, aiNode* parentainode);
+	vector<cMesh*> m_Skin;
 	vector<cAnimation> m_Actons;
-
+	cNode* m_RootNode;
+	unsigned int m_NumNodes;
+	std::vector<cNode*> m_Nodes; // master list
+	std::map<std::string /* Node name */, cNode*> m_NameToNode;
+	float4x4 m_GlobalInverseTransform;
 };
 

@@ -1,6 +1,23 @@
 #include "AnimationCModel.h"
 
+// ** cAnimation **
+CAnimationCModel::cAnimation::cBoneAnimation* CAnimationCModel::cAnimation::findBoneAnimationByName(std::string& boneName)
+{
+	std::map<std::string, cBoneAnimation*>::iterator itBoneAnim = this->mapBoneAnimations.find(boneName);
+	if (itBoneAnim == this->mapBoneAnimations.end())
+		return NULL;
+	return itBoneAnim->second;
+}
+CAnimationCModel::cMesh::cMesh() :
+	meshName(""), numberOfIndices(0), numberOfVertices(0),
+	mNumBones(0),
+	mNumRootBones(0)
+{
+}
 
+CAnimationCModel::cMesh::~cMesh()
+{
+}
 
 CAnimationCModel::CAnimationCModel()
 {
@@ -19,6 +36,31 @@ static float4x4 aiMatrix4x4to4x4(aiMatrix4x4 matrix4x4)
 		matrix4x4.d1, matrix4x4.d2, matrix4x4.d3, matrix4x4.d4
 	);
 }
+static bool mProcessChildNodes(CAnimationCModel* pModel, CAnimationCModel::cNode* parentnode, aiNode* parentainode)
+{
+	for (size_t index = 0; index < parentainode->mNumChildren; index++)
+	{
+		aiNode* childainode = parentainode->mChildren[index];
+		CAnimationCModel::cNode* childnode = new CAnimationCModel::cNode();
+
+		parentnode->children.push_back(childnode);
+
+		childnode->parent = parentnode;
+		childnode->name = childainode->mName.C_Str();
+		childnode->transform = aiMatrix4x4to4x4(childainode->mTransformation);
+		childnode->numChildren = childainode->mNumChildren;
+
+		pModel->m_Nodes.push_back(childnode);
+		pModel->m_NameToNode[childnode->name] = childnode;
+
+		if (childnode->numChildren > 0)
+		{
+			mProcessChildNodes(pModel, childnode, childainode);
+		}
+
+	}
+	return true;
+}
 bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& action)
 {
 	Assimp::Importer* mImporter = new Assimp::Importer;
@@ -34,22 +76,22 @@ bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& a
 	// ** Nodes **
 	// ***********
 	{
-		//aiNode* pRootAiNode = pAiScene->mRootNode;
-		//cNode* pRootNode = new cNode();
-		//pScene->mRootNode = pRootNode;
+		aiNode* pRootAiNode = pAiScene->mRootNode;
+		cNode* pRootNode = new cNode();
+		m_RootNode = pRootNode;
 
-		//pRootNode->name = pRootAiNode->mName.C_Str();
-		//pRootNode->numChildren = pRootAiNode->mNumChildren;
-		//pRootNode->transform = pRootAiNode->mTransformation;
-		////pRootNode->boneID = -1; // denotes root
+		pRootNode->name = pRootAiNode->mName.C_Str();
+		pRootNode->numChildren = pRootAiNode->mNumChildren;
+		pRootNode->transform = aiMatrix4x4to4x4(pRootAiNode->mTransformation);
+		//pRootNode->boneID = -1; // denotes root
 
-		//pScene->mGlobalInverseTransform = glm::inverse(pRootNode->transform);
+		m_GlobalInverseTransform = pRootNode->transform.Inverse();
 
-		//pScene->mNodes.push_back(pRootNode);
-		//pScene->mNameToNode[pRootNode->name] = pRootNode;
+		m_Nodes.push_back(pRootNode);
+		m_NameToNode[pRootNode->name] = pRootNode;
 
-		////pScene->mBones.push_back
-		//mProcessChildNodes(pScene, pRootNode, pRootAiNode);
+		//pScene->mBones.push_back
+		mProcessChildNodes(this, pRootNode, pRootAiNode);
 	}
 	// ***************
 	// ** End Nodes **
@@ -157,8 +199,8 @@ bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& a
 			for (size_t idxBone = 0; idxBone < pMesh->mNumBones; idxBone++)
 			{
 				cMesh::cBone* pParentBone = pMesh->mBones[idxBone];
-				std::map<std::string, cNode*>::iterator itParentNode = pScene->mNameToNode.find(pParentBone->name);
-				if (itParentNode == pScene->mNameToNode.end())
+				std::map<std::string, cNode*>::iterator itParentNode = m_NameToNode.find(pParentBone->name);
+				if (itParentNode == m_NameToNode.end())
 					return false;
 
 				cNode* pParentNode = itParentNode->second;
@@ -202,7 +244,7 @@ bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& a
 		// ** End Bones **
 		// ***************
 
-		pScene->meshes.push_back(pMesh);
+		m_Skin.push_back(pMesh);
 
 	}
 	// ****************
@@ -275,5 +317,5 @@ bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& a
 		pAnim->boneAnimations.push_back(pBoneAnim);
 		pAnim->mapBoneAnimations[pBoneAnim->nodeName] = pBoneAnim;
 	}
-
+	return true;
 }
