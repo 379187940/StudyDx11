@@ -318,6 +318,7 @@ bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& a
 			pAnim->boneAnimations.push_back(pBoneAnim);
 			pAnim->mapBoneAnimations[pBoneAnim->nodeName] = pBoneAnim;
 		}
+		m_Actons.push_back(pAnim);
 	}
 	return true;
 }
