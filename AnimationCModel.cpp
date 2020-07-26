@@ -68,8 +68,6 @@ bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& a
 	const aiScene* pAiScene = mImporter->ReadFile(strSkin.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_JoinIdenticalVertices);
 	std::string assimpError = mImporter->GetErrorString();
 	assert(pAiScene);
-	cScene* pScene = new cScene();
-	pScene->name = "RPG-Character";
 
 	// ***********
 	// ** Nodes **
