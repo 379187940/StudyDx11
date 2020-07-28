@@ -388,6 +388,9 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4.0</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="solidnotexture.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="terrain.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </FxCompile>
@@ -419,6 +422,7 @@
     <ClCompile Include="Quard.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="shadermanagerclass.cpp" />
+    <ClCompile Include="solidnotexture.cpp" />
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="textclass.cpp" />
     <ClCompile Include="textureclass.cpp" />
@@ -470,6 +474,7 @@
     <CLInclude Include="resource.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="shadermanagerclass.h" />
+    <ClInclude Include="solidnotexture.h" />
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="textclass.h" />
     <ClInclude Include="textureclass.h" />
