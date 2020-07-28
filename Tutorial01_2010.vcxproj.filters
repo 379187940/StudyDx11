@@ -35,15 +35,15 @@
     <Filter Include="Character">
       <UniqueIdentifier>{969d1a4e-a3f3-4295-82d3-4c62ab8ca220}</UniqueIdentifier>
     </Filter>
+    <Filter Include="StandardGeometry">
+      <UniqueIdentifier>{cf462612-0031-4973-87e1-f07da8cc036d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderObject.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
     <ClInclude Include="Triangle.h">
-      <Filter>RenderObject</Filter>
-    </ClInclude>
-    <ClInclude Include="Cube.h">
       <Filter>RenderObject</Filter>
     </ClInclude>
     <ClInclude Include="CubeLight.h">
@@ -131,12 +131,15 @@
     <ClInclude Include="solidnotexture.h">
       <Filter>Manager</Filter>
     </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>StandardGeometry</Filter>
+    </ClInclude>
+    <ClInclude Include="Clinder.h">
+      <Filter>StandardGeometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
-      <Filter>RenderObject</Filter>
-    </ClCompile>
-    <ClCompile Include="Cube.cpp">
       <Filter>RenderObject</Filter>
     </ClCompile>
     <ClCompile Include="CubeLight.cpp">
@@ -205,6 +208,12 @@
     </ClCompile>
     <ClCompile Include="solidnotexture.cpp">
       <Filter>Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>StandardGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="Clinder.cpp">
+      <Filter>StandardGeometry</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

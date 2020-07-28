@@ -404,6 +404,7 @@
   <ItemGroup>
     <ClCompile Include="AnimationCModel.cpp" />
     <ClCompile Include="BaseRenderObject.cpp" />
+    <ClCompile Include="Clinder.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="cScene.cpp" />
     <ClCompile Include="Cube.cpp" />
@@ -452,6 +453,7 @@
     <ClInclude Include="AnimationCModel.h" />
     <ClInclude Include="BaseRenderObject.h" />
     <ClInclude Include="BasicMath.hpp" />
+    <ClInclude Include="Clinder.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="cScene.h" />
     <ClInclude Include="Cube.h" />
