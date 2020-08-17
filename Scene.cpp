@@ -37,6 +37,8 @@ bool CScene::Release()
 	{
 		delete it->first;
 	}
+	if (m_pHostPlayer)
+		delete m_pHostPlayer;
 	delete m_quardDepth;
 	m_pDepthTextureSRV->Release();
 	return true;
@@ -146,8 +148,13 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 
 	//创建经常使用的raster state和depthstencil state
 	CreateOfenUseState();
-	
-	CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
+	m_pHostPlayer = new CAnimationCModel();
+	std::vector<std::string> animation;
+	animation.push_back("model\\RPG-Character\\RPG-Character@Unarmed-Idle.fbx");
+	animation.push_back("model\\RPG-Character\\RPG-Character@Unarmed-Walk.fbx");
+	animation.push_back("model\\RPG-Character\\RPG-Character@Unarmed-Run.fbx");
+	m_pHostPlayer->LoadCharacter("model//RPG-Character.FBX", animation);
+	/*CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
 	pNewTrianle->Init(pd3d11Device, pContext);
 	CCube* pNewCube = new CCube(_T("Cube"));
 	pNewCube->Init(pd3d11Device, pContext);
@@ -158,7 +165,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	
 	CGLTF* pNewGltf = new CGLTF(_T("GltfLoad"));
 	pNewGltf->Init(pd3d11Device, pContext);
-	pNewGltf->LoadFromObjFile(_T("cup2uv.gltf"));
+	pNewGltf->LoadFromObjFile(_T("cup2uv.gltf"));*/
 	//RegisterObject(pNewTrianle);
 	//RegisterObject(pNewCube);
 	//RegisterObject(pNewCubeLight);
@@ -176,7 +183,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	////RegisterObject(pNewCubeLight);
 	//RegisterObject(pNewTerrain);
 
-
+/*
 	HRESULT hr = S_FALSE ;
 	ID3D11RenderTargetView* pRenderTargetView = NULL;
 	ID3D11DepthStencilView* pDepthView = NULL;
@@ -193,7 +200,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	hr = m_pD3d11Device->CreateShaderResourceView(pResource, &SRDesc, &m_pDepthTextureSRV );
 	
 	pResource->Release();
-	m_quardDepth->SetDepthTexture(m_pDepthTextureSRV);
+	m_quardDepth->SetDepthTexture(m_pDepthTextureSRV);*/
 
 	m_pCmaera = new FirstPersonCamera();
 	UpdateCamera(float3(0, 0, 0),

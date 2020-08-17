@@ -3,6 +3,7 @@
 #include "IRenderObject.h"
 #include <Windows.h>
 #include "AntTweakBar.h"
+#include "AnimationCModel.h"
 struct RenderParam;
 class CQuard;
 class FirstPersonCamera;
@@ -62,6 +63,7 @@ private:
 	FontClass m_font;
 	TextClass m_fpsString;
 	ShaderManagerClass* m_pShaderManagerClass;
+	CAnimationCModel* m_pHostPlayer = NULL ;
 };
 extern CScene g_Scene;
 

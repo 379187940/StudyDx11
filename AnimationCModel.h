@@ -77,7 +77,6 @@ public:
 		unsigned int numberOfIndices;
 
 	private:
-		friend bool LoadCharacter();
 		friend class cSceneManager;
 		friend class cScene;
 		friend class CAnimationCModel;
