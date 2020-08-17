@@ -1,3 +1,7 @@
+cbuffer CameraMatrix
+{
+	matrix viewproj;
+};
 cbuffer PixelSolidColor
 {
 	float4 solidcolor;
