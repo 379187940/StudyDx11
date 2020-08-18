@@ -1,12 +1,19 @@
 #pragma once
-class CClinder
+#include "IRenderObject.h"
+#include "BaseRenderObject.h"
+class CClinder:
+	public CBaseRenderObject, public CCommonRenderData
 {
 public:
-	CClinder(float3 start ,float3 end , uint subdivide , float radius ,float4 color);
+	CClinder(wstring strName);
 	~CClinder();
 public:
+	void UpdateProperty(float3 start, float3 end, uint subdivide, float radius, float4 color);
 	void BuildGeometry();
-	
+	virtual bool Render(DWORD dwTimes);
+	virtual bool Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext);
+	virtual bool UpdateRenderParams(const RenderParams& renderParams);
+	virtual void Tick(DWORD dwTimes);
 private:
 	float3 m_start;
 	float3 m_end;

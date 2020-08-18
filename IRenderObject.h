@@ -5,7 +5,7 @@ struct RenderParams
 	float4x4 m_worldMatrix;
 	float4x4 m_viewMatrix;
 	float4x4 m_projMatrix;
-
+	
 	RenderParams()
 	{
 		

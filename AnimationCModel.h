@@ -155,6 +155,7 @@ public:
 	~CAnimationCModel();
 public:
 	bool LoadCharacter(std::string strSkin , vector<std::string>& action);
+	bool RenderBone();
 private:
 	friend bool mProcessChildNodes(CAnimationCModel* pModel, CAnimationCModel::cNode* parentnode, aiNode* parentainode);
 	vector<cMesh*> m_Skin;

@@ -3,7 +3,34 @@
 
 
 
-CClinder::CClinder(float3 start, float3 end, uint subdivide, float radius, float4 color)
+CClinder::CClinder(wstring strName ):
+	CBaseRenderObject(strName)
+{
+	
+}
+
+
+CClinder::~CClinder()
+{
+
+}
+bool CClinder::Render(DWORD dwTimes)
+{
+
+}
+bool CClinder::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
+{
+
+}
+bool CClinder::UpdateRenderParams(const RenderParams& renderParams)
+{
+	
+}
+void CClinder::Tick(DWORD dwTimes)
+{
+
+}
+void CClinder::UpdateProperty(float3 start, float3 end, uint subdivide, float radius, float4 color)
 {
 	m_start = start;
 	m_end = end;
@@ -11,11 +38,12 @@ CClinder::CClinder(float3 start, float3 end, uint subdivide, float radius, float
 	m_color = color;
 	m_subdivide = subdivide;
 	BuildGeometry();
-}
-
-
-CClinder::~CClinder()
-{
+	int iSize = m_vertexs.size();
+	m_pVertexBuffer = ::CreateBuffer(m_pd3dDevice, iSize * 3 * sizeof(float), D3D11_USAGE_DYNAMIC
+		, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
+	iSize = m_index.size();
+	m_pIndexBuffer = ::CreateBuffer(m_pd3dDevice, iSize * sizeof(uint16_t), D3D11_USAGE_DYNAMIC
+		, D3D11_BIND_INDEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
 
 }
 void CClinder::BuildGeometry()
