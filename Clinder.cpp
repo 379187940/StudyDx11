@@ -16,11 +16,14 @@ CClinder::~CClinder()
 }
 bool CClinder::Render(DWORD dwTimes)
 {
-
+	m_pContext->IASetVertexBuffers( )
 }
 bool CClinder::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 {
-
+	m_pd3dDevice = pd3dDevice;
+	m_pContext = pContext;
+	m_pMaterailSolidColor = new solidnotexture();
+	m_pMaterailSolidColor->Initialize(pd3dDevice);
 }
 bool CClinder::UpdateRenderParams(const RenderParams& renderParams)
 {
