@@ -16,7 +16,12 @@ CClinder::~CClinder()
 }
 bool CClinder::Render(DWORD dwTimes)
 {
-	m_pContext->IASetVertexBuffers( )
+	UINT stride = sizeof(float3);
+	UINT offset = 0;
+	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
+	m_pMaterailSolidColor->Render(m_pContext, m_ViewProj, float4(1.0f, 0.0f, 0.0f, 1.0f), m_index.size());
+	return true;
 }
 bool CClinder::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 {
@@ -24,10 +29,12 @@ bool CClinder::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	m_pContext = pContext;
 	m_pMaterailSolidColor = new solidnotexture();
 	m_pMaterailSolidColor->Initialize(pd3dDevice);
+	return true;
 }
 bool CClinder::UpdateRenderParams(const RenderParams& renderParams)
 {
-	
+	m_ViewProj = renderParams.m_worldMatrix * renderParams.m_viewMatrix * renderParams.m_projMatrix;
+	return true;
 }
 void CClinder::Tick(DWORD dwTimes)
 {

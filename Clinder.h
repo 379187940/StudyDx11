@@ -24,5 +24,6 @@ private:
 	vector<float3> m_vertexs;
 	vector <uint16_t> m_index;
 	solidnotexture* m_pMaterailSolidColor;
+	float4x4 m_ViewProj;
 };
 
