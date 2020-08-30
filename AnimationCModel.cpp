@@ -320,3 +320,10 @@ bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& a
 	}
 	return true;
 }
+bool CAnimationCModel::RenderBone( cNode* pParentNode  )
+{
+	int iNumChildren = pParentNode->numChildren;
+	for ( int i = 0 ; i < iNumChildren ; i++ )
+	{
+	}
+}

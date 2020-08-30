@@ -1,6 +1,7 @@
 #pragma once
 #include "unit.h"
 #include "cScene.h"
+#include "clinder.h"
 class CAnimationCModel
 {
 public:
@@ -155,7 +156,7 @@ public:
 	~CAnimationCModel();
 public:
 	bool LoadCharacter(std::string strSkin , vector<std::string>& action);
-	bool RenderBone();
+	bool RenderBone(cNode* pParentNode);
 private:
 	friend bool mProcessChildNodes(CAnimationCModel* pModel, CAnimationCModel::cNode* parentnode, aiNode* parentainode);
 	vector<cMesh*> m_Skin;
@@ -164,6 +165,7 @@ private:
 	unsigned int m_NumNodes;
 	std::vector<cNode*> m_Nodes; // master list
 	std::map<std::string /* Node name */, cNode*> m_NameToNode;
+	std::map < cNode*, CClinder* > m_Bone_Clinder;
 	float4x4 m_GlobalInverseTransform;
 };
 
