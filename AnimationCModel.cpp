@@ -325,5 +325,6 @@ bool CAnimationCModel::RenderBone( cNode* pParentNode  )
 	int iNumChildren = pParentNode->numChildren;
 	for ( int i = 0 ; i < iNumChildren ; i++ )
 	{
+
 	}
 }
