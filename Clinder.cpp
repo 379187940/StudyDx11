@@ -42,6 +42,10 @@ void CClinder::Tick(DWORD dwTimes)
 }
 void CClinder::UpdateProperty(float3 start, float3 end, uint subdivide, float radius, float4 color)
 {
+	if (m_pVertexBuffer)
+		m_pVertexBuffer->Release();
+	if (m_pIndexBuffer)
+		m_pIndexBuffer->Release();
 	m_start = start;
 	m_end = end;
 	m_radius = radius;

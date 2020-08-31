@@ -320,11 +320,33 @@ bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& a
 	}
 	return true;
 }
-bool CAnimationCModel::RenderBone( cNode* pParentNode  )
+bool CAnimationCModel::UpdateBoneCClinder(cMesh::cBone* pParentBone)
 {
-	int iNumChildren = pParentNode->numChildren;
-	for ( int i = 0 ; i < iNumChildren ; i++ )
+	std::vector<cMesh::cBone*>& children = pParentBone->children;
+	float3 parentPos = float3(-pParentBone->transform.m30, -pParentBone->transform.m31, -pParentBone->transform.m32);
+	for (int i = 0; i < children.size(); i++)
 	{
-
+		cMesh::cBone* child = children[i];
+		float3 childPos = float3(-child->transform.m30, -child->transform.m31, -child->transform.m32);
+		if (m_Bone_Clinder.find(child) == m_Bone_Clinder.end())
+		{
+			USES_CONVERSION;
+			const WCHAR* result = A2W(child->name.c_str());
+			CClinder* newClinder = new CClinder(result);
+			newClinder->Init( )
+		}
+		UpdateBoneCClinder(child);
+	}
+	return true;
+}
+bool CAnimationCModel::RenderBone( )
+{
+	for (int i = 0; i < m_Skin.size(); i++)
+	{
+		std::vector<cMesh::cBone*>& rootBone = m_Skin[i]->mRootBones;
+		for (int j = 0; j < rootBone.size(); j++)
+		{
+			UpdateBoneCClinder(rootBone[j]);
+		}
 	}
 }

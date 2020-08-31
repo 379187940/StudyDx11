@@ -3,6 +3,24 @@
 #include <assert.h>
 #include <vector>
 extern HWND g_hWnd;
+static ID3D11Device* g_pDevice = NULL;
+static ID3D11DeviceContext* g_pContext = NULL;
+ID3D11Device* AfxGetDevice()
+{
+	return g_pDevice;
+}
+ID3D11DeviceContext* AfxGetDeviceContext()
+{
+	return g_pContext;
+}
+void AfxSetDevice(ID3D11Device* pDevice )
+{
+	g_pDevice = pDevice;
+}
+void AfxSetDeviceContext(ID3D11DeviceContext* pContext)
+{
+	g_pContext = pContext;
+}
 HWND AfxGetMainWnd()
 {
 	return g_hWnd;
