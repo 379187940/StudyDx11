@@ -52,5 +52,3 @@ HWND AfxGetMainWnd();
 int2 AfxGetWindowSize();
 ID3D11Device* AfxGetDevice();
 ID3D11DeviceContext* AfxGetDeviceContext();
- void AfxSetDevice(ID3D11Device*);
- void AfxSetDeviceContext(ID3D11DeviceContext*);

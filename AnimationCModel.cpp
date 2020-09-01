@@ -328,13 +328,17 @@ bool CAnimationCModel::UpdateBoneCClinder(cMesh::cBone* pParentBone)
 	{
 		cMesh::cBone* child = children[i];
 		float3 childPos = float3(-child->transform.m30, -child->transform.m31, -child->transform.m32);
+		//if not exist create
 		if (m_Bone_Clinder.find(child) == m_Bone_Clinder.end())
 		{
 			USES_CONVERSION;
 			const WCHAR* result = A2W(child->name.c_str());
 			CClinder* newClinder = new CClinder(result);
-			newClinder->Init( )
+			newClinder->Init(AfxGetDevice(), AfxGetDeviceContext());
+			m_Bone_Clinder[child] = newClinder;
 		}
+		CClinder* clinder = m_Bone_Clinder[child];
+		clinder->UpdateProperty(parentPos, childPos, 50, 10, float4(1, 0, 0, 0));
 		UpdateBoneCClinder(child);
 	}
 	return true;

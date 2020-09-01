@@ -3,23 +3,15 @@
 #include <assert.h>
 #include <vector>
 extern HWND g_hWnd;
-static ID3D11Device* g_pDevice = NULL;
-static ID3D11DeviceContext* g_pContext = NULL;
+extern ID3D11Device*           g_pd3dDevice;
+extern ID3D11DeviceContext*    g_pImmediateContext;
 ID3D11Device* AfxGetDevice()
 {
-	return g_pDevice;
+	return g_pd3dDevice;
 }
 ID3D11DeviceContext* AfxGetDeviceContext()
 {
-	return g_pContext;
-}
-void AfxSetDevice(ID3D11Device* pDevice )
-{
-	g_pDevice = pDevice;
-}
-void AfxSetDeviceContext(ID3D11DeviceContext* pContext)
-{
-	g_pContext = pContext;
+	return g_pImmediateContext;
 }
 HWND AfxGetMainWnd()
 {
@@ -165,7 +157,7 @@ char* CustomW2A(const WCHAR* wstr)
 	assert(wstr);
 	int len = lstrlenW(wstr);
 	DWORD dwMinSize = WideCharToMultiByte(CP_ACP, 0, wstr , len, NULL, 0, NULL, FALSE);
-	char *pBuf = new char[dwMinSize + 1]; // 若不加1，字符串最后会有乱码	    
+	char *pBuf = new char[dwMinSize + 1];    
 	memset(pBuf, 0, dwMinSize + 1);
 	dwMinSize = WideCharToMultiByte(CP_ACP, 0, wstr, len, pBuf, dwMinSize, NULL, FALSE);
 	return pBuf;
