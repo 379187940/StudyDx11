@@ -92,7 +92,7 @@ void CClinder::BuildGeometry()
 	uint16_t startIndex = m_vertexs.size() - 1;
 	m_vertexs.push_back(m_end);
 	uint16_t endIndex = m_vertexs.size() - 1;
-	//地面索引   上底 下底
+	//底面索引   上底 下底
 	for (int i = 0; i < m_subdivide; i++)
 	{
 		m_index.push_back(startIndex);
