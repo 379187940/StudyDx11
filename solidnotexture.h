@@ -22,9 +22,9 @@ private:
 	//void RenderShader(ID3D11DeviceContext*, float4x4 , float4 , int);
 
 private:
-	ID3D11VertexShader* m_vertexShader;
-	ID3D11PixelShader* m_pixelShader;
-	ID3D11InputLayout* m_layout;
-	ID3D11Buffer* m_matrixBuffer;
-	ID3D11Buffer* m_pixelBuffer;
+	CComPtr<ID3D11VertexShader> m_vertexShader;
+	CComPtr<ID3D11PixelShader> m_pixelShader;
+	CComPtr<ID3D11InputLayout> m_layout;
+	CComPtr<ID3D11Buffer> m_matrixBuffer;
+	CComPtr<ID3D11Buffer> m_pixelBuffer;
 };

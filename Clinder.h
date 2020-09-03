@@ -23,7 +23,8 @@ private:
 	uint m_subdivide;
 	vector<float3> m_vertexs;
 	vector <uint16_t> m_index;
-	solidnotexture* m_pMaterailSolidColor;
+	unique_ptr<solidnotexture> m_pMaterailSolidColor;
 	float4x4 m_ViewProj;
+	int m_prevVertextSize;
 };
 

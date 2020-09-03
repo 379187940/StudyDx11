@@ -6,7 +6,7 @@
 CClinder::CClinder(wstring strName ):
 	CBaseRenderObject(strName)
 {
-	
+	m_prevVertextSize = 0;
 }
 
 
@@ -42,10 +42,6 @@ void CClinder::Tick(DWORD dwTimes)
 }
 void CClinder::UpdateProperty(float3 start, float3 end, uint subdivide, float radius, float4 color)
 {
-	if (m_pVertexBuffer)
-		m_pVertexBuffer->Release();
-	if (m_pIndexBuffer)
-		m_pIndexBuffer->Release();
 	m_start = start;
 	m_end = end;
 	m_radius = radius;
@@ -53,11 +49,19 @@ void CClinder::UpdateProperty(float3 start, float3 end, uint subdivide, float ra
 	m_subdivide = subdivide;
 	BuildGeometry();
 	int iSize = m_vertexs.size();
-	m_pVertexBuffer = ::CreateBuffer(m_pd3dDevice, iSize * 3 * sizeof(float), D3D11_USAGE_DYNAMIC
-		, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
-	iSize = m_index.size();
-	m_pIndexBuffer = ::CreateBuffer(m_pd3dDevice, iSize * sizeof(uint16_t), D3D11_USAGE_DYNAMIC
-		, D3D11_BIND_INDEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
+	int iIndexSize = m_index.size();
+	if (m_prevVertextSize != iSize)//需要重新分配顶点buffer
+	{
+		m_pVertexBuffer.Release();
+		m_pIndexBuffer.Release();
+		m_pVertexBuffer = ::CreateBuffer(m_pd3dDevice, iSize * 3 * sizeof(float), D3D11_USAGE_DYNAMIC
+			, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
+		
+		m_pIndexBuffer = ::CreateBuffer(m_pd3dDevice, iIndexSize * sizeof(uint16_t), D3D11_USAGE_DYNAMIC
+			, D3D11_BIND_INDEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
+	}
+	UpdateBufferData(m_pContext, m_pVertexBuffer, m_vertexs.data(), iSize * 3 * sizeof(float));
+	UpdateBufferData(m_pContext, m_pIndexBuffer, m_index.data(), iIndexSize* sizeof(uint16_t));
 
 }
 void CClinder::BuildGeometry()

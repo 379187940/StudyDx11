@@ -11,7 +11,7 @@ solidnotexture::solidnotexture()
 
 solidnotexture::~solidnotexture()
 {
-
+	
 }
 bool solidnotexture::Initialize(ID3D11Device* pDevice )
 {

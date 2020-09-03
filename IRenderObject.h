@@ -36,25 +36,16 @@ protected:
 	}
 	virtual ~CCommonRenderData()
 	{
-		if (m_pLayoutInput)
-			m_pLayoutInput->Release();
-		if (m_pVertexBuffer)
-			m_pVertexBuffer->Release();
-		if (m_pVertexShader)
-			m_pVertexShader->Release();
-		if (m_pPixelShader)
-			m_pPixelShader->Release();
-		if (m_pIndexBuffer)
-			m_pIndexBuffer->Release();
+	
 	}
 protected:
 	ID3D11DeviceContext* m_pContext;
 	ID3D11Device*        m_pd3dDevice;
-	ID3D11InputLayout*	 m_pLayoutInput;
-	ID3D11Buffer*        m_pVertexBuffer;
-	ID3D11Buffer*        m_pIndexBuffer;
-	ID3D11VertexShader*  m_pVertexShader;
-	ID3D11PixelShader*   m_pPixelShader;
+	CComPtr<ID3D11InputLayout>	 m_pLayoutInput;
+	CComPtr<ID3D11Buffer>        m_pVertexBuffer;
+	CComPtr<ID3D11Buffer>        m_pIndexBuffer;
+	CComPtr<ID3D11VertexShader>  m_pVertexShader;
+	CComPtr<ID3D11PixelShader>   m_pPixelShader;
 	RenderParams         m_renderParams;
 };
 
