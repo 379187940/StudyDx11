@@ -245,8 +245,8 @@ void CScene::Tick(DWORD dwTimes)
 	{
 		it->first->Tick(dwTimes);
 	}
-	//register bone clinder
-	m_pHostPlayer->RenderBone();
+	
+	
 }
 void CScene::RenderFps(DWORD dwTimes)
 {
@@ -277,7 +277,8 @@ void CScene::RenderFps(DWORD dwTimes)
 }
 bool CScene::Render(DWORD dwTimes)
 {
-	
+	//register bone clinder
+	m_pHostPlayer->RenderBone();
 	EnableAlphaBlending();
 	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	if (m_bWireFrame)

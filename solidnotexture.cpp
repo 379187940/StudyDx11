@@ -26,9 +26,9 @@ bool solidnotexture::Initialize(ID3D11Device* pDevice )
 	D3D11_BUFFER_DESC matrixBufferDesc;
 	D3D11_SAMPLER_DESC samplerDesc;
 	D3D11_BUFFER_DESC pixelBufferDesc;
-	result = D3DCompileFromFile(shaderFile, NULL, NULL, "vs_main", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer, &errorMessage);
+	result = CompileShaderFromFile(shaderFile, NULL, NULL, "vs_main", "vs_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &vertexShaderBuffer);
 	assert(SUCCEEDED(result));
-	result = D3DCompileFromFile(shaderFile, NULL, NULL, "ps_main", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer, &errorMessage);
+	result = CompileShaderFromFile(shaderFile, NULL, NULL, "ps_main", "ps_5_0", D3D10_SHADER_ENABLE_STRICTNESS, 0, &pixelShaderBuffer);
 	assert(SUCCEEDED(result));
 	result = pDevice->CreateVertexShader(vertexShaderBuffer->GetBufferPointer(), vertexShaderBuffer->GetBufferSize(), NULL, &m_vertexShader);
 	assert(SUCCEEDED(result));

@@ -40,10 +40,10 @@ CAnimationCModel::~CAnimationCModel()
 static float4x4 aiMatrix4x4to4x4(aiMatrix4x4 matrix4x4)
 {
 	return float4x4(
-		matrix4x4.a1, matrix4x4.a2, matrix4x4.a3, matrix4x4.a4,
-		matrix4x4.b1, matrix4x4.b2, matrix4x4.b3, matrix4x4.b4,
-		matrix4x4.c1, matrix4x4.c2, matrix4x4.c3, matrix4x4.c4,
-		matrix4x4.d1, matrix4x4.d2, matrix4x4.d3, matrix4x4.d4
+		matrix4x4.a1, matrix4x4.b1, matrix4x4.c1, matrix4x4.d1,
+		matrix4x4.a2, matrix4x4.b2, matrix4x4.c2, matrix4x4.d2,
+		matrix4x4.a3, matrix4x4.b3, matrix4x4.c3, matrix4x4.d3,
+		matrix4x4.a4, matrix4x4.b4, matrix4x4.c4, matrix4x4.d4
 	);
 }
 static bool mProcessChildNodes(CAnimationCModel* pModel, CAnimationCModel::cNode* parentnode, aiNode* parentainode)
