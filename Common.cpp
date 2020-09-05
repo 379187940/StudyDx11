@@ -5,6 +5,11 @@
 extern HWND g_hWnd;
 extern ID3D11Device*           g_pd3dDevice;
 extern ID3D11DeviceContext*    g_pImmediateContext;
+extern CScene g_Scene;
+CScene* AfxGetScene()
+{
+	return &g_Scene;
+}
 ID3D11Device* AfxGetDevice()
 {
 	return g_pd3dDevice;
@@ -13,6 +18,7 @@ ID3D11DeviceContext* AfxGetDeviceContext()
 {
 	return g_pImmediateContext;
 }
+
 HWND AfxGetMainWnd()
 {
 	return g_hWnd;

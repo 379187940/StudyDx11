@@ -227,6 +227,11 @@ void CScene::UpdateCamera(float3 cameraPos, float3 lookAt, float nearClipPlane, 
 	m_pCmaera->SetProjAttribs(0.1f, 1000.0f, viewPort.Width / viewPort.Height, PI_F / 4.0f, false);
 	
 }
+bool CScene::UnRegisterObject(IRenderObject* pRenderObject)
+{
+	m_allObject.erase(pRenderObject);
+	return true;
+}
 bool CScene::RegisterObject(IRenderObject* pRenderObject)
 {
 	if (m_allObject.find(pRenderObject) != m_allObject.end())
@@ -240,6 +245,8 @@ void CScene::Tick(DWORD dwTimes)
 	{
 		it->first->Tick(dwTimes);
 	}
+	//register bone clinder
+	m_pHostPlayer->RenderBone();
 }
 void CScene::RenderFps(DWORD dwTimes)
 {
@@ -270,6 +277,7 @@ void CScene::RenderFps(DWORD dwTimes)
 }
 bool CScene::Render(DWORD dwTimes)
 {
+	
 	EnableAlphaBlending();
 	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	if (m_bWireFrame)
@@ -287,6 +295,7 @@ bool CScene::Render(DWORD dwTimes)
 	}
 	if (m_bWireFrame)
 		m_pD3d11Context->RSSetState(m_pFillSolidState);
+	
 	m_pD3d11Context->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
 	
 	RenderFps( dwTimes);

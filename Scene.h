@@ -8,6 +8,7 @@ struct RenderParam;
 class CQuard;
 class FirstPersonCamera;
 class ShaderManagerClass;
+class CDirLight;
 using namespace std;
 class CScene
 {
@@ -16,6 +17,7 @@ public:
 	~CScene();
 public:
 	bool RegisterObject(IRenderObject* pRenderObject);
+	bool UnRegisterObject(IRenderObject* pRenderObject);
 	void Tick(DWORD dwTimes);
 	bool Render(DWORD dwTimes);
 	bool UpdateRenderParams();

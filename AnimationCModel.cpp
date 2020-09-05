@@ -1,11 +1,13 @@
 #include "AnimationCModel.h"
-
+#include "unit.h"
+#include "scene.h"
 // ** cAnimation **
 CAnimationCModel::cAnimation::cBoneAnimation* CAnimationCModel::cAnimation::findBoneAnimationByName(std::string& boneName)
 {
 	std::map<std::string, cBoneAnimation*>::iterator itBoneAnim = this->mapBoneAnimations.find(boneName);
 	if (itBoneAnim == this->mapBoneAnimations.end())
 		return NULL;
+	
 	return itBoneAnim->second;
 }
 CAnimationCModel::cMesh::cMesh() :
@@ -26,6 +28,14 @@ CAnimationCModel::CAnimationCModel()
 
 CAnimationCModel::~CAnimationCModel()
 {
+	std::map < cMesh::cBone*, CClinder* >::iterator itClinder;
+	for (itClinder = m_Bone_Clinder.begin(); itClinder != m_Bone_Clinder.end(); itClinder++)
+	{
+		CClinder*& pClinder = itClinder->second;
+		AfxGetScene()->UnRegisterObject(pClinder);
+		delete pClinder;
+		pClinder = NULL;
+	}
 }
 static float4x4 aiMatrix4x4to4x4(aiMatrix4x4 matrix4x4)
 {
@@ -336,6 +346,7 @@ bool CAnimationCModel::UpdateBoneCClinder(cMesh::cBone* pParentBone)
 			CClinder* newClinder = new CClinder(result);
 			newClinder->Init(AfxGetDevice(), AfxGetDeviceContext());
 			m_Bone_Clinder[child] = newClinder;
+			AfxGetScene()->RegisterObject(newClinder);
 		}
 		CClinder* clinder = m_Bone_Clinder[child];
 		clinder->UpdateProperty(parentPos, childPos, 50, 10, float4(1, 0, 0, 0));
@@ -353,4 +364,5 @@ bool CAnimationCModel::RenderBone( )
 			UpdateBoneCClinder(rootBone[j]);
 		}
 	}
+	return true;
 }
