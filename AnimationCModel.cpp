@@ -334,7 +334,7 @@ bool CAnimationCModel::UpdateBoneCClinder(cMesh::cBone* pParentBone)
 {
 	std::vector<cMesh::cBone*>& children = pParentBone->children;
 	float3 parentPos = float3(-pParentBone->transform.m30, -pParentBone->transform.m31, -pParentBone->transform.m32);
-	for (int i = 0; i < children.size(); i++)
+	for (int i = 0; i < 1/*children.size()*/; i++)
 	{
 		cMesh::cBone* child = children[i];
 		float3 childPos = float3(-child->transform.m30, -child->transform.m31, -child->transform.m32);
@@ -350,7 +350,7 @@ bool CAnimationCModel::UpdateBoneCClinder(cMesh::cBone* pParentBone)
 		}
 		CClinder* clinder = m_Bone_Clinder[child];
 		clinder->UpdateProperty(parentPos, childPos, 50, 10, float4(1, 0, 0, 0));
-		UpdateBoneCClinder(child);
+		//UpdateBoneCClinder(child);
 	}
 	return true;
 }

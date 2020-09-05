@@ -18,7 +18,6 @@ bool solidnotexture::Initialize(ID3D11Device* pDevice )
 	CString shaderFile;
 	assert(GetFullPath("solidnotexture.hlsl", shaderFile));
 	HRESULT result;
-	ID3D10Blob* errorMessage;
 	ID3D10Blob* vertexShaderBuffer;
 	ID3D10Blob* pixelShaderBuffer;
 	D3D11_INPUT_ELEMENT_DESC polygonLayout[2];
@@ -39,7 +38,6 @@ bool solidnotexture::Initialize(ID3D11Device* pDevice )
 	assert(SUCCEEDED(result));
 	vertexShaderBuffer->Release();
 	pixelShaderBuffer->Release();
-	errorMessage->Release();
 	D3D11_BUFFER_DESC bufferDesc;
 	bufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
 	bufferDesc.ByteWidth = sizeof(ViewProjMatrix);
@@ -58,16 +56,11 @@ bool solidnotexture::Initialize(ID3D11Device* pDevice )
 bool solidnotexture::SetShaderParameters(ID3D11DeviceContext* pContext, float4x4 matrixViweProj, float4 solidColor)
 {
 	D3D11_MAPPED_SUBRESOURCE subResource;
-	pContext->Map(m_matrixBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource);
-	memcpy(subResource.pData, &matrixViweProj, sizeof(matrixViweProj));
-	pContext->Unmap(m_matrixBuffer, 0);
+	UpdateBufferData(pContext, m_matrixBuffer, &matrixViweProj, sizeof(float4x4));
+	UpdateBufferData(pContext, m_pixelBuffer, &solidColor, sizeof(float4));
 
-	pContext->Map(m_pixelBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &subResource);
-	memcpy(subResource.pData, &solidColor, sizeof(matrixViweProj));
-	pContext->Unmap(m_matrixBuffer, 0);
-
-	pContext->VSSetConstantBuffers(0, 0, &m_matrixBuffer);
-	pContext->PSSetConstantBuffers(0, 0, &m_pixelBuffer);
+	pContext->VSSetConstantBuffers(0, 1, &m_matrixBuffer.p);
+	pContext->PSSetConstantBuffers(0, 1, &m_pixelBuffer.p);
 	return true;
 }
 bool solidnotexture::Render(ID3D11DeviceContext* pContext , float4x4 matrixViweProj, float4 solidColor , int indexCount)
@@ -76,6 +69,7 @@ bool solidnotexture::Render(ID3D11DeviceContext* pContext , float4x4 matrixViweP
 	pContext->PSSetShader(m_pixelShader, nullptr, 0);
 	SetShaderParameters(pContext, matrixViweProj, solidColor);
 	pContext->IASetInputLayout(m_layout);
+	pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	pContext->DrawIndexed(indexCount, 0, 0);
 	return true;
 }

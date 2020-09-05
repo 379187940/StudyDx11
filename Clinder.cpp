@@ -18,7 +18,7 @@ bool CClinder::Render(DWORD dwTimes)
 {
 	UINT stride = sizeof(float3);
 	UINT offset = 0;
-	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
+	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer.p, &stride, &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	m_pMaterailSolidColor->Render(m_pContext, m_ViewProj, float4(1.0f, 0.0f, 0.0f, 1.0f), m_index.size());
 	return true;
@@ -52,6 +52,7 @@ void CClinder::UpdateProperty(float3 start, float3 end, uint subdivide, float ra
 	int iIndexSize = m_index.size();
 	if (m_prevVertextSize != iSize)//需要重新分配顶点buffer
 	{
+		m_prevVertextSize = iSize;
 		m_pVertexBuffer.Release();
 		m_pIndexBuffer.Release();
 		m_pVertexBuffer = ::CreateBuffer(m_pd3dDevice, iSize * 3 * sizeof(float), D3D11_USAGE_DYNAMIC
