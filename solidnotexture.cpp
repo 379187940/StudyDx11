@@ -60,13 +60,14 @@ bool solidnotexture::SetShaderParameters(ID3D11DeviceContext* pContext, float4x4
 	UpdateBufferData(pContext, m_pixelBuffer, &solidColor, sizeof(float4));
 
 	pContext->VSSetConstantBuffers(0, 1, &m_matrixBuffer.p);
-	pContext->PSSetConstantBuffers(0, 1, &m_pixelBuffer.p);
+	pContext->PSSetConstantBuffers(1, 1, &m_pixelBuffer.p);
 	return true;
 }
 bool solidnotexture::Render(ID3D11DeviceContext* pContext , float4x4 matrixViweProj, float4 solidColor , int indexCount)
 {
 	pContext->VSSetShader(m_vertexShader, nullptr, 0);
 	pContext->PSSetShader(m_pixelShader, nullptr, 0);
+	matrixViweProj = matrixViweProj.Transpose();
 	SetShaderParameters(pContext, matrixViweProj, solidColor);
 	pContext->IASetInputLayout(m_layout);
 	pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

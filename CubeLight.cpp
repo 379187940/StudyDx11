@@ -25,7 +25,7 @@ bool CCubeLight ::Render(DWORD dwTimes)
 	m_pContext->PSSetConstantBuffers(0, 1, &m_pConstBuffer);
 	UINT stride = sizeof(SimpleVertex);
 	UINT offset = 0;
-	m_pContext->IASetVertexBuffers(0,1,&m_pVertexBuffer , &stride , &offset);
+	m_pContext->IASetVertexBuffers(0,1,&m_pVertexBuffer.p , &stride , &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R16_UINT, 0);
 	
 	

@@ -157,13 +157,13 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	/*CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
 	pNewTrianle->Init(pd3d11Device, pContext);
 	CCube* pNewCube = new CCube(_T("Cube"));
-	pNewCube->Init(pd3d11Device, pContext);
+	pNewCube->Init(pd3d11Device, pContext);*/
 	CCubeLight* pNewCubeLight = new CCubeLight(_T("CubeLight"));
 	pNewCubeLight->Init(pd3d11Device, pContext);
-	m_quardDepth = new CQuard(_T("CQuard"));
-	m_quardDepth->Init(pd3d11Device, pContext);
+	//m_quardDepth = new CQuard(_T("CQuard"));
+	//m_quardDepth->Init(pd3d11Device, pContext);
 	
-	CGLTF* pNewGltf = new CGLTF(_T("GltfLoad"));
+	/*CGLTF* pNewGltf = new CGLTF(_T("GltfLoad"));
 	pNewGltf->Init(pd3d11Device, pContext);
 	pNewGltf->LoadFromObjFile(_T("cup2uv.gltf"));*/
 	//RegisterObject(pNewTrianle);
