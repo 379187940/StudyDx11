@@ -137,19 +137,19 @@ void cScene::mReadNodeHeirarchy( float animationTime, cAnimation* pAnimation,
 		float4x4 scaleMatrix = float4x4::Scale(scale );
 
 		// combo time
-		nodeTransform = scaleMatrix * rotationMatrix * positionMatrix;
+		nodeTransform = positionMatrix * rotationMatrix * scaleMatrix;
 	}
 
-	float4x4 objectBoneTransform = nodeTransform * parentTransform;
+	float4x4 objectBoneTransform = parentTransform * nodeTransform;
 
 	std::map<std::string, cMesh::cBone*>::iterator itBone = pMesh->mNameToBone.find( pNode->name );
 	if ( itBone != pMesh->mNameToBone.end() )
 	{
 		itBone->second->objectBoneTransformation = objectBoneTransform;
 		itBone->second->finalTransformation =
-			itBone->second->transform
-			*objectBoneTransform
-			* this->mGlobalInverseTransform;
+			this->mGlobalInverseTransform
+			* objectBoneTransform
+			* itBone->second->transform;
 	}
 
 	for ( size_t childIndex = 0; childIndex < pNode->numChildren; childIndex++ )
