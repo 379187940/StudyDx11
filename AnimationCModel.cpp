@@ -333,11 +333,13 @@ bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& a
 bool CAnimationCModel::UpdateBoneCClinder(cMesh::cBone* pParentBone)
 {
 	std::vector<cMesh::cBone*>& children = pParentBone->children;
-	float3 parentPos = float3(pParentBone->finalTransformation.m30, pParentBone->finalTransformation.m31, pParentBone->finalTransformation.m32);
+	float4x4 boneToWorld = pParentBone->transform.Inverse();
+	float3 parentPos = float3(boneToWorld.m30, boneToWorld.m31, boneToWorld.m32);
 	for (int i = 0; i < children.size(); i++)
 	{
 		cMesh::cBone* child = children[i];
-		float3 childPos = float3(child->finalTransformation.m30, child->finalTransformation.m31, child->finalTransformation.m32);
+		boneToWorld = child->transform.Inverse();
+		float3 childPos = float3(boneToWorld.m30, boneToWorld.m31, boneToWorld.m32);
 		//if not exist create
 		if (m_Bone_Clinder.find(child) == m_Bone_Clinder.end())
 		{

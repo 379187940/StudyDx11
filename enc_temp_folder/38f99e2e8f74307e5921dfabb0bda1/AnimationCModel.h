@@ -37,7 +37,6 @@ public:
 			// TODO: Write dtor to clean up bone weights
 
 			std::string name;
-			//from mesh space to bone space
 			float4x4 transform;
 
 			cBone* parent;
