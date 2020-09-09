@@ -6,6 +6,7 @@ extern HWND g_hWnd;
 extern ID3D11Device*           g_pd3dDevice;
 extern ID3D11DeviceContext*    g_pImmediateContext;
 extern CScene g_Scene;
+float4x4 g_
 const float4x4& AfxGetViewportMatrix()
 {
 
