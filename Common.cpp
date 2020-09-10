@@ -2,18 +2,33 @@
 #include "Common.h"
 #include <assert.h>
 #include <vector>
+#include "Scene.h"
 extern HWND g_hWnd;
 extern ID3D11Device*           g_pd3dDevice;
 extern ID3D11DeviceContext*    g_pImmediateContext;
 extern CScene g_Scene;
-float4x4 g_
+float4x4 g_ProjspaceToScreenSpace;
+float2 WorldPosToScreenPos(float3 worldPos)
+{
+	float2 result;
+	FirstPersonCamera* pCamera = g_Scene.GetCamera();
+	
+	return result;
+}
 const float4x4& AfxGetViewportMatrix()
 {
-
+	return g_ProjspaceToScreenSpace;
 }
 bool SetViewPortMatrix(const D3D11_VIEWPORT& viewPort)
 {
-
+	g_ProjspaceToScreenSpace = float4x4::Identity();
+	g_ProjspaceToScreenSpace.m00 = viewPort.Width/2.0f;
+	g_ProjspaceToScreenSpace.m30 = viewPort.TopLeftX + viewPort.Width / 2.0f;
+	g_ProjspaceToScreenSpace.m11 = -viewPort.Height / 2.0f;
+	g_ProjspaceToScreenSpace.m31 = viewPort.Height / 2.0f + viewPort.TopLeftY;
+	g_ProjspaceToScreenSpace.m22 = viewPort.MaxDepth - viewPort.MinDepth;
+	g_ProjspaceToScreenSpace.m32 = viewPort.MinDepth;
+	return true;
 }
 CScene* AfxGetScene()
 {

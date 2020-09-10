@@ -99,7 +99,6 @@ void FirstPersonCamera::Update(InputController& Controller, float ElapsedTime)
     m_Pos += PosDeltaWorld;
 
     m_ViewMatrix  = float4x4::Translation(-m_Pos) * CameraRotation;
-    m_WorldMatrix = WorldRotation * float4x4::Translation(m_Pos);
 }
 
 float4x4 FirstPersonCamera::GetReferenceRotiation() const

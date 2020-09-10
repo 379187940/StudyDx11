@@ -25,7 +25,6 @@ public:
 
     // clang-format off
     const float4x4& GetViewMatrix()  const { return m_ViewMatrix;  }
-    const float4x4& GetWorldMatrix() const { return m_WorldMatrix; }
     const float4x4& GetProjMatrix()  const { return m_ProjMatrix;  }
 
     float3 GetWorldRight() const { return float3(m_ViewMatrix._11, m_ViewMatrix._21, m_ViewMatrix._31); }
@@ -67,7 +66,6 @@ protected:
     float3 m_Pos;
 
     float4x4 m_ViewMatrix;
-    float4x4 m_WorldMatrix;
     float4x4 m_ProjMatrix;
     float    m_fRotationSpeed = 0.01f;
     float    m_fMoveSpeed     = 1.f;
