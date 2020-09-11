@@ -16,6 +16,8 @@ public:
 	CScene();
 	~CScene();
 public:
+	FontClass& GetDefaultClass() { return m_font; }
+
 	bool RegisterObject(IRenderObject* pRenderObject);
 	bool UnRegisterObject(IRenderObject* pRenderObject);
 	void Tick(DWORD dwTimes);

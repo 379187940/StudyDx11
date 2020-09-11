@@ -10,9 +10,12 @@ extern CScene g_Scene;
 float4x4 g_ProjspaceToScreenSpace;
 float2 WorldPosToScreenPos(float3 worldPos)
 {
-	float2 result;
 	FirstPersonCamera* pCamera = g_Scene.GetCamera();
-	
+	float4x4 viewMatrix = pCamera->GetViewMatrix();
+	float4x4 projMatrix = pCamera->GetProjMatrix();
+	float4 resultPos = float4(worldPos, 1.0f) * viewMatrix * projMatrix;
+	resultPos /= resultPos.w;
+	float2 result(resultPos.x, resultPos.y);
 	return result;
 }
 const float4x4& AfxGetViewportMatrix()
