@@ -16,7 +16,7 @@ public:
 	CScene();
 	~CScene();
 public:
-	FontClass& GetDefaultClass() { return m_font; }
+	FontClass& GetDefaultFont() { return m_font; }
 
 	bool RegisterObject(IRenderObject* pRenderObject);
 	bool UnRegisterObject(IRenderObject* pRenderObject);
@@ -29,7 +29,8 @@ public:
 	void UpdateInput(InputController& Controller, float ElapsedTime);
 	FirstPersonCamera* GetCamera() { return m_pCmaera; }
 	const CDirLight* GetMainLight() { return m_pMainLight; }
-	
+	ShaderManagerClass* GetShaderManager() { return m_pShaderManagerClass; }
+
 protected:
 	//ui
 	static void TW_CALL SetObjectVisible(const void *value, void * /*clientData*/);

@@ -2,6 +2,7 @@
 #include "unit.h"
 #include "cScene.h"
 #include "clinder.h"
+#include "textclass.h"
 class CAnimationCModel
 {
 public:
@@ -168,6 +169,7 @@ private:
 	std::vector<cNode*> m_Nodes; // master list
 	std::map<std::string /* Node name */, cNode*> m_NameToNode;
 	std::map < cMesh::cBone*, CClinder* > m_Bone_Clinder;
+	std::map < cMesh::cBone*, TextClass* > m_Bone_RenderName;
 	float4x4 m_GlobalInverseTransform;
 };
 
