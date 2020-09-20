@@ -273,6 +273,7 @@ HRESULT InitDevice()
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
     g_pImmediateContext->RSSetViewports( 1, &vp );
+	::SetViewPortMatrix(vp);
 	if (!TwInit(TW_DIRECT3D11, g_pd3dDevice))
 	{
 		MessageBoxA(NULL, TwGetLastError(), "AntTweakBar initialization failed", MB_OK | MB_ICONERROR);
