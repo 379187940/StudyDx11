@@ -36,7 +36,7 @@ public:
     bool HandleNativeMessage(const void* MsgData);
 
     const MouseState& GetMouseState();
-
+	void ClearMouseWheelState();
 private:
     void UpdateMousePos();
 };

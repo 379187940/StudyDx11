@@ -46,7 +46,8 @@ void FirstPersonCamera::Update(InputController& Controller, float ElapsedTime)
         MoveDirection.y += 1.0f;
     if (Controller.IsKeyDown(InputKeys::MoveDown))
         MoveDirection.y -= 1.0f;
-
+	const auto& mouseState = Controller.GetMouseState();
+	
     // Normalize vector so if moving in 2 dirs (left & forward),
     // the camera doesn't move faster than if moving in 1 dir
     auto len = length(MoveDirection);
@@ -64,28 +65,24 @@ void FirstPersonCamera::Update(InputController& Controller, float ElapsedTime)
 
     float3 PosDelta = MoveDirection * ElapsedTime;
 
+    float MouseDeltaX = 0;
+    float MouseDeltaY = 0;
+    if (m_LastMouseState.PosX >= 0 && m_LastMouseState.PosY >= 0 &&
+        m_LastMouseState.ButtonFlags != MouseState::BUTTON_FLAG_NONE)
     {
-        const auto& mouseState = Controller.GetMouseState();
+        MouseDeltaX = mouseState.PosX - m_LastMouseState.PosX;
+        MouseDeltaY = mouseState.PosY - m_LastMouseState.PosY;
+    }
+    
 
-        float MouseDeltaX = 0;
-        float MouseDeltaY = 0;
-        if (m_LastMouseState.PosX >= 0 && m_LastMouseState.PosY >= 0 &&
-            m_LastMouseState.ButtonFlags != MouseState::BUTTON_FLAG_NONE)
-        {
-            MouseDeltaX = mouseState.PosX - m_LastMouseState.PosX;
-            MouseDeltaY = mouseState.PosY - m_LastMouseState.PosY;
-        }
-        m_LastMouseState = mouseState;
-
-        float fYawDelta   = MouseDeltaX * m_fRotationSpeed;
-        float fPitchDelta = MouseDeltaY * m_fRotationSpeed;
-        if (mouseState.ButtonFlags & MouseState::BUTTON_FLAG_LEFT)
-        {
-            m_fYawAngle += fYawDelta * -m_fHandness;
-            m_fPitchAngle += fPitchDelta * -m_fHandness;
-            m_fPitchAngle = (std::max)(m_fPitchAngle, -PI_F / 2.f);
-            m_fPitchAngle = (std::min)(m_fPitchAngle, +PI_F / 2.f);
-        }
+    float fYawDelta   = MouseDeltaX * m_fRotationSpeed;
+    float fPitchDelta = MouseDeltaY * m_fRotationSpeed;
+    if (mouseState.ButtonFlags & MouseState::BUTTON_FLAG_LEFT)
+    {
+        m_fYawAngle += fYawDelta * -m_fHandness;
+        m_fPitchAngle += fPitchDelta * -m_fHandness;
+        m_fPitchAngle = (std::max)(m_fPitchAngle, -PI_F / 2.f);
+        m_fPitchAngle = (std::min)(m_fPitchAngle, +PI_F / 2.f);
     }
 
     float4x4 ReferenceRotation = GetReferenceRotiation();
@@ -97,8 +94,17 @@ void FirstPersonCamera::Update(InputController& Controller, float ElapsedTime)
 
     float3 PosDeltaWorld = PosDelta * WorldRotation;
     m_Pos += PosDeltaWorld;
-
-    m_ViewMatrix  = float4x4::Translation(-m_Pos) * CameraRotation;
+	//middle
+	auto wheelDelta = mouseState.WheelDelta;
+	if (wheelDelta != 0)
+	{
+		auto cameraDirection = float3(0, 0, 1)*WorldRotation;
+		m_Pos += cameraDirection * wheelDelta*m_fMoveSpeed;
+		Controller.ClearMouseWheelState();
+		//Controller.GetMouseState().ButtonFlags &= MouseState::BUTTON_FLAG_WHEEL;
+	}
+	m_LastMouseState = mouseState;
+    m_ViewMatrix  = float4x4::Translation(-m_Pos) * CameraRotation ;
 }
 
 float4x4 FirstPersonCamera::GetReferenceRotiation() const
