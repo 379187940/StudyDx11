@@ -341,8 +341,10 @@ bool CAnimationCModel::UpdateBoneCClinder(cMesh::cBone* pParentBone)
 	{
 		pRenderBonename = new TextClass();
 		pRenderBonename->Initialize(AfxGetDevice(), AfxGetDeviceContext(), AfxGetWindowSize().x,
-			AfxGetWindowSize().y, 40, false, &AfxGetScene()->GetDefaultFont(), const_cast<char *>(pParentBone->name.c_str()), screenPos.x, screenPos.y, 0, 255, 0);
+			AfxGetWindowSize().y, 20, false, &AfxGetScene()->GetDefaultFont(), const_cast<char *>(pParentBone->name.c_str()), screenPos.x, screenPos.y, 0, 255, 0);
+		m_Bone_RenderName[pParentBone] = pRenderBonename;
 	}
+	pRenderBonename = m_Bone_RenderName[pParentBone];
 	assert(pRenderBonename);
 	pRenderBonename->UpdateSentence(AfxGetDeviceContext(), &AfxGetScene()->GetDefaultFont(), const_cast<char *>(pParentBone->name.c_str()), screenPos.x, screenPos.y, 0, 255, 0);
 	pRenderBonename->Render(AfxGetDeviceContext(), AfxGetScene()->GetShaderManager(), float4x4::Identity(), float4x4::Identity(), float4x4::Ortho(AfxGetWindowSize().x, AfxGetWindowSize().y, 0.0f, 1.0f, false), AfxGetScene()->GetDefaultFont().GetTexture());

@@ -15,6 +15,7 @@ float2 WorldPosToScreenPos(float3 worldPos)
 	float4x4 projMatrix = pCamera->GetProjMatrix();
 	float4 resultPos = float4(worldPos, 1.0f) * viewMatrix * projMatrix;
 	resultPos /= resultPos.w;
+	resultPos = resultPos * g_ProjspaceToScreenSpace;
 	float2 result(resultPos.x, resultPos.y);
 	return result;
 }
