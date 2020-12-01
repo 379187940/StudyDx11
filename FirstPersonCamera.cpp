@@ -103,8 +103,9 @@ void FirstPersonCamera::Update(InputController& Controller, float ElapsedTime)
 		Controller.ClearMouseWheelState();
 		//Controller.GetMouseState().ButtonFlags &= MouseState::BUTTON_FLAG_WHEEL;
 	}
+	m_Pos = m_LookAt - float3(WorldRotation.m20, WorldRotation.m21, WorldRotation.m22)*m_Dis;
 	m_LastMouseState = mouseState;
-    m_ViewMatrix  = float4x4::Translation(-m_Pos) * CameraRotation ;
+    m_ViewMatrix  = CameraRotation *float4x4::Translation(-m_Pos);
 }
 
 float4x4 FirstPersonCamera::GetReferenceRotiation() const
