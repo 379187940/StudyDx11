@@ -87,19 +87,19 @@ void FirstPersonCamera::Update(InputController& Controller, float ElapsedTime)
 
     float4x4 ReferenceRotation = GetReferenceRotiation();
 
-    float4x4 CameraRotation = float4x4::RotationArbitrary(m_ReferenceUpAxis, m_fYawAngle) *
+    float4x4 WorldRotation = float4x4::RotationArbitrary(m_ReferenceUpAxis, m_fYawAngle) *
         float4x4::RotationArbitrary(m_ReferenceRightAxis, m_fPitchAngle) *
         ReferenceRotation;
-    float4x4 WorldRotation = CameraRotation.Transpose();
+    float4x4 CameraRotation = WorldRotation.Transpose();
 
-    float3 PosDeltaWorld = PosDelta * WorldRotation;
-    m_Pos += PosDeltaWorld;
+    //float3 PosDeltaWorld = PosDelta * WorldRotation;
+    m_LookAt += PosDelta;
 	//middle
 	auto wheelDelta = mouseState.WheelDelta;
 	if (wheelDelta != 0)
 	{
-		auto cameraDirection = float3(0, 0, 1)*WorldRotation;
-		m_Pos += cameraDirection * wheelDelta*m_fMoveSpeed;
+		//auto cameraDirection = float3(0, 0, 1)*WorldRotation;
+		m_Dis += wheelDelta*m_fMoveSpeed;
 		Controller.ClearMouseWheelState();
 		//Controller.GetMouseState().ButtonFlags &= MouseState::BUTTON_FLAG_WHEEL;
 	}
@@ -146,7 +146,8 @@ void FirstPersonCamera::SetReferenceAxes(const float3& ReferenceRightAxis, const
 
 void FirstPersonCamera::SetLookAt(const float3& LookAt)
 {
-    float3 ViewDir = LookAt - m_Pos;
+	m_LookAt = LookAt;
+    float3 ViewDir = m_LookAt - m_Pos;
 
     ViewDir = ViewDir * GetReferenceRotiation();
 

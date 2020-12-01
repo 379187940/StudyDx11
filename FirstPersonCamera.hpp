@@ -63,8 +63,9 @@ protected:
     float3 m_ReferenceUpAxis    = float3{0, 1, 0};
     float3 m_ReferenceAheadAxis = float3{0, 0, 1};
 
-    float3 m_Pos;
-
+    float3 m_LookAt;
+	float3 m_Pos;
+	float m_Dis;
     float4x4 m_ViewMatrix;
     float4x4 m_ProjMatrix;
     float    m_fRotationSpeed = 0.01f;
