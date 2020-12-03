@@ -105,7 +105,8 @@ void FirstPersonCamera::Update(InputController& Controller, float ElapsedTime)
 	}
 	m_Pos = m_LookAt - float3(WorldRotation.m20, WorldRotation.m21, WorldRotation.m22)*m_Dis;
 	m_LastMouseState = mouseState;
-    m_ViewMatrix  = CameraRotation *float4x4::Translation(-m_Pos);
+	//CameraRotation.m[3] = float4(1, 0, 0, 0);
+    m_ViewMatrix  = float4x4::Translation(-m_Pos) *CameraRotation ;
 }
 
 float4x4 FirstPersonCamera::GetReferenceRotiation() const
@@ -149,7 +150,7 @@ void FirstPersonCamera::SetLookAt(const float3& LookAt)
 {
 	m_LookAt = LookAt;
     float3 ViewDir = m_LookAt - m_Pos;
-
+	m_Dis = length(ViewDir);
     ViewDir = ViewDir * GetReferenceRotiation();
 
     m_fYawAngle = atan2f(ViewDir.x, ViewDir.z);
