@@ -33,12 +33,14 @@ CScene::~CScene()
 }
 bool CScene::Release()
 {
+	if (m_pHostPlayer)
+		delete m_pHostPlayer;
+	//大多数对象都应该在父对象析构时调用unregister函数,最后没有父对象的渲染对象通过下面进行释放
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
 		delete it->first;
 	}
-	if (m_pHostPlayer)
-		delete m_pHostPlayer;
+
 	delete m_quardDepth;
 	m_pDepthTextureSRV->Release();
 	return true;
