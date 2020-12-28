@@ -173,9 +173,9 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	//RegisterObject(pNewCubeLight);
 	//RegisterObject(pNewGltf);
 	
-	//CTerrain* pTerrain = new CTerrain(_T("Terrain"));
-	//pTerrain->Init(pd3d11Device, pContext);
-	//RegisterObject(pTerrain);
+	CTerrain* pTerrain = new CTerrain(_T("Terrain"));
+	pTerrain->Init(pd3d11Device, pContext);
+	RegisterObject(pTerrain);
 	
 	//CGLTF* pNewTerrain = new CGLTF(_T("terrain"));
 	//pNewTerrain->Init(pd3d11Device, pContext);
