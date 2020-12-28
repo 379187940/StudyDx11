@@ -266,8 +266,7 @@ void CScene::RenderFps(DWORD dwTimes)
 	if (dwTimeTick > 1000)
 	{
 		char a[20];
-		/*sprintf(a, "fps: %d", renderTime);*/
-		sprintf(a, "fps: %s", "B_R_Finger3");
+		sprintf(a, "fps: %d", renderTime);
 		
 		m_fpsString.UpdateSentence(m_pD3d11Context, &m_font, a, 10, 10, 1.0f, 0.0f, 0.0f);
 		dwTimeTick = 0;
