@@ -174,9 +174,9 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	//RegisterObject(pNewCubeLight);
 	//RegisterObject(pNewGltf);
 	
-	//CTerrain* pTerrain = new CTerrain(_T("Terrain"));
-	//pTerrain->Init(pd3d11Device, pContext);
-	//RegisterObject(pTerrain);
+	CTerrain* pTerrain = new CTerrain(_T("Terrain"));
+	pTerrain->Init(pd3d11Device, pContext);
+	RegisterObject(pTerrain);
 	
 	//CGLTF* pNewTerrain = new CGLTF(_T("terrain"));
 	//pNewTerrain->Init(pd3d11Device, pContext);
@@ -267,8 +267,7 @@ void CScene::RenderFps(DWORD dwTimes)
 	if (dwTimeTick > 1000)
 	{
 		char a[20];
-		/*sprintf(a, "fps: %d", renderTime);*/
-		sprintf(a, "fps: %s", "B_R_Finger3");
+		sprintf(a, "fps: %d", renderTime);
 		
 		m_fpsString.UpdateSentence(m_pD3d11Context, &m_font, a, 10, 10, 1.0f, 0.0f, 0.0f);
 		dwTimeTick = 0;

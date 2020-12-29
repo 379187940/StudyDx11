@@ -5,6 +5,7 @@
 
 #include "Material.h"
 #include "FreeImage.h"
+#include "Scene.h"
 CTerrain::CTerrain(wstring strName) :
 	CBaseRenderObject(strName)
 {
@@ -59,8 +60,9 @@ bool CTerrain::LoadHeightMap(char* heightImageFilename)
 			{
 			case FIC_RGB:
 			{
-				int index = (height - row - 1)*srcPitchByte + col*byte_per_pixel;
-				m_HeightData.heightData[row*width + col] = *(bits1 + index);
+				int k = (width * (height - 1 - row)) + col;
+				int index = row*srcPitchByte + col*byte_per_pixel;
+				m_HeightData.heightData[k] = *(bits1 + index);
 				break;
 			}
 			default:
@@ -84,14 +86,18 @@ bool CTerrain::InitGeometry()
 		for (int j = 0; j < col; j++)
 		{
 			float3 pos;
-			pos.x = j- xTranslation ;
+			pos.x = i ;
 			pos.y = m_HeightData.heightData[i*col + j]* m_heightScale;
-			pos.z = i - zTranslation ;
+			pos.z = -j;
+			pos.z += (float)(row - 1);
 			m_VertexBuffer.push_back(pos);
 			float3 color;
-			color.r = float(u(e))/255;
+			/*color.r = float(u(e)) / 255;
 			color.g = float(u(e)) / 255;
-			color.b = float(u(e)) / 255;
+			color.b = float(u(e)) / 255;*/
+			color.r = 1.0f;
+			color.g = 1.0f;
+			color.b = 1.0f;
 			m_VertexColorBuffer.push_back(color);
 		}
 	/*
@@ -161,7 +167,11 @@ bool CTerrain::Render(DWORD dwTimes)
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pCameraAttBuffer.p);
 	m_pContext->IASetInputLayout(m_pLayoutInput);
 	m_pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	ID3D11RasterizerState* oldState = nullptr;
+	m_pContext->RSGetState(&oldState);
+	m_pContext->RSSetState(AfxGetScene()->GetFillFrameState());
 	m_pContext->DrawIndexed(m_indexBuffer.size(), 0, 0);
+	m_pContext->RSSetState(oldState);
 	return false;
 }
 bool CTerrain::UpdateRenderParams(const RenderParams& renderParams)

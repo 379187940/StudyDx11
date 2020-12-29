@@ -30,7 +30,8 @@ public:
 	FirstPersonCamera* GetCamera() { return m_pCmaera; }
 	const CDirLight* GetMainLight() { return m_pMainLight; }
 	ShaderManagerClass* GetShaderManager() { return m_pShaderManagerClass; }
-
+	ID3D11RasterizerState* GetFillSolidState() { return m_pFillSolidState;}
+	ID3D11RasterizerState* GetFillFrameState() { return m_pFillFrameState; }
 protected:
 	//ui
 	static void TW_CALL SetObjectVisible(const void *value, void * /*clientData*/);
