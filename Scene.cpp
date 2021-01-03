@@ -42,7 +42,8 @@ bool CScene::Release()
 	}
 
 	delete m_quardDepth;
-	m_pDepthTextureSRV->Release();
+	if (m_pDepthTextureSRV)
+		m_pDepthTextureSRV->Release();
 	return true;
 }
 void CScene::CreateOfenUseState()
