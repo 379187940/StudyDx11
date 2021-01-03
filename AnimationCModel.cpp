@@ -335,6 +335,19 @@ bool CAnimationCModel::UpdateBoneCClinder(cMesh::cBone* pParentBone)
 	std::vector<cMesh::cBone*>& children = pParentBone->children;
 	float4x4 boneToWorld = pParentBone->transform.Inverse();
 	float3 parentPos = float3(boneToWorld.m30, boneToWorld.m31, boneToWorld.m32);
+	float2 screenPos = WorldPosToScreenPos(parentPos);
+	TextClass *pRenderBonename = NULL;
+	if (m_Bone_RenderName.find(pParentBone) == m_Bone_RenderName.end())
+	{
+		pRenderBonename = new TextClass();
+		pRenderBonename->Initialize(AfxGetDevice(), AfxGetDeviceContext(), AfxGetWindowSize().x,
+			AfxGetWindowSize().y, 20, false, &AfxGetScene()->GetDefaultFont(), const_cast<char *>(pParentBone->name.c_str()), screenPos.x, screenPos.y, 0, 255, 0);
+		m_Bone_RenderName[pParentBone] = pRenderBonename;
+	}
+	pRenderBonename = m_Bone_RenderName[pParentBone];
+	assert(pRenderBonename);
+	pRenderBonename->UpdateSentence(AfxGetDeviceContext(), &AfxGetScene()->GetDefaultFont(), const_cast<char *>(pParentBone->name.c_str()), screenPos.x, screenPos.y, 0, 1.0f, 0);
+	pRenderBonename->Render(AfxGetDeviceContext(), AfxGetScene()->GetShaderManager(), float4x4::Identity(), float4x4::Identity(), float4x4::Ortho(AfxGetWindowSize().x, AfxGetWindowSize().y, 0.0f, 1.0f, false), AfxGetScene()->GetDefaultFont().GetTexture());
 	for (int i = 0; i < children.size(); i++)
 	{
 		cMesh::cBone* child = children[i];

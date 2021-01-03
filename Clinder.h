@@ -25,6 +25,7 @@ private:
 	vector <uint16_t> m_index;
 	unique_ptr<solidnotexture> m_pMaterailSolidColor;
 	float4x4 m_ViewProj;
+	TextClass m_BoneName;
 	int m_prevVertextSize;
 };
 

@@ -1,6 +1,6 @@
 #include "unit.h"
 #include "Clinder.h"
-
+#include "Scene.h"
 
 
 CClinder::CClinder(wstring strName ):
@@ -29,6 +29,9 @@ bool CClinder::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	m_pContext = pContext;
 	m_pMaterailSolidColor.reset(new solidnotexture());
 	m_pMaterailSolidColor->Initialize(pd3dDevice);
+	int2 windowSize;
+	windowSize = AfxGetWindowSize();
+	m_BoneName.Initialize(pd3dDevice, pContext, windowSize.x, windowSize.y, 30, false, &AfxGetScene()->GetDefaultFont(), "", 20, 10, 1.0f, 0, 0);
 	return true;
 }
 bool CClinder::UpdateRenderParams(const RenderParams& renderParams)

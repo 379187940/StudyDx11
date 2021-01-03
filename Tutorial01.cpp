@@ -179,9 +179,9 @@ HRESULT InitDevice()
     UINT height = rc.bottom - rc.top;
 
     UINT createDeviceFlags = 0;
-#ifdef _DEBUG
-    createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
-#endif
+//#ifdef _DEBUG
+//    createDeviceFlags |= D3D11_CREATE_DEVICE_DEBUG;
+//#endif
 
     D3D_DRIVER_TYPE driverTypes[] =
     {
@@ -273,6 +273,7 @@ HRESULT InitDevice()
     vp.TopLeftX = 0;
     vp.TopLeftY = 0;
     g_pImmediateContext->RSSetViewports( 1, &vp );
+	::SetViewPortMatrix(vp);
 	if (!TwInit(TW_DIRECT3D11, g_pd3dDevice))
 	{
 		MessageBoxA(NULL, TwGetLastError(), "AntTweakBar initialization failed", MB_OK | MB_ICONERROR);

@@ -28,11 +28,14 @@ public:
 	TextClass(const TextClass&);
 	~TextClass();
 
-	bool Initialize(ID3D11Device*, ID3D11DeviceContext*, int, int, int, bool, FontClass*, char*, int, int, float, float, float);
+	bool Initialize(ID3D11Device* device, ID3D11DeviceContext* deviceContext, int screenWidth, int screenHeight, int maxLength,
+		bool shadow, FontClass* Font, char* text, int positionX, int positionY, float red, float green, float blue);
 	void Shutdown();
-	void Render(ID3D11DeviceContext*, ShaderManagerClass* , float4x4, float4x4, float4x4, ID3D11ShaderResourceView*);
+	void Render(ID3D11DeviceContext* deviceContext, ShaderManagerClass* ShaderManager, float4x4 worldMatrix, float4x4 viewMatrix,
+		float4x4 orthoMatrix, ID3D11ShaderResourceView* fontTexture);
 
-	bool UpdateSentence(ID3D11DeviceContext*, FontClass*, char*, int, int, float, float, float);
+	bool UpdateSentence(ID3D11DeviceContext* deviceContext, FontClass* Font, char* text, int positionX, int positionY, float red,
+		float green, float blue);
 
 private:
 	bool InitializeSentence(ID3D11Device*, ID3D11DeviceContext*, FontClass*, char*, int, int, float, float, float);

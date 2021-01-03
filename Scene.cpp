@@ -33,12 +33,14 @@ CScene::~CScene()
 }
 bool CScene::Release()
 {
+	if (m_pHostPlayer)
+		delete m_pHostPlayer;
+	//大多数对象都应该在父对象析构时调用unregister函数,最后没有父对象的渲染对象通过下面进行释放
 	for (map<IRenderObject*, int>::iterator it = m_allObject.begin(); it != m_allObject.end(); it++)
 	{
 		delete it->first;
 	}
-	if (m_pHostPlayer)
-		delete m_pHostPlayer;
+
 	delete m_quardDepth;
 	m_pDepthTextureSRV->Release();
 	return true;
@@ -171,9 +173,9 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	//RegisterObject(pNewCubeLight);
 	//RegisterObject(pNewGltf);
 	
-	//CTerrain* pTerrain = new CTerrain(_T("Terrain"));
-	//pTerrain->Init(pd3d11Device, pContext);
-	//RegisterObject(pTerrain);
+	CTerrain* pTerrain = new CTerrain(_T("Terrain"));
+	pTerrain->Init(pd3d11Device, pContext);
+	RegisterObject(pTerrain);
 	
 	//CGLTF* pNewTerrain = new CGLTF(_T("terrain"));
 	//pNewTerrain->Init(pd3d11Device, pContext);
@@ -203,12 +205,12 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	m_quardDepth->SetDepthTexture(m_pDepthTextureSRV);*/
 
 	m_pCmaera = new FirstPersonCamera();
-	UpdateCamera(float3(0, 0, 0),
-		float3(0.0f, 0.0f, 0.0f),
+	UpdateCamera(float3(120, 1, 120),
+		float3(128, 0.0f, 128.0f),
 		0.1f,
 		100000.0f
 	);
-	m_pCmaera->SetMoveSpeed(5.0f);
+	m_pCmaera->SetMoveSpeed(50.0f);
 	BuildUi();
 	m_pMainLight = new CDirLight(float3(1, -1, 1), float3(1.0f, 1.0f, 1.0f));
 	return true;
@@ -265,6 +267,7 @@ void CScene::RenderFps(DWORD dwTimes)
 	{
 		char a[20];
 		sprintf(a, "fps: %d", renderTime);
+		
 		m_fpsString.UpdateSentence(m_pD3d11Context, &m_font, a, 10, 10, 1.0f, 0.0f, 0.0f);
 		dwTimeTick = 0;
 		renderTime = 0;
@@ -278,7 +281,9 @@ void CScene::RenderFps(DWORD dwTimes)
 bool CScene::Render(DWORD dwTimes)
 {
 	//register bone clinder
+	m_pD3d11Context->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
 	m_pHostPlayer->RenderBone();
+	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	EnableAlphaBlending();
 	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	if (m_bWireFrame)
