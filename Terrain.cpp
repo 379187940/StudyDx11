@@ -95,9 +95,19 @@ bool CTerrain::InitGeometry()
 			/*color.r = float(u(e)) / 255;
 			color.g = float(u(e)) / 255;
 			color.b = float(u(e)) / 255;*/
-			color.r = 1.0f;
-			color.g = 1.0f;
-			color.b = 1.0f;
+			if (i == 128 && j == 128)
+			{
+				color.r = 1.0f;
+				color.g = 0.0f;
+				color.b = 0.0f;
+			}
+			else 
+			{
+				color.r = 1.0f;
+				color.g = 1.0f;
+				color.b = 1.0f;
+			}
+			
 			m_VertexColorBuffer.push_back(color);
 		}
 	/*
