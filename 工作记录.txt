@@ -2,3 +2,7 @@ bool cSceneManager::loadScene( sSceneData sceneData )
 git add
 git commit
 git push origin master
+
+1.实现AnimationCModel的位置和方向动态调整
+2.实现第一人称相机
+3.实现方向光阴影

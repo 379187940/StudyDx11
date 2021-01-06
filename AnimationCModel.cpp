@@ -369,6 +369,17 @@ bool CAnimationCModel::UpdateBoneCClinder(cMesh::cBone* pParentBone)
 	}
 	return true;
 }
+void CAnimationCModel::SetPosAndDir(float3 pos, float3 dir)
+{
+	m_WorldTransform.Identity();
+	m_pos = pos;
+	m_dir = dir;
+	m_WorldTransform.m31 = pos.x;
+	m_WorldTransform.m32 = pos.y;
+	m_WorldTransform.m33 = pos.z;
+	
+
+}
 bool CAnimationCModel::RenderBone( )
 {
 	for (int i = 0; i < m_Skin.size(); i++)

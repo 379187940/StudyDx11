@@ -160,6 +160,7 @@ public:
 	bool LoadCharacter(std::string strSkin , vector<std::string>& action);
 	bool UpdateBoneCClinder( cMesh::cBone* pParentBone );
 	bool RenderBone();
+	void SetPosAndDir(float3 pos, float3 dir);
 private:
 	friend bool mProcessChildNodes(CAnimationCModel* pModel, CAnimationCModel::cNode* parentnode, aiNode* parentainode);
 	vector<cMesh*> m_Skin;
@@ -171,5 +172,8 @@ private:
 	std::map < cMesh::cBone*, CClinder* > m_Bone_Clinder;
 	std::map < cMesh::cBone*, TextClass* > m_Bone_RenderName;
 	float4x4 m_GlobalInverseTransform;
+	float3 m_pos;
+	float3 m_dir;
+	float4x4 m_WorldTransform;
 };
 
