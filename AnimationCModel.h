@@ -172,7 +172,7 @@ private:
 	std::map < cMesh::cBone*, CClinder* > m_Bone_Clinder;
 	std::map < cMesh::cBone*, TextClass* > m_Bone_RenderName;
 	float4x4 m_GlobalInverseTransform;
-	float3 m_pos;
+	float3 m_pos{ 0.0, 0.0, 0.0 };
 	float3 m_dir;
 	float4x4 m_WorldTransform;
 };

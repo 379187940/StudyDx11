@@ -377,7 +377,10 @@ void CAnimationCModel::SetPosAndDir(float3 pos, float3 dir)
 	m_WorldTransform.m31 = pos.x;
 	m_WorldTransform.m32 = pos.y;
 	m_WorldTransform.m33 = pos.z;
-	
+	Diligent::normalize(dir);
+	static float3 unit_yAxis(0, 1, 0);
+	float temp = abs(Diligent::dot(dir, unit_yAxis));
+	assert(temp < cos(5.0f*PI / 180.0f));
 
 }
 bool CAnimationCModel::RenderBone( )
