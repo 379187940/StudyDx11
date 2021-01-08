@@ -1,6 +1,7 @@
 #include "AnimationCModel.h"
 #include "unit.h"
 #include "scene.h"
+using namespace Diligent;
 // ** cAnimation **
 CAnimationCModel::cAnimation::cBoneAnimation* CAnimationCModel::cAnimation::findBoneAnimationByName(std::string& boneName)
 {
@@ -374,14 +375,15 @@ void CAnimationCModel::SetPosAndDir(float3 pos, float3 dir)
 	m_WorldTransform.Identity();
 	m_pos = pos;
 	m_dir = dir;
+	Diligent::normalize(m_dir);
 	m_WorldTransform.m31 = pos.x;
 	m_WorldTransform.m32 = pos.y;
 	m_WorldTransform.m33 = pos.z;
-	Diligent::normalize(dir);
 	static float3 unit_yAxis(0, 1, 0);
-	float temp = abs(Diligent::dot(dir, unit_yAxis));
+	float temp = abs(Diligent::dot(m_dir, unit_yAxis));
+	//一般人物朝向都是直接
 	assert(temp < cos(5.0f*PI / 180.0f));
-
+	float3 right = Diligent::cross()
 }
 bool CAnimationCModel::RenderBone( )
 {
