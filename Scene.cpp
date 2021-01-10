@@ -283,7 +283,7 @@ bool CScene::Render(DWORD dwTimes)
 {
 	//register bone clinder
 	m_pD3d11Context->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
-	m_pHostPlayer->RenderBone();
+	m_pHostPlayer->RenderBoneCylinderAndName();
 	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	EnableAlphaBlending();
 	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);

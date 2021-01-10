@@ -158,9 +158,11 @@ public:
 	~CAnimationCModel();
 public:
 	bool LoadCharacter(std::string strSkin , vector<std::string>& action);
-	bool UpdateBoneCClinder( cMesh::cBone* pParentBone );
-	bool RenderBone();
+	bool RenderBoneCylinderAndName();
 	void SetPosAndDir(float3 pos, float3 dir);
+private:
+	void CreateBoneCylinderAndBoneName(cMesh::cBone* pParentBone);
+	bool UpdateBoneCClinder(cMesh::cBone* pParentBone);
 private:
 	friend bool mProcessChildNodes(CAnimationCModel* pModel, CAnimationCModel::cNode* parentnode, aiNode* parentainode);
 	vector<cMesh*> m_Skin;
@@ -169,11 +171,13 @@ private:
 	unsigned int m_NumNodes;
 	std::vector<cNode*> m_Nodes; // master list
 	std::map<std::string /* Node name */, cNode*> m_NameToNode;
-	std::map < cMesh::cBone*, CClinder* > m_Bone_Clinder;
+	std::map < cMesh::cBone*, CCylinder* > m_Bone_Clinder;
 	std::map < cMesh::cBone*, TextClass* > m_Bone_RenderName;
 	float4x4 m_GlobalInverseTransform;
 	float3 m_pos{ 0.0, 0.0, 0.0 };
 	float3 m_dir;
 	float4x4 m_WorldTransform;
+	//美术制作的角色一般都是头
+	float4x4 m_InitTransform;
 };
 

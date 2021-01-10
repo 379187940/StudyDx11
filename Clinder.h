@@ -2,12 +2,12 @@
 #include "IRenderObject.h"
 #include "BaseRenderObject.h"
 #include "solidnotexture.h"
-class CClinder:
+class CCylinder:
 	public CBaseRenderObject, public CCommonRenderData
 {
 public:
-	CClinder(wstring strName);
-	~CClinder();
+	CCylinder(wstring strName);
+	~CCylinder();
 public:
 	void UpdateProperty(float3 start, float3 end, uint subdivide, float radius, float4 color);
 	void BuildGeometry();

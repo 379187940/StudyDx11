@@ -3,18 +3,18 @@
 #include "Scene.h"
 
 
-CClinder::CClinder(wstring strName ):
+CCylinder::CCylinder(wstring strName ):
 	CBaseRenderObject(strName)
 {
 	m_prevVertextSize = 0;
 }
 
 
-CClinder::~CClinder()
+CCylinder::~CCylinder()
 {
 
 }
-bool CClinder::Render(DWORD dwTimes)
+bool CCylinder::Render(DWORD dwTimes)
 {
 	UINT stride = sizeof(float3);
 	UINT offset = 0;
@@ -23,7 +23,7 @@ bool CClinder::Render(DWORD dwTimes)
 	m_pMaterailSolidColor->Render(m_pContext, m_ViewProj, float4(1.0f, 0.0f, 0.0f, 1.0f), m_index.size());
 	return true;
 }
-bool CClinder::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
+bool CCylinder::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 {
 	m_pd3dDevice = pd3dDevice;
 	m_pContext = pContext;
@@ -34,16 +34,16 @@ bool CClinder::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 	m_BoneName.Initialize(pd3dDevice, pContext, windowSize.x, windowSize.y, 30, false, &AfxGetScene()->GetDefaultFont(), "", 20, 10, 1.0f, 0, 0);
 	return true;
 }
-bool CClinder::UpdateRenderParams(const RenderParams& renderParams)
+bool CCylinder::UpdateRenderParams(const RenderParams& renderParams)
 {
 	m_ViewProj = renderParams.m_worldMatrix * renderParams.m_viewMatrix * renderParams.m_projMatrix;
 	return true;
 }
-void CClinder::Tick(DWORD dwTimes)
+void CCylinder::Tick(DWORD dwTimes)
 {
 
 }
-void CClinder::UpdateProperty(float3 start, float3 end, uint subdivide, float radius, float4 color)
+void CCylinder::UpdateProperty(float3 start, float3 end, uint subdivide, float radius, float4 color)
 {
 	m_start = start;
 	m_end = end;
@@ -68,7 +68,7 @@ void CClinder::UpdateProperty(float3 start, float3 end, uint subdivide, float ra
 	UpdateBufferData(m_pContext, m_pIndexBuffer, m_index.data(), iIndexSize* sizeof(uint16_t));
 
 }
-void CClinder::BuildGeometry()
+void CCylinder::BuildGeometry()
 {
 	m_vertexs.clear();
 	m_index.clear();
