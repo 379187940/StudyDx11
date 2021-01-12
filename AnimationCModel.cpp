@@ -420,13 +420,6 @@ void CAnimationCModel::SetPosAndDir(float3 pos, float3 dir)
 }
 bool CAnimationCModel::RenderBoneCylinderAndName( )
 {
-	for (int i = 0; i < m_Skin.size(); i++)
-	{
-		std::vector<cMesh::cBone*>& rootBone = m_Skin[i]->mRootBones;
-		for (int j = 0; j < rootBone.size(); j++)
-		{
-			UpdateBoneCClinder(rootBone[j]);
-		}
-	}
+	
 	return true;
 }
