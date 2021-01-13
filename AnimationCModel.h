@@ -160,6 +160,7 @@ public:
 	bool LoadCharacter(std::string strSkin , vector<std::string>& action);
 	bool RenderBoneCylinderAndName();
 	void SetPosAndDir(float3 pos, float3 dir);
+	void RegisterCylinderToScene();
 private:
 	void CreateBoneCylinderAndBoneName(cMesh::cBone* pParentBone);
 	bool UpdateBoneCClinder(cMesh::cBone* pParentBone);

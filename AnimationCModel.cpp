@@ -332,6 +332,13 @@ bool CAnimationCModel::LoadCharacter(std::string strSkin, vector<std::string>& a
 	}
 	return true;
 }
+void CAnimationCModel::RegisterCylinderToScene()
+{
+	for (std::map < cMesh::cBone*, CCylinder* >::iterator it = m_Bone_Clinder.begin(); it != m_Bone_Clinder.end(); it++)
+	{
+		AfxGetScene()->RegisterObject(it->second);
+	}
+}
 void CAnimationCModel::CreateBoneCylinderAndBoneName(cMesh::cBone* pParentBone)
 {
 	for (std::map < cMesh::cBone*, CCylinder* >::iterator it = m_Bone_Clinder.begin(); it != m_Bone_Clinder.end(); it++)
