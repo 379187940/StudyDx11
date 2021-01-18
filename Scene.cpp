@@ -148,7 +148,13 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	int2 windowSize;
 	windowSize = AfxGetWindowSize();
 	m_fpsString.Initialize(m_pD3d11Device, m_pD3d11Context, windowSize.x, windowSize.y , 20 , false,&m_font ,"fps: NULL"  ,  10 ,10 ,  1.0f , 0 , 0);
-
+	m_pCmaera = new FirstPersonCamera();
+	UpdateCamera(float3(120, 1, 120),
+		float3(128, 0.0f, 128.0f),
+		0.1f,
+		100000.0f
+	);
+	m_pCmaera->SetMoveSpeed(50.0f);
 	//创建经常使用的raster state和depthstencil state
 	CreateOfenUseState();
 	m_pHostPlayer = new CAnimationCModel();
@@ -157,6 +163,8 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	animation.push_back("model\\RPG-Character\\RPG-Character@Unarmed-Walk.fbx");
 	animation.push_back("model\\RPG-Character\\RPG-Character@Unarmed-Run.fbx");
 	m_pHostPlayer->LoadCharacter("model//RPG-Character.FBX", animation);
+	m_pHostPlayer->CreateBoneCylinderAndBoneName();
+	m_pHostPlayer->RegisterCylinderToScene();
 	/*CTriangle* pNewTrianle = new CTriangle(_T("Triangle"));
 	pNewTrianle->Init(pd3d11Device, pContext);
 	CCube* pNewCube = new CCube(_T("Cube"));
@@ -205,13 +213,7 @@ bool CScene::LoadDafultScene(ID3D11Device* pd3d11Device, ID3D11DeviceContext* pC
 	pResource->Release();
 	m_quardDepth->SetDepthTexture(m_pDepthTextureSRV);*/
 
-	m_pCmaera = new FirstPersonCamera();
-	UpdateCamera(float3(120, 1, 120),
-		float3(128, 0.0f, 128.0f),
-		0.1f,
-		100000.0f
-	);
-	m_pCmaera->SetMoveSpeed(50.0f);
+	
 	BuildUi();
 	m_pMainLight = new CDirLight(float3(1, -1, 1), float3(1.0f, 1.0f, 1.0f));
 	return true;
@@ -248,7 +250,7 @@ void CScene::Tick(DWORD dwTimes)
 	{
 		it->first->Tick(dwTimes);
 	}
-	
+	m_pHostPlayer->UpdateBoneCylinder();
 	
 }
 void CScene::RenderFps(DWORD dwTimes)
@@ -280,10 +282,10 @@ void CScene::RenderFps(DWORD dwTimes)
 	m_fpsString.Render(m_pD3d11Context, m_pShaderManagerClass, float4x4::Identity(), float4x4::Identity(), float4x4::Ortho(AfxGetWindowSize().x, AfxGetWindowSize().y, 0.0f, 1.0f, false) , m_font.GetTexture());
 }
 bool CScene::Render(DWORD dwTimes)
-{
+{	
 	//register bone clinder
 	m_pD3d11Context->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
-	m_pHostPlayer->RenderBoneCylinderAndName();
+	m_pHostPlayer->RenderBoneName();
 	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	EnableAlphaBlending();
 	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);

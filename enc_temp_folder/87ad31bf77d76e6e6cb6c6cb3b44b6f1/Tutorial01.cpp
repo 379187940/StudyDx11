@@ -78,7 +78,6 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 			auto ElapsedTime = CurrTime - PrevTime;
 			PrevTime = CurrTime;
 			g_Scene.UpdateInput(g_inputController, ElapsedTime);
-			g_Scene.Tick(CurrTime);
             Render();
         }
     }

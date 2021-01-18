@@ -158,12 +158,17 @@ public:
 	~CAnimationCModel();
 public:
 	bool LoadCharacter(std::string strSkin , vector<std::string>& action);
-	bool RenderBoneCylinderAndName();
 	void SetPosAndDir(float3 pos, float3 dir);
+
+	//bone diagram use for debug
+	void CreateBoneCylinderAndBoneName(cMesh::cBone* pParentBone = nullptr);
 	void RegisterCylinderToScene();
+	bool UpdateBoneCylinder(cMesh::cBone* pParentBone = nullptr);
+	bool RenderBoneName(cMesh::cBone* pParentBone = nullptr);
+	
+	//end
 private:
-	void CreateBoneCylinderAndBoneName(cMesh::cBone* pParentBone);
-	bool UpdateBoneCClinder(cMesh::cBone* pParentBone);
+	
 private:
 	friend bool mProcessChildNodes(CAnimationCModel* pModel, CAnimationCModel::cNode* parentnode, aiNode* parentainode);
 	vector<cMesh*> m_Skin;

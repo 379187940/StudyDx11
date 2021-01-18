@@ -386,10 +386,6 @@ void CAnimationCModel::CreateBoneCylinderAndBoneName(cMesh::cBone* pParentBone)
 }
 bool CAnimationCModel::UpdateBoneCylinder(cMesh::cBone* pParentBone)
 {
-	if (pParentBone == nullptr)
-	{
-		pParentBone = m_Skin[0]->mRootBones[0];
-	}
 	std::vector<cMesh::cBone*>& children = pParentBone->children;
 	float4x4 boneToWorld = pParentBone->transform.Inverse();
 	float3 parentPos = float3(boneToWorld.m30, boneToWorld.m31, boneToWorld.m32);
