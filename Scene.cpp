@@ -284,9 +284,6 @@ void CScene::RenderFps(DWORD dwTimes)
 bool CScene::Render(DWORD dwTimes)
 {	
 	//register bone clinder
-	m_pD3d11Context->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
-	m_pHostPlayer->RenderBoneName();
-	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	EnableAlphaBlending();
 	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	if (m_bWireFrame)
@@ -306,7 +303,7 @@ bool CScene::Render(DWORD dwTimes)
 		m_pD3d11Context->RSSetState(m_pFillSolidState);
 	
 	m_pD3d11Context->OMSetDepthStencilState(m_depthDisabledStencilState, 1);
-	
+	m_pHostPlayer->RenderBoneName();
 	RenderFps( dwTimes);
 	m_pD3d11Context->OMSetDepthStencilState(m_depthStencilState, 1);
 	return true;
