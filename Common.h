@@ -55,4 +55,4 @@ ID3D11Device* AfxGetDevice();
 ID3D11DeviceContext* AfxGetDeviceContext();
 const float4x4& AfxGetViewportMatrix();
 bool SetViewPortMatrix(const D3D11_VIEWPORT& viewPort);
-float2 WorldPosToScreenPos(float3 worldPos);
+bool WorldPosToScreenPos(float3 worldPos, float2& screenPos);

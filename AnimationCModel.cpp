@@ -24,7 +24,8 @@ CAnimationCModel::cMesh::~cMesh()
 
 CAnimationCModel::CAnimationCModel()
 {
-	m_InitTransform.RotationX(PI / 2);
+	m_InitTransform = float4x4::RotationX(-PI / 2);
+	m_InitTransform *= float4x4::Scale(0.10f);
 }
 
 
@@ -361,12 +362,16 @@ void CAnimationCModel::CreateBoneCylinderAndBoneName(cMesh::cBone* pParentBone)
 	std::vector<cMesh::cBone*>& children = pParentBone->children;
 	float4x4 boneToWorld = pParentBone->transform.Inverse();
 	float3 parentPos = float3(boneToWorld.m30, boneToWorld.m31, boneToWorld.m32);
-	float2 screenPos = WorldPosToScreenPos(parentPos);
-	TextClass *pRenderBonename = NULL;
 	
+	TextClass *pRenderBonename = NULL;
 	pRenderBonename = new TextClass();
-	pRenderBonename->Initialize(AfxGetDevice(), AfxGetDeviceContext(), AfxGetWindowSize().x,
-		AfxGetWindowSize().y, 20, false, &AfxGetScene()->GetDefaultFont(), const_cast<char *>(pParentBone->name.c_str()), screenPos.x, screenPos.y, 0, 255, 0);
+	float2 screenPos;
+	if ( WorldPosToScreenPos(parentPos,screenPos ) )
+		pRenderBonename->Initialize(AfxGetDevice(), AfxGetDeviceContext(), AfxGetWindowSize().x,
+			AfxGetWindowSize().y, 20, false, &AfxGetScene()->GetDefaultFont(), const_cast<char *>(pParentBone->name.c_str()), screenPos.x, screenPos.y, 0, 255, 0);
+	else
+		pRenderBonename->Initialize(AfxGetDevice(), AfxGetDeviceContext(), AfxGetWindowSize().x,
+			AfxGetWindowSize().y, 20, false, &AfxGetScene()->GetDefaultFont(), "", 0.0f, 0.0f, 0, 255, 0);
 	m_Bone_RenderName[pParentBone] = pRenderBonename;
 	pRenderBonename->UpdateSentence(AfxGetDeviceContext(), &AfxGetScene()->GetDefaultFont(), const_cast<char *>(pParentBone->name.c_str()), screenPos.x, screenPos.y, 0, 1.0f, 0);
 	for (int i = 0; i < children.size(); i++)
@@ -390,18 +395,28 @@ bool CAnimationCModel::UpdateBoneCylinder(cMesh::cBone* pParentBone)
 	{
 		pParentBone = m_Skin[0]->mRootBones[0];
 	}
+	float4 tempPos;
 	std::vector<cMesh::cBone*>& children = pParentBone->children;
 	float4x4 boneToWorld = pParentBone->transform.Inverse();
 	float3 parentPos = float3(boneToWorld.m30, boneToWorld.m31, boneToWorld.m32);
-	float2 screenPos = WorldPosToScreenPos(parentPos);
+	tempPos = float4(parentPos, 1.0f) * m_InitTransform;
+	tempPos /= tempPos.w;
+	parentPos = tempPos;
 	TextClass *pRenderBonename = m_Bone_RenderName[pParentBone];
 	assert(pRenderBonename);
-	pRenderBonename->UpdateSentence(AfxGetDeviceContext(), &AfxGetScene()->GetDefaultFont(), const_cast<char *>(pParentBone->name.c_str()), screenPos.x, screenPos.y, 0, 1.0f, 0);
+	float2 screenPos;
+	if (WorldPosToScreenPos(parentPos, screenPos))
+		pRenderBonename->UpdateSentence(AfxGetDeviceContext(), &AfxGetScene()->GetDefaultFont(), const_cast<char *>(pParentBone->name.c_str()), screenPos.x, screenPos.y, 0, 1.0f, 0);
+	else
+		pRenderBonename->UpdateSentence(AfxGetDeviceContext(), &AfxGetScene()->GetDefaultFont(), "", 0.0f, 0.0f, 0, 1.0f, 0);
 	for (int i = 0; i < children.size(); i++)
 	{
 		cMesh::cBone* child = children[i];
 		boneToWorld = child->transform.Inverse();
 		float3 childPos = float3(boneToWorld.m30, boneToWorld.m31, boneToWorld.m32);
+		tempPos = float4(childPos, 1.0f) * m_InitTransform;
+		tempPos /= tempPos.w;
+		childPos = tempPos;
 		CCylinder* clinder = m_Bone_Clinder[child];
 		clinder->UpdateProperty(parentPos, childPos, 50.0, 0.50f, float4(1, 0, 0, 0));
 		UpdateBoneCylinder(child);

@@ -8,16 +8,21 @@ extern ID3D11Device*           g_pd3dDevice;
 extern ID3D11DeviceContext*    g_pImmediateContext;
 extern CScene g_Scene;
 float4x4 g_ProjspaceToScreenSpace;
-float2 WorldPosToScreenPos(float3 worldPos)
+bool WorldPosToScreenPos(float3 worldPos,float2& screenPos )
 {
 	FirstPersonCamera* pCamera = g_Scene.GetCamera();
 	float4x4 viewMatrix = pCamera->GetViewMatrix();
 	float4x4 projMatrix = pCamera->GetProjMatrix();
 	float4 resultPos = float4(worldPos, 1.0f) * viewMatrix * projMatrix;
 	resultPos /= resultPos.w;
+	if (
+		resultPos.x>1.0f || resultPos.x<-1.0f ||
+		resultPos.y>1.0f || resultPos.y <-1.0f ||
+		resultPos.z>1.0f || resultPos.z < 0.0f)
+		return false;
 	resultPos = resultPos * g_ProjspaceToScreenSpace;
-	float2 result(resultPos.x, resultPos.y);
-	return result;
+	screenPos = float2(resultPos.x, resultPos.y);
+	return true;
 }
 const float4x4& AfxGetViewportMatrix()
 {
