@@ -82,6 +82,9 @@ bool CTerrain::InitGeometry()
 	int zTranslation = row / 2 + 1;
 	std::default_random_engine e;
 	std::uniform_int_distribution<unsigned> u(0, 255); //生成随机颜色
+	float uIncrementSize = 1.0f / (col - 1);
+	float vIncrementSize = 1.0f / (row - 1);
+	float u = 0.0f, v = 0.0f;
 	for ( int i = 0 ; i < row ; i++ )
 		for (int j = 0; j < col; j++)
 		{
@@ -92,6 +95,7 @@ bool CTerrain::InitGeometry()
 			pos.z += (float)(row - 1);
 			m_VertexBuffer.push_back(pos);
 			float3 color;
+			float2 uv(u+i*)
 			/*color.r = float(u(e)) / 255;
 			color.g = float(u(e)) / 255;
 			color.b = float(u(e)) / 255;*/
