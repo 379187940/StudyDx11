@@ -6,15 +6,27 @@
 #include "Material.h"
 #include "FreeImage.h"
 #include "Scene.h"
+#include <d3dx11.h>
 CTerrain::CTerrain(wstring strName) :
 	CBaseRenderObject(strName)
 {
-
+	m_MaskTexture = nullptr;
+	m_pLineSampleState = nullptr;
 }
 
 
 CTerrain::~CTerrain()
 {
+	for (int i = 0; i < m_DiffuseColor.size(); i++)
+	{
+		m_DiffuseColor[i]->Release();
+		m_DiffuseColor[i] = nullptr;
+	}
+	m_DiffuseColor.clear();
+	m_MaskTexture->Release();
+	m_MaskTexture = nullptr;
+	m_pLineSampleState->Release();
+	m_pLineSampleState = nullptr;
 }
 bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 {
@@ -81,7 +93,6 @@ bool CTerrain::InitGeometry()
 	int xTranslation = col / 2 + 1;
 	int zTranslation = row / 2 + 1;
 	std::default_random_engine e;
-	std::uniform_int_distribution<unsigned> u(0, 255); //生成随机颜色
 	float uIncrementSize = 1.0f / (col - 1);
 	float vIncrementSize = 1.0f / (row - 1);
 	float u = 0.0f, v = 0.0f;
@@ -95,7 +106,8 @@ bool CTerrain::InitGeometry()
 			pos.z += (float)(row - 1);
 			m_VertexBuffer.push_back(pos);
 			float3 color;
-			float2 uv(u+i*)
+			float2 uv(u+j*uIncrementSize,v+i*vIncrementSize);
+			m_TerrainUv.push_back(uv);
 			/*color.r = float(u(e)) / 255;
 			color.g = float(u(e)) / 255;
 			color.b = float(u(e)) / 255;*/
@@ -139,6 +151,20 @@ bool CTerrain::InitGeometry()
 			m_indexBuffer.push_back(index3);
 			m_indexBuffer.push_back(index4);
 		}
+	D3D11_SAMPLER_DESC sampDesc;
+	ZeroMemory(&sampDesc, sizeof(sampDesc));
+	sampDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	sampDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	sampDesc.ComparisonFunc = D3D11_COMPARISON_ALWAYS;
+	sampDesc.MinLOD = 0;
+	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
+	HRESULT hr = m_pd3dDevice->CreateSamplerState(&sampDesc, &m_pLineSampleState);
+	assert(SUCCEEDED(hr));
+	ID3D11Texture2D* pDiffuse = CreateTexture2d(m_pd3dDevice, 512, 512, D3D11_BIND_SHADER_RESOURCE, DXGI_FORMAT_B8G8R8A8_UNORM, D3D11_USAGE_DEFAULT, 0);
+	assert(pDiffuse);
+	m_DiffuseColor.push_back(pDiffuse);
 	m_pCameraAttBuffer = CreateBuffer(m_pd3dDevice, sizeof(CameraAtrribute), D3D11_USAGE_DYNAMIC, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
 	assert(m_pCameraAttBuffer);
 	m_pVertexBuffer = CreateBuffer(m_pd3dDevice, m_VertexBuffer.size() * sizeof(float3), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
@@ -147,12 +173,14 @@ bool CTerrain::InitGeometry()
 	assert(m_pVertexColorBuffer);
 	m_pIndexBuffer = CreateBuffer(m_pd3dDevice, m_indexBuffer.size() * sizeof(int), D3D11_USAGE_DYNAMIC, D3D11_BIND_INDEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
 	assert(m_pIndexBuffer);
-
+	m_pUvBuffer = CreateBuffer(m_pd3dDevice, m_TerrainUv.size() * sizeof(float2), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
+	assert(m_pUvBuffer);
+	D3DX11CreateTextureFromFile
 	ID3DBlob* pVertexShaderBlob = NULL;
 	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "vs_main", "vs_4_0", 0, 0, &pVertexShaderBlob)));
 	vector<D3D11_INPUT_ELEMENT_DESC> allDesc;
 	allDesc.push_back({"POSITION",0,DXGI_FORMAT_R32G32B32_FLOAT,0,0,D3D11_INPUT_PER_VERTEX_DATA,0});
-	allDesc.push_back({"COLOR",0,DXGI_FORMAT_R32G32B32_FLOAT,1,0,D3D11_INPUT_PER_VERTEX_DATA,0 });
+	allDesc.push_back({"TEXCOORD",0,DXGI_FORMAT_R32G32B32_FLOAT,1,0,D3D11_INPUT_PER_VERTEX_DATA,0 });
 	m_pLayoutInput = CreateInputLayout(m_pd3dDevice, allDesc, pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize());
 	m_pd3dDevice->CreateVertexShader(pVertexShaderBlob->GetBufferPointer(), pVertexShaderBlob->GetBufferSize(), NULL, &m_pVertexShader);
 	pVertexShaderBlob->Release();
@@ -172,9 +200,10 @@ void CTerrain::Tick(DWORD dwTimes)
 bool CTerrain::Render(DWORD dwTimes)
 {
 	UINT stride = sizeof(float3);
+	UINT strideUv = sizeof(float2);
 	UINT offset = 0;
 	m_pContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer.p, &stride, &offset);
-	m_pContext->IASetVertexBuffers(1, 1, &m_pVertexColorBuffer.p, &stride, &offset);
+	m_pContext->IASetVertexBuffers(1, 1, &m_pUvBuffer.p, &strideUv, &offset);
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT,0);
 	m_pContext->VSSetShader(m_pVertexShader, nullptr, 0);
 	m_pContext->PSSetShader(m_pPixelShader, nullptr, 0);
@@ -200,5 +229,6 @@ bool CTerrain::UpdateRenderParams(const RenderParams& renderParams)
 	UpdateBufferData(m_pContext, m_pVertexBuffer, m_VertexBuffer.data(), m_VertexBuffer.size() * sizeof(float3));
 	UpdateBufferData(m_pContext, m_pVertexColorBuffer, m_VertexColorBuffer.data(), m_VertexColorBuffer.size() * sizeof(float3));
 	UpdateBufferData(m_pContext, m_pIndexBuffer, m_indexBuffer.data(), m_indexBuffer.size() * sizeof(int));
+	UpdateBufferData(m_pContext, m_pUvBuffer, m_TerrainUv.data(), m_TerrainUv.size() * sizeof(float2));
 	return true;
 }
