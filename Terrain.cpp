@@ -175,7 +175,7 @@ bool CTerrain::InitGeometry()
 	assert(m_pIndexBuffer);
 	m_pUvBuffer = CreateBuffer(m_pd3dDevice, m_TerrainUv.size() * sizeof(float2), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
 	assert(m_pUvBuffer);
-	
+	ID3D11Texture2D
 	ID3DBlob* pVertexShaderBlob = NULL;
 	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "vs_main", "vs_4_0", 0, 0, &pVertexShaderBlob)));
 	vector<D3D11_INPUT_ELEMENT_DESC> allDesc;

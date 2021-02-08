@@ -428,6 +428,7 @@
     <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="textclass.cpp" />
     <ClCompile Include="textureclass.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Tutorial01.cpp" />
@@ -483,6 +484,7 @@
     <ClInclude Include="Terrain.h" />
     <ClInclude Include="textclass.h" />
     <ClInclude Include="textureclass.h" />
+    <ClInclude Include="TextureManager.h" />
     <ClInclude Include="Timer.hpp" />
     <ClInclude Include="tiny_gltf.h" />
     <ClInclude Include="Triangle.h" />

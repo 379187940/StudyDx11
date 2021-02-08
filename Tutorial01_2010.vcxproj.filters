@@ -146,6 +146,7 @@
     <ClInclude Include="DDS.h">
       <Filter>Texture</Filter>
     </ClInclude>
+    <ClInclude Include="TextureManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -227,6 +228,7 @@
     <ClCompile Include="DDSTextureLoader.cpp">
       <Filter>Texture</Filter>
     </ClCompile>
+    <ClCompile Include="TextureManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <CLInclude Include="resource.h">
