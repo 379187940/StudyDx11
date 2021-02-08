@@ -38,6 +38,9 @@
     <Filter Include="StandardGeometry">
       <UniqueIdentifier>{cf462612-0031-4973-87e1-f07da8cc036d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{768c7fdc-ce94-4b29-ab3f-4aa69656be62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="IRenderObject.h">
@@ -137,6 +140,12 @@
     <ClInclude Include="Clinder.h">
       <Filter>StandardGeometry</Filter>
     </ClInclude>
+    <ClInclude Include="DDSTextureLoader.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="DDS.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Triangle.cpp">
@@ -214,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="Clinder.cpp">
       <Filter>StandardGeometry</Filter>
+    </ClCompile>
+    <ClCompile Include="DDSTextureLoader.cpp">
+      <Filter>Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

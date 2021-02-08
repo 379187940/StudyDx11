@@ -411,6 +411,7 @@
     <ClCompile Include="CubeLight.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="DDSTextureLoader.cpp" />
     <ClCompile Include="FirstPersonCamera.cpp" />
     <ClCompile Include="fontclass.cpp" />
     <ClCompile Include="fontshaderclass.cpp" />
@@ -458,6 +459,8 @@
     <ClInclude Include="cScene.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="CubeLight.h" />
+    <ClInclude Include="DDS.h" />
+    <ClInclude Include="DDSTextureLoader.h" />
     <ClInclude Include="FirstPersonCamera.hpp" />
     <ClInclude Include="fontclass.h" />
     <ClInclude Include="fontshaderclass.h" />
