@@ -10,9 +10,11 @@
 //#include <Windows.h>
 #include "atlstr.h"
 #include <vector>
+#include <map>
 using namespace Diligent;
 //using namespace GLTF;
 using namespace std;
+#include "TextureManager.h"
 #include "Common.h"
 #include "FreeImage.h"
 #include <map>

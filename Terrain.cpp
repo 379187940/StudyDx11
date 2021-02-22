@@ -23,8 +23,11 @@ CTerrain::~CTerrain()
 		m_DiffuseColor[i] = nullptr;
 	}
 	m_DiffuseColor.clear();
-	m_MaskTexture->Release();
-	m_MaskTexture = nullptr;
+	if (m_MaskTexture)
+	{
+		m_MaskTexture->Release();
+		m_MaskTexture = nullptr;
+	}
 	m_pLineSampleState->Release();
 	m_pLineSampleState = nullptr;
 }
@@ -162,7 +165,7 @@ bool CTerrain::InitGeometry()
 	sampDesc.MaxLOD = D3D11_FLOAT32_MAX;
 	HRESULT hr = m_pd3dDevice->CreateSamplerState(&sampDesc, &m_pLineSampleState);
 	assert(SUCCEEDED(hr));
-	ID3D11Texture2D* pDiffuse = CreateTexture2d(m_pd3dDevice, 512, 512, D3D11_BIND_SHADER_RESOURCE, DXGI_FORMAT_B8G8R8A8_UNORM, D3D11_USAGE_DEFAULT, 0);
+	ID3D11ShaderResourceView* pDiffuse = AfxGetTextureManager()->GetTexture2D("terrain\\dirt001.dds");
 	assert(pDiffuse);
 	m_DiffuseColor.push_back(pDiffuse);
 	m_pCameraAttBuffer = CreateBuffer(m_pd3dDevice, sizeof(CameraAtrribute), D3D11_USAGE_DYNAMIC, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
@@ -175,7 +178,6 @@ bool CTerrain::InitGeometry()
 	assert(m_pIndexBuffer);
 	m_pUvBuffer = CreateBuffer(m_pd3dDevice, m_TerrainUv.size() * sizeof(float2), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
 	assert(m_pUvBuffer);
-	ID3D11Texture2D
 	ID3DBlob* pVertexShaderBlob = NULL;
 	assert(SUCCEEDED(CompileShaderFromFile("terrain.hlsl", NULL, NULL, "vs_main", "vs_4_0", 0, 0, &pVertexShaderBlob)));
 	vector<D3D11_INPUT_ELEMENT_DESC> allDesc;
@@ -207,14 +209,12 @@ bool CTerrain::Render(DWORD dwTimes)
 	m_pContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT,0);
 	m_pContext->VSSetShader(m_pVertexShader, nullptr, 0);
 	m_pContext->PSSetShader(m_pPixelShader, nullptr, 0);
+	assert(m_DiffuseColor[0]);
+	m_pContext->PSSetShaderResources(0, 1, &m_DiffuseColor[0]);
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pCameraAttBuffer.p);
 	m_pContext->IASetInputLayout(m_pLayoutInput);
-	m_pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	ID3D11RasterizerState* oldState = nullptr;
-	m_pContext->RSGetState(&oldState);
-	m_pContext->RSSetState(AfxGetScene()->GetFillFrameState());
+	//m_pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	m_pContext->DrawIndexed(m_indexBuffer.size(), 0, 0);
-	m_pContext->RSSetState(oldState);
 	return false;
 }
 bool CTerrain::UpdateRenderParams(const RenderParams& renderParams)

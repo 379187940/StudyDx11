@@ -45,6 +45,7 @@ char* CustomW2A(const WCHAR* wstr);
 #ifndef V_RETURN
 #define V_RETURN(p) (p)
 #endif
+class CTextureManager;
 ID3D11InputLayout* CreateInputLayout(ID3D11Device* pDevice, const std::vector<D3D11_INPUT_ELEMENT_DESC>& input, const void* pShaderBytecodeWithInputSignature, UINT sizeShaderBytecode);
 bool UpdateBufferData(ID3D11DeviceContext* pContext, ID3D11Buffer* pBuffer, void* pdata, size_t dataSize);
 
@@ -56,3 +57,4 @@ ID3D11DeviceContext* AfxGetDeviceContext();
 const float4x4& AfxGetViewportMatrix();
 bool SetViewPortMatrix(const D3D11_VIEWPORT& viewPort);
 bool WorldPosToScreenPos(float3 worldPos, float2& screenPos);
+CTextureManager* AfxGetTextureManager();
