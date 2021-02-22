@@ -47,7 +47,7 @@ private:
 	CComPtr<ID3D11Buffer> m_pIndexBuffer;
 	CComPtr<ID3D11Buffer> m_pUvBuffer;
 	vector<ID3D11ShaderResourceView*> m_DiffuseColor;
+	ID3D11ShaderResourceView* m_pMaskTexture;
 	ID3D11SamplerState* m_pLineSampleState;
-	ID3D11Texture2D* m_MaskTexture;
 };
 

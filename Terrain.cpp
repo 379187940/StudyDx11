@@ -10,7 +10,6 @@
 CTerrain::CTerrain(wstring strName) :
 	CBaseRenderObject(strName)
 {
-	m_MaskTexture = nullptr;
 	m_pLineSampleState = nullptr;
 }
 
@@ -19,15 +18,9 @@ CTerrain::~CTerrain()
 {
 	for (int i = 0; i < m_DiffuseColor.size(); i++)
 	{
-		m_DiffuseColor[i]->Release();
-		m_DiffuseColor[i] = nullptr;
+		AfxGetTextureManager()->ReleaseTexture2D(m_DiffuseColor[i]);
 	}
-	m_DiffuseColor.clear();
-	if (m_MaskTexture)
-	{
-		m_MaskTexture->Release();
-		m_MaskTexture = nullptr;
-	}
+	AfxGetTextureManager()->ReleaseTexture2D(m_pMaskTexture);
 	m_pLineSampleState->Release();
 	m_pLineSampleState = nullptr;
 }
@@ -168,6 +161,18 @@ bool CTerrain::InitGeometry()
 	ID3D11ShaderResourceView* pDiffuse = AfxGetTextureManager()->GetTexture2D("terrain\\dirt001.dds");
 	assert(pDiffuse);
 	m_DiffuseColor.push_back(pDiffuse);
+	ID3D11ShaderResourceView* colorTexture2 = AfxGetTextureManager()->GetTexture2D("terrain\\dirt004.dds");
+	assert(colorTexture2);
+	m_DiffuseColor.push_back(colorTexture2);
+	ID3D11ShaderResourceView* colorTexture3 = AfxGetTextureManager()->GetTexture2D("terrain\\dirt002.dds");
+	assert(colorTexture3);
+	m_DiffuseColor.push_back(colorTexture3);
+	ID3D11ShaderResourceView* colorTexture4 = AfxGetTextureManager()->GetTexture2D("terrain\\stone001.dds");
+	assert(colorTexture4);
+	m_DiffuseColor.push_back(colorTexture4);
+	ID3D11ShaderResourceView* maskTexture = AfxGetTextureManager()->GetTexture2D("terrain\\alpha001.dds");
+	assert(maskTexture);
+	
 	m_pCameraAttBuffer = CreateBuffer(m_pd3dDevice, sizeof(CameraAtrribute), D3D11_USAGE_DYNAMIC, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
 	assert(m_pCameraAttBuffer);
 	m_pVertexBuffer = CreateBuffer(m_pd3dDevice, m_VertexBuffer.size() * sizeof(float3), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
