@@ -38,7 +38,7 @@ ID3D11ShaderResourceView* CTextureManager::GetTexture2D(string path)
 	it = m_name_texture.find(path);
 	if (it != m_name_texture.end())
 	{
-		m_name_refcount[it->second]++;
+		m_texture_refcount[it->second]++;
 		return it->second;
 	}
 	ID3D11ShaderResourceView* pResourceView = nullptr;
@@ -46,7 +46,7 @@ ID3D11ShaderResourceView* CTextureManager::GetTexture2D(string path)
 	assert(pResourceView);
 	m_name_texture[path] = pResourceView;
 	m_texture_name[pResourceView] = path;
-	m_name_refcount[pResourceView] = 1;
+	m_texture_refcount[pResourceView] = 1;
 	return pResourceView;
 }
 CTextureManager* AfxGetTextureManager()

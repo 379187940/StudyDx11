@@ -11,16 +11,13 @@ CTerrain::CTerrain(wstring strName) :
 	CBaseRenderObject(strName)
 {
 	m_pLineSampleState = nullptr;
+	m_pMaskTexture = nullptr;
 }
 
 
 CTerrain::~CTerrain()
 {
-	for (int i = 0; i < m_DiffuseColor.size(); i++)
-	{
-		AfxGetTextureManager()->ReleaseTexture2D(m_DiffuseColor[i]);
-	}
-	AfxGetTextureManager()->ReleaseTexture2D(m_pMaskTexture);
+	Release();
 	m_pLineSampleState->Release();
 	m_pLineSampleState = nullptr;
 }
@@ -36,6 +33,16 @@ bool CTerrain::Init(ID3D11Device* pd3dDevice, ID3D11DeviceContext* pContext)
 bool CTerrain::Release()
 {
 	m_HeightData.heightData.clear();
+	for (int i = 0; i < m_DiffuseColor.size(); i++)
+	{
+		AfxGetTextureManager()->ReleaseTexture2D(m_DiffuseColor[i]);
+	}
+	m_DiffuseColor.clear();
+	if (m_pMaskTexture)
+	{
+		AfxGetTextureManager()->ReleaseTexture2D(m_pMaskTexture);
+		m_pMaskTexture = nullptr;
+	}
 	return true;
 }
 bool CTerrain::LoadHeightMap(char* heightImageFilename)
@@ -170,9 +177,9 @@ bool CTerrain::InitGeometry()
 	ID3D11ShaderResourceView* colorTexture4 = AfxGetTextureManager()->GetTexture2D("terrain\\stone001.dds");
 	assert(colorTexture4);
 	m_DiffuseColor.push_back(colorTexture4);
-	ID3D11ShaderResourceView* maskTexture = AfxGetTextureManager()->GetTexture2D("terrain\\alpha001.dds");
-	assert(maskTexture);
-	
+	m_pMaskTexture = AfxGetTextureManager()->GetTexture2D("terrain\\alpha001.dds");
+	assert(m_pMaskTexture);
+	 
 	m_pCameraAttBuffer = CreateBuffer(m_pd3dDevice, sizeof(CameraAtrribute), D3D11_USAGE_DYNAMIC, D3D11_BIND_CONSTANT_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
 	assert(m_pCameraAttBuffer);
 	m_pVertexBuffer = CreateBuffer(m_pd3dDevice, m_VertexBuffer.size() * sizeof(float3), D3D11_USAGE_DYNAMIC, D3D11_BIND_VERTEX_BUFFER, D3D11_CPU_ACCESS_WRITE, 0, NULL);
@@ -216,6 +223,11 @@ bool CTerrain::Render(DWORD dwTimes)
 	m_pContext->PSSetShader(m_pPixelShader, nullptr, 0);
 	assert(m_DiffuseColor[0]);
 	m_pContext->PSSetShaderResources(0, 1, &m_DiffuseColor[0]);
+	m_pContext->PSSetShaderResources(1, 1, &m_DiffuseColor[0]);
+	m_pContext->PSSetShaderResources(2, 1, &m_DiffuseColor[0]);
+	m_pContext->PSSetShaderResources(3, 1, &m_DiffuseColor[0]);
+
+	m_pContext->PSSetShaderResources(4, 1, &m_pMaskTexture);
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pCameraAttBuffer.p);
 	m_pContext->IASetInputLayout(m_pLayoutInput);
 	//m_pContext->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
