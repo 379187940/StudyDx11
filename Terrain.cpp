@@ -223,9 +223,9 @@ bool CTerrain::Render(DWORD dwTimes)
 	m_pContext->PSSetShader(m_pPixelShader, nullptr, 0);
 	assert(m_DiffuseColor[0]);
 	m_pContext->PSSetShaderResources(0, 1, &m_DiffuseColor[0]);
-	m_pContext->PSSetShaderResources(1, 1, &m_DiffuseColor[0]);
-	m_pContext->PSSetShaderResources(2, 1, &m_DiffuseColor[0]);
-	m_pContext->PSSetShaderResources(3, 1, &m_DiffuseColor[0]);
+	m_pContext->PSSetShaderResources(1, 1, &m_DiffuseColor[1]);
+	m_pContext->PSSetShaderResources(2, 1, &m_DiffuseColor[2]);
+	m_pContext->PSSetShaderResources(3, 1, &m_DiffuseColor[3]);
 
 	m_pContext->PSSetShaderResources(4, 1, &m_pMaskTexture);
 	m_pContext->VSSetConstantBuffers(0, 1, &m_pCameraAttBuffer.p);

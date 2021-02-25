@@ -1,10 +1,10 @@
 #include "common.hlsli"
 
-Texture2D basecolor;
-Texture2D colorTexture1;
-Texture2D colorTexture2;
-Texture2D colorTexture3;
-Texture2D mask;
+Texture2D basecolor:register(t0);
+Texture2D colorTexture1:register(t1);
+Texture2D colorTexture2:register(t2);
+Texture2D colorTexture3:register(t3);
+Texture2D mask:register(t4);
 SamplerState lineSam;
 struct vs_input
 {
