@@ -33,4 +33,5 @@ void ps_main( vs_output input , out float4 color: SV_Target)
 	color = lerp(color, colorTexture1.Sample(lineSam, input.uv), maskColor.r);
 	color = lerp(color, colorTexture2.Sample(lineSam, input.uv), maskColor.g);
 	color = lerp(color, colorTexture3.Sample(lineSam, input.uv), maskColor.b);
+	color.a = 1.0f;
 }
