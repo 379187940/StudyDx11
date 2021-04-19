@@ -142,7 +142,7 @@
       <FloatingPointModel>Fast</FloatingPointModel>
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <ExceptionHandling>Sync</ExceptionHandling>
-      <AdditionalIncludeDirectories>DXUT\Core;DXUT\Optional;.\3rdsdk\AntTweakBar\include;.\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>DXUT\Core;DXUT\Optional;.\3rdsdk\AntTweakBar\include;.\xfile;.\include;.\xfile\parser;.\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;DEBUG;PROFILE;_WINDOWS;D3DXFX_LARGEADDRESS_HANDLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -432,6 +432,18 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Tutorial01.cpp" />
+    <ClCompile Include="xfile\Parser\cBinaryXFileParser.cpp" />
+    <ClCompile Include="xfile\Parser\cTextXFileParser.cpp" />
+    <ClCompile Include="xfile\Parser\cXFile.cpp" />
+    <ClCompile Include="xfile\Parser\sAnimationSet.cpp" />
+    <ClCompile Include="xfile\Parser\sErrorMessageException.cpp" />
+    <ClCompile Include="xfile\Parser\sFileIO.cpp" />
+    <ClCompile Include="xfile\Parser\sFrameList.cpp" />
+    <ClCompile Include="xfile\Parser\sFunctionCallHistory.cpp" />
+    <ClCompile Include="xfile\Parser\SkinInfo.cpp" />
+    <ClCompile Include="xfile\Parser\sMaterialList.cpp" />
+    <ClCompile Include="xfile\Parser\sMeshList.cpp" />
+    <ClCompile Include="xfile\XFileParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="3rdsdk\FreeImage\FreeImage.2013.vcxproj" />
@@ -489,6 +501,18 @@
     <ClInclude Include="tiny_gltf.h" />
     <ClInclude Include="Triangle.h" />
     <ClInclude Include="unit.h" />
+    <ClInclude Include="xfile\Parser\cBinaryXFileParser.h" />
+    <ClInclude Include="xfile\Parser\cTextXFileParser.h" />
+    <ClInclude Include="xfile\Parser\cXFile.h" />
+    <ClInclude Include="xfile\Parser\sAnimationSet.h" />
+    <ClInclude Include="xfile\Parser\sErrorMessageException.h" />
+    <ClInclude Include="xfile\Parser\sFileIO.h" />
+    <ClInclude Include="xfile\Parser\sFrameList.h" />
+    <ClInclude Include="xfile\Parser\sFunctionCallHistory.h" />
+    <ClInclude Include="xfile\Parser\SkinInfo.h" />
+    <ClInclude Include="xfile\Parser\sMaterialList.h" />
+    <ClInclude Include="xfile\Parser\sMeshList.h" />
+    <ClInclude Include="xfile\XFileParser.h" />
     <ResourceCompile Include="Tutorial01.rc" />
   </ItemGroup>
   <ItemGroup>

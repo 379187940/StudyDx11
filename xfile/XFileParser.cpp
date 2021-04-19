@@ -1,9 +1,9 @@
 // XFileParser.cpp : Defines the entry point for the console application.
 //
 
-#include "XFileParser.h"
-#include "stdafx.h"
 
+#include "unit.h"
+#include "XFileParser.h"
 void PrintMatrix(DirectX::XMFLOAT4X4 matrix)
 {
 	for (std::size_t row = 0; row < 4; ++row) {

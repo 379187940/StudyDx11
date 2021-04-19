@@ -65,7 +65,7 @@ namespace ns_HoLin
 		void Cleanup(HANDLE = NULL);
 		sAnimation* CreateAnimation(); // creates an animation object to be stored inside an AnimationSet
 		void Insert(sAnimation*);
-		sAnimation* SearchForAnimation(std::string_view);
+		sAnimation* SearchForAnimation(std::string);
 	};
 
 	struct sAnimationSetList
@@ -79,8 +79,8 @@ namespace ns_HoLin
 		void Cleanup(HANDLE = NULL);
 		sAnimationSet* CreateAnimationSet();
 		sAnimationSet* GetLastAnimationSet() { return plast_set; } // check if returns nullptr
-		sAnimationSet* SearchForAnimationSet(std::string_view);
-		sAnimation* SearchForAnimation(std::string_view);
+		sAnimationSet* SearchForAnimationSet(std::string);
+		sAnimation* SearchForAnimation(std::string);
 		sAnimation* CreateAnimation(); // creates an animation object outside of an AnimationSet
 		void InsertAnimation(sAnimation*);
 	};

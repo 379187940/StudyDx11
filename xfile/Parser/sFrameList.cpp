@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "unit.h"
 
 namespace ns_HoLin
 {
@@ -72,7 +72,7 @@ namespace ns_HoLin
 		number_of_frames_in_sequence++;
 	}
 
-	BOOL sSequenceOfFrames::Find(std::string_view name)
+	BOOL sSequenceOfFrames::Find(std::string name)
 	{
 		ns_HoLin::sFrame *p_tmp = pfirstframe;
 
@@ -84,7 +84,7 @@ namespace ns_HoLin
 		return FALSE;
 	}
 	
-	ns_HoLin::sFrame* sSequenceOfFrames::Search(std::string_view name)
+	ns_HoLin::sFrame* sSequenceOfFrames::Search(std::string name)
 	{
 		ns_HoLin::sFrame *p_tmp = pfirstframe;
 
@@ -173,7 +173,7 @@ namespace ns_HoLin
 		}
 	}
 
-	ns_HoLin::sFrame* sFrames::SearchFrames(std::string_view s)
+	ns_HoLin::sFrame* sFrames::SearchFrames(std::string s)
 	{
 		ns_HoLin::sSequenceOfFrames *pseq = pfirstseq;
 		ns_HoLin::sFrame *p_frame = nullptr;
@@ -187,7 +187,7 @@ namespace ns_HoLin
 		return (ns_HoLin::sFrame*)nullptr;
 	}
 
-	BOOL sFrames::FindFrames(std::string_view s)
+	BOOL sFrames::FindFrames(std::string s)
 	{
 		ns_HoLin::sSequenceOfFrames *pseq = pfirstseq;
 
@@ -199,7 +199,7 @@ namespace ns_HoLin
 		return FALSE;
 	}
 
-	ns_HoLin::sSequenceOfFrames* sFrames::SearchSequence(std::string_view s)
+	ns_HoLin::sSequenceOfFrames* sFrames::SearchSequence(std::string s)
 	{
 		ns_HoLin::sSequenceOfFrames *pseq = pfirstseq;
 
@@ -213,7 +213,7 @@ namespace ns_HoLin
 		return (ns_HoLin::sSequenceOfFrames*)nullptr;
 	}
 
-	BOOL sFrames::FindSequence(std::string_view s)
+	BOOL sFrames::FindSequence(std::string s)
 	{
 		ns_HoLin::sSequenceOfFrames *pseq = pfirstseq;
 

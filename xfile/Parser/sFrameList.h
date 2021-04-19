@@ -35,8 +35,8 @@ namespace ns_HoLin
 		~sSequenceOfFrames();
 		void Cleanup(HANDLE = NULL);
 		void InsertFrame(sFrame*);
-		BOOL Find(std::string_view);
-		sFrame* Search(std::string_view);
+		BOOL Find(std::string);
+		sFrame* Search(std::string);
 		sFrame* CreateNewFrame();
 		sFrame* GetLastEntry();
 	};
@@ -53,9 +53,9 @@ namespace ns_HoLin
 		ns_HoLin::sSequenceOfFrames* GetLastSequence() { return plastseq; }
 		void InsertSequenceOfFrames(ns_HoLin::sSequenceOfFrames*);
 		void InsertFrameIntoLastSequence(sFrame*);
-		sFrame* SearchFrames(std::string_view);
-		BOOL FindFrames(std::string_view);
-		ns_HoLin::sSequenceOfFrames* SearchSequence(std::string_view);
-		BOOL FindSequence(std::string_view);
+		sFrame* SearchFrames(std::string);
+		BOOL FindFrames(std::string);
+		ns_HoLin::sSequenceOfFrames* SearchSequence(std::string);
+		BOOL FindSequence(std::string);
 	};
 }

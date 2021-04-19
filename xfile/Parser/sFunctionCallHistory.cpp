@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "unit.h"
 
 namespace ns_HoLin
 {
@@ -16,7 +16,7 @@ namespace ns_HoLin
 		}
 	}
 
-	void sFunctionCallHistory::Insert(std::string_view name)
+	void sFunctionCallHistory::Insert(std::string name)
 	{
 		history.emplace_back(name);
 	}

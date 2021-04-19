@@ -22,7 +22,7 @@
 #include <unordered_map>
 #include <string>
 #include <utility>
-#include <any>
+
 #include "cTextXFileParser.h"
 
 namespace ns_HoLin

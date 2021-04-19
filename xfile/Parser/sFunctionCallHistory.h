@@ -13,7 +13,7 @@ namespace ns_HoLin
 		sFunctionCallHistory(std::string);
 		~sFunctionCallHistory();
 		
-		static void Insert(std::string_view);
+		static void Insert(std::string);
 		static BOOL PrintHistoryLog(BOOL = FALSE);
 	};
 }

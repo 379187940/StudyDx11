@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "unit.h"
 
 namespace ns_HoLin
 {
@@ -179,7 +179,7 @@ namespace ns_HoLin
 		}
 	}
 
-	sAnimation* sAnimationSet::SearchForAnimation(std::string_view name)
+	sAnimation* sAnimationSet::SearchForAnimation(std::string name)
 	{
 		if (pfirstanimation) {
 			sAnimation *p = pfirstanimation;
@@ -240,7 +240,7 @@ namespace ns_HoLin
 		return (sAnimationSet*)pset;
 	}
 
-	sAnimationSet* sAnimationSetList::SearchForAnimationSet(std::string_view name)
+	sAnimationSet* sAnimationSetList::SearchForAnimationSet(std::string name)
 	{
 		if (pfirst_set) {
 			sAnimationSet *p = pfirst_set;
@@ -253,7 +253,7 @@ namespace ns_HoLin
 		return (sAnimationSet*)nullptr;
 	}
 
-	sAnimation* sAnimationSetList::SearchForAnimation(std::string_view name)
+	sAnimation* sAnimationSetList::SearchForAnimation(std::string name)
 	{
 		if (pfirst_set) {
 			sAnimationSet *pset = pfirst_set;

@@ -109,8 +109,8 @@ namespace ns_HoLin
 		void Cleanup();
 		sMesh* CreateNewMesh();
 		void InsertMesh(sMesh* = nullptr);
-		BOOL Find(std::string_view);
-		sMesh* Search(std::string_view);
+		BOOL Find(std::string);
+		sMesh* Search(std::string);
 		sMesh* GetLastMesh() { return plastmesh; }
 	};
 }

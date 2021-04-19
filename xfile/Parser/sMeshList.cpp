@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "unit.h"
 
 namespace ns_HoLin
 {
@@ -208,7 +208,7 @@ namespace ns_HoLin
 		}
 	}
 
-	BOOL sMeshList::Find(std::string_view name)
+	BOOL sMeshList::Find(std::string name)
 	{
 		if (pfirstmesh) {
 			sMesh *ptmp = pfirstmesh;
@@ -225,7 +225,7 @@ namespace ns_HoLin
 		return FALSE;
 	}
 	
-	sMesh* sMeshList::Search(std::string_view name)
+	sMesh* sMeshList::Search(std::string name)
 	{
 		if (pfirstmesh) {
 			sMesh *pmesh = pfirstmesh;
