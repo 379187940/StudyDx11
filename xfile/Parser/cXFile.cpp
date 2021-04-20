@@ -25,83 +25,83 @@ namespace ns_HoLin
 		text.xfiledata.Cleanup();
 	}
 	
-	BOOL cXFile::ReadCommandLineArgumentsThenParse(DWORD argv, const wchar_t **argc)
-	{
-		if (hfile)
-			return FALSE;
-		Cleanup();
-		text.xfiledata.Cleanup();
-
-		std::array<std::wstring, 2> state_strings{ // Do not reposition strings
-			std::wstring(L"-trackoutput"),
-			std::wstring(L"-f"),
-		};
-		std::unordered_map<std::wstring, DWORD> map_options{
-			std::make_pair(state_strings[0], 0),
-			std::make_pair(state_strings[1], 1)
-		};
-		std::array<std::any, state_strings.size()> arguments_options;
-		BOOL btrack = FALSE;
-
-		for (DWORD i = 1; i < argv; ++i) {
-			if (state_strings[0] == std::wstring(argc[i])) {
-				arguments_options[map_options[state_strings[0]]] = TRUE;
-			}
-			else if (state_strings[1] == std::wstring(argc[i])) {
-				if (argv <= (i + 1)) {
-#if defined(_CONSOLE)
-					std::wcout << L"Error -f option, no file name entered, exiting.\n";
-#endif
-					return FALSE;
-				}
-				arguments_options[map_options[state_strings[1]]] = std::wstring((const wchar_t*)argc[++i]);
-			}
-			else {
-#if defined(_CONSOLE)
-				std::wcout << L"Quitting unknown command \'" << (const wchar_t*)argc[i] << L"\'\n";
-#endif
-				return FALSE;
-			}
-		}
-		if (arguments_options[map_options[state_strings[1]]].has_value()) {
-			if (!this->openfile(std::any_cast<std::wstring>(arguments_options[map_options[state_strings[1]]]).c_str()))
-				return FALSE;
-		}
-		if (!hfile) {
-			OpenFileWithMeshFileName();
-		}
-		if (hfile) {
-#if defined(_CONSOLE)
-			std::wcout << L"File opened.\n";
-#endif
-			try {
-				if (arguments_options[map_options[state_strings[0]]].has_value())
-					btrack = std::any_cast<BOOL>(arguments_options[map_options[state_strings[0]]]);
-				if (this->ParseFile(btrack)) {
-#if defined(_CONSOLE)
-					std::wcout << L"File parsed successfully.\n";
-#endif
-					CloseHandle(hfile);
-					hfile = nullptr;
-					return TRUE;
-				}
-				else {
-#if defined(_CONSOLE)
-					std::wcout << L"Error parsing file.\n";
-#endif
-				}
-			}
-			catch (ns_HoLin::sErrorMessageException serror) {
-				std::cerr << serror.what();
-			}
-			catch (std::exception e) {
-				std::cerr << e.what() << '\n';
-			}
-			CloseHandle(hfile);
-			hfile = nullptr;
-		}
-		return FALSE;
-	}
+//	BOOL cXFile::ReadCommandLineArgumentsThenParse(DWORD argv, const wchar_t **argc)
+//	{
+//		if (hfile)
+//			return FALSE;
+//		Cleanup();
+//		text.xfiledata.Cleanup();
+//
+//		std::array<std::wstring, 2> state_strings{ // Do not reposition strings
+//			std::wstring(L"-trackoutput"),
+//			std::wstring(L"-f"),
+//		};
+//		std::unordered_map<std::wstring, DWORD> map_options{
+//			std::make_pair(state_strings[0], 0),
+//			std::make_pair(state_strings[1], 1)
+//		};
+//		std::array<std::any, state_strings.size()> arguments_options;
+//		BOOL btrack = FALSE;
+//
+//		for (DWORD i = 1; i < argv; ++i) {
+//			if (state_strings[0] == std::wstring(argc[i])) {
+//				arguments_options[map_options[state_strings[0]]] = TRUE;
+//			}
+//			else if (state_strings[1] == std::wstring(argc[i])) {
+//				if (argv <= (i + 1)) {
+//#if defined(_CONSOLE)
+//					std::wcout << L"Error -f option, no file name entered, exiting.\n";
+//#endif
+//					return FALSE;
+//				}
+//				arguments_options[map_options[state_strings[1]]] = std::wstring((const wchar_t*)argc[++i]);
+//			}
+//			else {
+//#if defined(_CONSOLE)
+//				std::wcout << L"Quitting unknown command \'" << (const wchar_t*)argc[i] << L"\'\n";
+//#endif
+//				return FALSE;
+//			}
+//		}
+//		if (arguments_options[map_options[state_strings[1]]].has_value()) {
+//			if (!this->openfile(std::any_cast<std::wstring>(arguments_options[map_options[state_strings[1]]]).c_str()))
+//				return FALSE;
+//		}
+//		if (!hfile) {
+//			OpenFileWithMeshFileName();
+//		}
+//		if (hfile) {
+//#if defined(_CONSOLE)
+//			std::wcout << L"File opened.\n";
+//#endif
+//			try {
+//				if (arguments_options[map_options[state_strings[0]]].has_value())
+//					btrack = std::any_cast<BOOL>(arguments_options[map_options[state_strings[0]]]);
+//				if (this->ParseFile(btrack)) {
+//#if defined(_CONSOLE)
+//					std::wcout << L"File parsed successfully.\n";
+//#endif
+//					CloseHandle(hfile);
+//					hfile = nullptr;
+//					return TRUE;
+//				}
+//				else {
+//#if defined(_CONSOLE)
+//					std::wcout << L"Error parsing file.\n";
+//#endif
+//				}
+//			}
+//			catch (ns_HoLin::sErrorMessageException serror) {
+//				std::cerr << serror.what();
+//			}
+//			catch (std::exception e) {
+//				std::cerr << e.what() << '\n';
+//			}
+//			CloseHandle(hfile);
+//			hfile = nullptr;
+//		}
+//		return FALSE;
+//	}
 
 	BOOL cXFile::ReadXFile(const wchar_t *file_name)
 	{

@@ -42,7 +42,7 @@ namespace ns_HoLin
 				return true;
 			return false;
 		}
-		BOOL ReadCommandLineArgumentsThenParse(DWORD, const wchar_t**);
+		//BOOL ReadCommandLineArgumentsThenParse(DWORD, const wchar_t**);
 		BOOL ReadXFile(const wchar_t*);
 		DWORD GetXFileType() {
 			return file_type;

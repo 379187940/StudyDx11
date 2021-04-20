@@ -192,37 +192,37 @@ void PrintData(ns_HoLin::cTextXFileParser *p_xfile)
 	//PrintDuplicates(p_xfile->xfiledata.smeshlist.pfirstmesh);
 }
 
-int wmain(DWORD argv, const wchar_t **argc)
-{
-	ns_HoLin::cXFile xfile;
-
-#if defined(_WINDOWS)
-	// Win32 application
-	if (xfile.ReadXFile(L"mesh//Five_Wheeler_mesh.txt")) {
-		if (xfile.GetXFileType() == TEXT_FILE) {
-			ns_HoLin::cTextXFileParser *p = xfile.GetTextData();
-	
-			if (p) {
-				PrintData(p);
-			}
-		}
-	}
-	MessageBox(nullptr, L"Terminating program.", L"End", MB_OK);
-#else
-	// Console application
-	if (xfile.ReadCommandLineArgumentsThenParse(argv, argc)) {
-		std::wcout << L"Success.\n";
-		if (xfile.GetXFileType() == TEXT_FILE) {
-			ns_HoLin::cTextXFileParser *p = xfile.GetTextData();
-			if (p) {
-				PrintData(p);
-			}
-			else {
-				std::wcout << L"Error pointer.\n";
-			}
-		}
-	}
-	std::wcout << L"Closing program.\n";
-#endif
-	return 1;
-}
+//int wmain(DWORD argv, const wchar_t **argc)
+//{
+//	ns_HoLin::cXFile xfile;
+//
+//#if defined(_WINDOWS)
+//	// Win32 application
+//	if (xfile.ReadXFile(L"mesh//Five_Wheeler_mesh.txt")) {
+//		if (xfile.GetXFileType() == TEXT_FILE) {
+//			ns_HoLin::cTextXFileParser *p = xfile.GetTextData();
+//	
+//			if (p) {
+//				PrintData(p);
+//			}
+//		}
+//	}
+//	MessageBox(nullptr, L"Terminating program.", L"End", MB_OK);
+//#else
+//	// Console application
+//	if (xfile.ReadCommandLineArgumentsThenParse(argv, argc)) {
+//		std::wcout << L"Success.\n";
+//		if (xfile.GetXFileType() == TEXT_FILE) {
+//			ns_HoLin::cTextXFileParser *p = xfile.GetTextData();
+//			if (p) {
+//				PrintData(p);
+//			}
+//			else {
+//				std::wcout << L"Error pointer.\n";
+//			}
+//		}
+//	}
+//	std::wcout << L"Closing program.\n";
+//#endif
+//	return 1;
+//}
