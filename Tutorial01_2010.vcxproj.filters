@@ -116,9 +116,6 @@
     <ClInclude Include="textureclass.h">
       <Filter>Font</Filter>
     </ClInclude>
-    <ClInclude Include="MnagerClass.h">
-      <Filter>MainFile</Filter>
-    </ClInclude>
     <ClInclude Include="unit.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -239,9 +236,6 @@
     </ClCompile>
     <ClCompile Include="textureclass.cpp">
       <Filter>Font</Filter>
-    </ClCompile>
-    <ClCompile Include="MnagerClass.cpp">
-      <Filter>MainFile</Filter>
     </ClCompile>
     <ClCompile Include="textclass.cpp">
       <Filter>Font</Filter>
