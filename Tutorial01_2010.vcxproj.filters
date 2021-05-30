@@ -41,10 +41,10 @@
     <Filter Include="Texture">
       <UniqueIdentifier>{768c7fdc-ce94-4b29-ab3f-4aa69656be62}</UniqueIdentifier>
     </Filter>
-    <Filter Include=".xfile_handle">
+    <Filter Include="MeshLoader\.xfile_handle">
       <UniqueIdentifier>{557a7213-a7f1-4b8b-9114-92b1621bc1c0}</UniqueIdentifier>
     </Filter>
-    <Filter Include=".xfile_handle\parser">
+    <Filter Include="MeshLoader\.xfile_handle\parser">
       <UniqueIdentifier>{a4f95441-9fad-4b5e-96d2-1950a9f66549}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -151,40 +151,40 @@
     </ClInclude>
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="xfile\XFileParser.h">
-      <Filter>.xfile_handle</Filter>
+      <Filter>MeshLoader\.xfile_handle</Filter>
     </ClInclude>
     <ClInclude Include="xfile\Parser\cBinaryXFileParser.h">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClInclude>
     <ClInclude Include="xfile\Parser\cTextXFileParser.h">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClInclude>
     <ClInclude Include="xfile\Parser\cXFile.h">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClInclude>
     <ClInclude Include="xfile\Parser\sAnimationSet.h">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClInclude>
     <ClInclude Include="xfile\Parser\sErrorMessageException.h">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClInclude>
     <ClInclude Include="xfile\Parser\sFileIO.h">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClInclude>
     <ClInclude Include="xfile\Parser\sFrameList.h">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClInclude>
     <ClInclude Include="xfile\Parser\sFunctionCallHistory.h">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClInclude>
     <ClInclude Include="xfile\Parser\SkinInfo.h">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClInclude>
     <ClInclude Include="xfile\Parser\sMaterialList.h">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClInclude>
     <ClInclude Include="xfile\Parser\sMeshList.h">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -266,40 +266,40 @@
     </ClCompile>
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="xfile\XFileParser.cpp">
-      <Filter>.xfile_handle</Filter>
+      <Filter>MeshLoader\.xfile_handle</Filter>
     </ClCompile>
     <ClCompile Include="xfile\Parser\cBinaryXFileParser.cpp">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClCompile>
     <ClCompile Include="xfile\Parser\cTextXFileParser.cpp">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClCompile>
     <ClCompile Include="xfile\Parser\cXFile.cpp">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClCompile>
     <ClCompile Include="xfile\Parser\sAnimationSet.cpp">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClCompile>
     <ClCompile Include="xfile\Parser\sErrorMessageException.cpp">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClCompile>
     <ClCompile Include="xfile\Parser\sFileIO.cpp">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClCompile>
     <ClCompile Include="xfile\Parser\sFrameList.cpp">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClCompile>
     <ClCompile Include="xfile\Parser\sFunctionCallHistory.cpp">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClCompile>
     <ClCompile Include="xfile\Parser\SkinInfo.cpp">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClCompile>
     <ClCompile Include="xfile\Parser\sMaterialList.cpp">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClCompile>
     <ClCompile Include="xfile\Parser\sMeshList.cpp">
-      <Filter>.xfile_handle\parser</Filter>
+      <Filter>MeshLoader\.xfile_handle\parser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

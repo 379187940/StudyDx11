@@ -10,7 +10,6 @@ struct vs_input
 {
 	float3 position: POSITION;
 	float2 uv:TEXCOORD0;
-#if defined(SPLIT)
 };
 struct vs_output
 {
